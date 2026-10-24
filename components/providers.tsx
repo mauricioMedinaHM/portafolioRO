@@ -10,7 +10,12 @@ export function Providers({ children }: { children: ReactNode }) {
       return;
     }
 
-    const lenis = new Lenis({ lerp: 0.12, smoothWheel: true });
+    const lenis = new Lenis({
+      lerp: 0.12,
+      smoothWheel: true,
+      // scroll suave hacia las anclas de las secciones (offset = nav sticky)
+      anchors: { offset: -72 },
+    });
     let rafId = 0;
     const raf = (time: number) => {
       lenis.raf(time);
