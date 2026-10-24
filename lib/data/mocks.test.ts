@@ -27,13 +27,16 @@ describe("mocks (contenido real de la clienta)", () => {
     }
   });
 
-  it("los publicados tienen link http y los sin link están en borrador", () => {
+  it("los que tienen video llevan link http; los de experiencia van sin URL", () => {
     for (const p of mockProjects) {
-      if (p.isPublished) {
+      if (p.provider === "youtube") {
         expect(p.url).toMatch(/^https?:\/\//);
-        expect(p.provider).toBe("youtube");
+        expect(p.isPublished).toBe(true);
       } else {
+        // items de experiencia / próximos videos: publicados como tarjeta de texto
+        expect(p.provider).toBe("link");
         expect(p.url).toBe("");
+        expect(p.isPublished).toBe(true);
       }
     }
   });

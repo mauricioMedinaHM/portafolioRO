@@ -71,13 +71,13 @@ export function ProjectForm({
       <Field
         label="Link del video o contenido"
         error={errors.url?.message}
-        hint="Pegá el link de Drive, YouTube, Vimeo o Google Fotos."
+        hint="Pegá el link de Drive, YouTube, Vimeo o Google Fotos. Si es experiencia sin video, dejalo vacío."
       >
         <div className="flex gap-2">
           <Input
             type="url"
             inputMode="url"
-            placeholder="https://…"
+            placeholder="https://… (opcional)"
             className="flex-1"
             {...register("url")}
           />

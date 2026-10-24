@@ -8,7 +8,7 @@ export function Footer({ name }: { name: string }) {
       </p>
       <Link
         href="/admin"
-        className="mt-2 inline-flex min-h-12 items-center px-4 text-xs text-subtle/80 underline-offset-4 transition-colors hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-accent"
+        className="mt-2 inline-flex min-h-12 items-center px-4 text-xs text-subtle underline-offset-4 transition-colors hover:text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-accent"
       >
         Admin
       </Link>

@@ -36,6 +36,7 @@ export function MediaFallback({
           // La miniatura puede venir de un og:image externo que no está en next/image.
           // eslint-disable-next-line @next/next/no-img-element
           <img
+            decoding="async"
             src={thumbnailUrl ?? undefined}
             alt=""
             className="absolute inset-0 h-full w-full object-cover"

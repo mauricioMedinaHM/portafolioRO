@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { MessageCircle } from "lucide-react";
 import { buttonVariants, Reveal } from "@/components/ui";
 import { WHATSAPP_MESSAGE, whatsappLink } from "@/lib/links";
@@ -47,12 +48,13 @@ export function Hero({
               poster={profile.photoUrl ?? undefined}
             />
           ) : profile.photoUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={profile.photoUrl}
               alt={profile.fullName}
+              width={192}
+              height={192}
+              priority
               className="size-40 rounded-full border-4 border-surface object-cover shadow-lift sm:size-48"
-              fetchPriority="high"
             />
           ) : (
             <div className="flex size-40 items-center justify-center rounded-full border-4 border-surface bg-accent font-display text-5xl text-white shadow-lift sm:size-48">

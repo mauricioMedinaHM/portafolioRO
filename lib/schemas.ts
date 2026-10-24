@@ -3,12 +3,14 @@ import { z } from "zod";
 const urlHttp = z
   .string()
   .trim()
-  .min(1, "Pegá un link")
   .url("Tiene que ser una URL válida")
   .refine(
     (u) => u.startsWith("http://") || u.startsWith("https://"),
     "Solo links http/https",
   );
+
+// El link es opcional: los items de experiencia sin video van sin URL.
+const urlOrEmpty = z.union([z.literal(""), urlHttp]);
 
 export const loginSchema = z.object({
   email: z.string().trim().email("Mail inválido"),
@@ -32,7 +34,7 @@ export type PasswordInput = z.infer<typeof passwordSchema>;
 export const projectSchema = z.object({
   title: z.string().trim().min(1, "Falta el título").max(140),
   categoryId: z.string().min(1, "Elegí una categoría"),
-  url: urlHttp,
+  url: urlOrEmpty,
   description: z
     .string()
     .trim()

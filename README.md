@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portafolio — Rosario Tejerina Pittis
 
-## Getting Started
+Landing mobile-first de portafolio audiovisual + panel admin.
+Next.js 15 (App Router) · TypeScript · Tailwind v4 · Supabase · Vercel.
 
-First, run the development server:
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env.local   # completar vars de Supabase
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Variables de entorno (`docs/SUPABASE_SETUP.md` tiene el paso a paso):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `NEXT_PUBLIC_SITE_URL` — URL pública (OG, sitemap, QR)
+- `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- Sin Supabase configurado, la landing sirve los datos de `lib/data/mocks.ts`
+  y `/admin` muestra un aviso de configuración.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Base de datos: ejecutar `supabase/migrations/0001_init.sql` y luego
+`supabase/seed.sql` en el SQL Editor de Supabase, crear la usuaria en
+Auth y sumarla a la tabla `admin_users` (por mail alcanza).
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
+| Comando | Qué hace |
+|---|---|
+| `pnpm dev` | Dev server (Turbopack) |
+| `pnpm build` / `pnpm start` | Build de producción |
+| `pnpm lint` / `pnpm typecheck` / `pnpm test` | ESLint / tsc / Vitest |
+| `pnpm test:e2e` | Build + Playwright (360–1280px) |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Estructura
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `app/` — landing (`page.tsx`), admin (`/admin`), auth callback, `/dev/ui`
+- `components/` — `ui/` base, `sections/` landing, `media/` embeds,
+  `share/` QR, `admin/` panel
+- `lib/` — tipos, schemas zod, supabase clients, queries, embed parser
+- `supabase/` — migración + seed (contenido real en `docs/CONTENIDO.md`)
+- `tests/e2e` — Playwright
 
-## Deploy on Vercel
+## Deploy (Vercel)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Importar el repo en Vercel (framework Next.js, sin config extra).
+2. Cargar las env vars en Project Settings → Environment Variables.
+3. El cron de `vercel.json` hace ping semanal a `/api/ping` para que el
+   plan free de Supabase no se pause.

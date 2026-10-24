@@ -252,6 +252,7 @@ export const mockProjects: Project[] = [
     description:
       "Prensa, entrevistas a expositores y autoridades, y contenido para redes. Se publica cuando esté el link del video.",
     position: 2,
+      isPublished: true,
   }),
   project({
     id: "prj-generacion-tech",
@@ -260,6 +261,7 @@ export const mockProjects: Project[] = [
     description:
       "Programa de TV sobre tecnología: producción, cobertura de eventos y entrevistas a emprendedores.",
     position: 3,
+      isPublished: true,
   }),
 
   // 4. Radio y capacitación
@@ -270,6 +272,7 @@ export const mockProjects: Project[] = [
     description:
       "Proyecto de extensión UCaSal: capacitación en radio y locución para alumnos del Colegio Secundario 5051 N.S. de la Merced, con producción de un programa radial ambiental y salida al aire.",
     position: 0,
+      isPublished: true,
   }),
   project({
     id: "prj-puentes-generacionales",
@@ -278,6 +281,7 @@ export const mockProjects: Project[] = [
     description:
       "Proyecto de extensión: dinámicas intergeneracionales, contenidos para redes y registro de jornadas.",
     position: 1,
+      isPublished: true,
   }),
 
   // 5. Redes y comunicación (experiencia laboral, sin video por ahora)
@@ -287,6 +291,7 @@ export const mockProjects: Project[] = [
     title: "Productora Plastilina — Community Manager",
     description: "Contenidos, copys y coberturas de eventos.",
     position: 0,
+      isPublished: true,
   }),
   project({
     id: "prj-lozainas",
@@ -294,6 +299,7 @@ export const mockProjects: Project[] = [
     title: "Lozainas.makeup",
     description: "Coordinación y comercialización de eventos.",
     position: 1,
+      isPublished: true,
   }),
   project({
     id: "prj-sk-promociones",
@@ -301,6 +307,7 @@ export const mockProjects: Project[] = [
     title: "SK Promociones",
     description: "Promotora de marca.",
     position: 2,
+      isPublished: true,
   }),
   project({
     id: "prj-alemania",
@@ -308,5 +315,6 @@ export const mockProjects: Project[] = [
     title: "Alemanía Resto-Bar",
     description: "Atención al cliente.",
     position: 3,
+      isPublished: true,
   }),
 ];

@@ -46,10 +46,26 @@ export default async function Home() {
     { href: "#contacto", label: "Contacto" },
   ];
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: profile.fullName,
+    description: profile.tagline,
+    email: profile.email ?? undefined,
+    image: profile.photoUrl ?? undefined,
+    url: SITE_URL,
+    jobTitle: "Conductora y comunicadora audiovisual",
+    sameAs: Object.values(profile.socials).filter(Boolean),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <NavBar name={profile.fullName} anchors={anchors} siteUrl={SITE_URL} />
-      <main>
+      <main id="contenido">
         <Hero
           profile={profile}
           firstCategorySlug={withProjects[0]?.category.slug}

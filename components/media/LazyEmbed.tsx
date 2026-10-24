@@ -46,7 +46,6 @@ export function LazyEmbed({
             title={title}
             loading="lazy"
             allow="autoplay; fullscreen; picture-in-picture"
-            allowFullScreen
           />
         ) : (
           <motion.button
@@ -61,6 +60,7 @@ export function LazyEmbed({
               // Miniaturas externas (YouTube, Drive, Vimeo): el dominio no está en next/image.
               // eslint-disable-next-line @next/next/no-img-element
               <img
+                decoding="async"
                 src={thumbnailUrl}
                 alt=""
                 className="absolute inset-0 h-full w-full object-cover"

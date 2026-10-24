@@ -105,6 +105,7 @@ export function MediaCard({ project }: MediaCardProps) {
             // Archivo subido o URL de imagen arbitraria, fuera de los remotePatterns.
             // eslint-disable-next-line @next/next/no-img-element
             <img
+              decoding="async"
               src={thumbnailUrl || project.url}
               alt={project.title}
               className="h-full w-full object-cover"
@@ -133,7 +134,7 @@ export function MediaCard({ project }: MediaCardProps) {
       <div className="flex flex-col gap-1">
         <h3 className="text-base font-semibold leading-snug text-foreground">{project.title}</h3>
         {project.date ? (
-          <time dateTime={project.date} className="text-sm text-foreground/60">
+          <time dateTime={project.date} className="text-sm text-foreground/70">
             {formatDate(project.date)}
           </time>
         ) : null}
