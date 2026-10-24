@@ -37,7 +37,7 @@ export function PasteButton({
       }}
       className={cn(
         "inline-flex min-h-12 items-center gap-2 rounded-full border border-border bg-surface px-4 text-sm font-medium text-foreground transition-colors",
-        "hover:bg-muted focus-visible:outline-2 focus-visible:outline-accent disabled:opacity-50",
+        "hover:bg-muted focus-visible:outline-2 focus-visible:outline-ink disabled:opacity-50",
         className,
       )}
     >

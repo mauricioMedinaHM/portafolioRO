@@ -1,20 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import "@fontsource-variable/newsreader/opsz.css";
+import "@fontsource-variable/hanken-grotesk";
 import { Providers } from "@/components/providers";
 import { SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
 import "./globals.css";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
-  display: "swap",
-});
 
 const DESCRIPTION =
   "Portafolio de Rosario Tejerina Pittis: conducción en vivo, streaming, móviles y coberturas, radio y comunicación audiovisual desde Salta, Argentina.";
@@ -59,7 +48,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f7f1ea",
+  themeColor: "#fafaf8",
 };
 
 export default function RootLayout({
@@ -68,11 +57,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es-AR" className={`${inter.variable} ${fraunces.variable}`}>
-      <body className="min-h-svh font-sans antialiased">
+    <html lang="es-AR">
+      <body className="min-h-svh bg-paper font-sans text-ink antialiased">
         <a
           href="#contenido"
-          className="sr-only z-50 rounded-full bg-foreground px-5 py-3 font-medium text-background focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:outline-2 focus:outline-accent"
+          className="sr-only z-50 bg-ink px-5 py-3 font-medium text-paper focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:outline-2 focus:outline-offset-2 focus:outline-paper"
         >
           Saltar al contenido
         </a>

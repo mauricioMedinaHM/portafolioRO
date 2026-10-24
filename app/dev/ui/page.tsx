@@ -28,24 +28,25 @@ export default function UiDevPage() {
     <main className="pb-24">
       <Section
         id="botones"
-        title="UI base — Estudio cálido"
-        intro="Muestra de componentes a 360px. Botones ≥48px, foco visible, motion con prefers-reduced-motion."
+        title="UI base"
+        eyebrow="Sistema"
+        intro="Muestra de componentes. Botones con foco visible y motion que respeta prefers-reduced-motion."
       >
         <Reveal>
           <Card>
             <CardHeader>
               <CardTitle>Botones</CardTitle>
-              <CardDescription>primary / secondary / ghost / icon</CardDescription>
+              <CardDescription>sólido / borde / ghost / icono</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-3">
               <Button>Botón primary</Button>
-              <Button variant="secondary">Botón secondary</Button>
+              <Button variant="outline">Botón borde</Button>
               <Button variant="ghost">Botón ghost</Button>
               <div className="flex gap-3">
                 <Button size="icon" aria-label="Compartir">
                   <Icon name="share" />
                 </Button>
-                <Button size="icon" variant="secondary" aria-label="Descargar">
+                <Button size="icon" variant="outline" aria-label="Descargar">
                   <Icon name="download" />
                 </Button>
                 <Button size="icon" variant="ghost" aria-label="Menú">
@@ -85,7 +86,7 @@ export default function UiDevPage() {
             </CardHeader>
             <CardContent className="flex flex-col gap-3">
               <Button onClick={() => setModalOpen(true)}>Abrir modal</Button>
-              <Button variant="secondary" onClick={() => setSheetOpen(true)}>
+              <Button variant="outline" onClick={() => setSheetOpen(true)}>
                 Abrir sheet
               </Button>
               <Button
@@ -105,7 +106,7 @@ export default function UiDevPage() {
             <CardHeader>
               <CardTitle>Ejemplo de tarjeta</CardTitle>
               <CardDescription>
-                Superficie clara, borde suave y sombra cálida.
+                Superficie de papel, borde fino y sin sombra.
               </CardDescription>
             </CardHeader>
             <CardContent>

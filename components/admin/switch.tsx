@@ -22,7 +22,7 @@ export function Switch({ checked, onChange, label, disabled, className }: Switch
       onClick={() => onChange(!checked)}
       className={cn(
         "inline-flex min-h-12 min-w-12 items-center justify-center rounded-full",
-        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
+        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink",
         "disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}
@@ -30,12 +30,12 @@ export function Switch({ checked, onChange, label, disabled, className }: Switch
       <span
         className={cn(
           "relative h-8 w-14 rounded-full transition-colors",
-          checked ? "bg-secondary" : "bg-border",
+          checked ? "bg-ink" : "bg-border",
         )}
       >
         <span
           className={cn(
-            "absolute top-1 left-1 size-6 rounded-full bg-surface shadow transition-transform",
+            "absolute top-1 left-1 size-6 rounded-full border border-ink bg-paper transition-transform",
             checked && "translate-x-6",
           )}
         />

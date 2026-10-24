@@ -1,33 +1,22 @@
-"use client";
-
-import { motion, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 export interface RevealProps {
   children: ReactNode;
   className?: string;
   /** Retraso en segundos antes de iniciar la animación. */
   delay?: number;
-  /** Desplazamiento inicial en px (desde abajo). */
+  /** Se conserva por compatibilidad; el desplazamiento es 12px. */
   y?: number;
 }
 
-export function Reveal({ children, className, delay = 0, y = 24 }: RevealProps) {
-  const reduceMotion = useReducedMotion();
-
-  if (reduceMotion) {
-    return <div className={className}>{children}</div>;
-  }
-
+export function Reveal({ children, className, delay = 0 }: RevealProps) {
   return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "0px 0px -10% 0px" }}
-      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
+    <div
+      className={cn("reveal", className)}
+      style={delay ? { animationDelay: `${delay}s` } : undefined}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

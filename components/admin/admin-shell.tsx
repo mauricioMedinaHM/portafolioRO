@@ -26,7 +26,7 @@ export function AdminShell({
 
   return (
     <div className="flex min-h-svh flex-col">
-      <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-border bg-paper">
         <div className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between gap-3 px-5">
           <div className="min-w-0">
             <p className="font-display text-lg leading-tight text-foreground">
@@ -45,7 +45,7 @@ export function AdminShell({
                 toast.error("No se pudo cerrar sesión");
               }
             }}
-            className="inline-flex min-h-12 items-center gap-2 rounded-full px-4 text-sm font-medium text-subtle transition-colors hover:bg-foreground/5 hover:text-foreground focus-visible:outline-2 focus-visible:outline-accent"
+            className="inline-flex min-h-12 items-center gap-2 rounded-full px-4 text-sm font-medium text-subtle transition-colors hover:bg-foreground/5 hover:text-foreground focus-visible:outline-2 focus-visible:outline-ink"
           >
             <LogOut className="size-4" aria-hidden />
             Salir
@@ -72,8 +72,8 @@ export function AdminShell({
                 href={href}
                 className={cn(
                   "flex min-h-16 min-w-20 flex-1 flex-col items-center justify-center gap-1 text-xs font-medium transition-colors",
-                  "focus-visible:outline-2 focus-visible:outline-accent",
-                  active ? "text-accent-strong" : "text-subtle hover:text-foreground",
+                  "focus-visible:outline-2 focus-visible:outline-ink",
+                  active ? "text-ink" : "text-subtle hover:text-foreground",
                 )}
               >
                 <NavIcon className="size-5" aria-hidden />

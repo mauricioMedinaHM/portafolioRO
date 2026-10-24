@@ -25,7 +25,7 @@ export function ConfirmDelete({
     <>
       <Button
         variant="ghost"
-        className="text-accent-strong"
+        className="text-ink"
         onClick={() => setOpen(true)}
       >
         <Trash2 className="size-4" aria-hidden />

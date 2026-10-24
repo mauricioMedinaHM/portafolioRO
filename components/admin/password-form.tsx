@@ -49,7 +49,7 @@ export function PasswordForm() {
           {...register("confirm")}
         />
       </Field>
-      <Button type="submit" variant="secondary" disabled={busy} className="w-full">
+      <Button type="submit" variant="outline" disabled={busy} className="w-full">
         {busy ? "Guardando…" : "Cambiar contraseña"}
       </Button>
     </form>

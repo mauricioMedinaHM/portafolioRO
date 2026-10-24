@@ -36,7 +36,7 @@ export default async function AdminPage() {
           projects={data.projects}
         />
       ) : (
-        <Card className="border-accent/40">
+        <Card className="border-ink/40">
           <CardContent className="flex flex-col gap-2 pt-5 text-sm">
             <p className="font-medium text-foreground">
               No se pudo leer la base de datos.

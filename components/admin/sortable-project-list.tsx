@@ -180,15 +180,15 @@ function SortableRow({
         ref={setNodeRef}
         style={{ transform: CSS.Translate.toString(transform), transition }}
         className={cn(
-          "flex items-center gap-2 rounded-card border border-border bg-surface p-3 shadow-card",
-          isDragging && "z-10 opacity-90 shadow-lift",
+          "flex items-center gap-2 rounded-card border border-border bg-surface p-3 ",
+          isDragging && "z-10 opacity-90 ",
           !published && "opacity-75",
         )}
       >
         <button
           type="button"
           aria-label={`Arrastrar ${project.title}`}
-          className="flex min-h-12 min-w-10 cursor-grab items-center justify-center rounded-lg text-subtle touch-none focus-visible:outline-2 focus-visible:outline-accent active:cursor-grabbing"
+          className="flex min-h-12 min-w-10 cursor-grab items-center justify-center rounded-lg text-subtle touch-none focus-visible:outline-2 focus-visible:outline-ink active:cursor-grabbing"
           {...attributes}
           {...listeners}
         >
@@ -197,7 +197,7 @@ function SortableRow({
 
         <Link
           href={`/admin/proyectos/${project.id}`}
-          className="flex min-w-0 flex-1 items-center gap-3 rounded-lg py-1 focus-visible:outline-2 focus-visible:outline-accent"
+          className="flex min-w-0 flex-1 items-center gap-3 rounded-lg py-1 focus-visible:outline-2 focus-visible:outline-ink"
         >
           {project.thumbnailUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -223,7 +223,7 @@ function SortableRow({
                 </span>
               ) : null}
               {!published ? (
-                <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-medium text-accent-strong">
+                <span className="rounded-full bg-paper-2 px-2.5 py-0.5 text-xs font-medium text-ink">
                   Borrador
                 </span>
               ) : null}
@@ -238,7 +238,7 @@ function SortableRow({
               aria-label="Subir"
               disabled={index === 0}
               onClick={() => onMove(index, -1)}
-              className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-lg text-subtle transition-colors hover:bg-foreground/5 hover:text-foreground disabled:opacity-30 focus-visible:outline-2 focus-visible:outline-accent"
+              className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-lg text-subtle transition-colors hover:bg-foreground/5 hover:text-foreground disabled:opacity-30 focus-visible:outline-2 focus-visible:outline-ink"
             >
               <ChevronUp className="size-5" aria-hidden />
             </button>
@@ -247,7 +247,7 @@ function SortableRow({
               aria-label="Bajar"
               disabled={index === total - 1}
               onClick={() => onMove(index, 1)}
-              className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-lg text-subtle transition-colors hover:bg-foreground/5 hover:text-foreground disabled:opacity-30 focus-visible:outline-2 focus-visible:outline-accent"
+              className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-lg text-subtle transition-colors hover:bg-foreground/5 hover:text-foreground disabled:opacity-30 focus-visible:outline-2 focus-visible:outline-ink"
             >
               <ChevronDown className="size-5" aria-hidden />
             </button>
@@ -283,12 +283,12 @@ function SortableRow({
                   router.refresh();
                 }
               }}
-              className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-lg text-subtle transition-colors hover:bg-foreground/5 focus-visible:outline-2 focus-visible:outline-accent"
+              className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-lg text-subtle transition-colors hover:bg-foreground/5 focus-visible:outline-2 focus-visible:outline-ink"
             >
               <Star
                 className={cn(
                   "size-5",
-                  featured ? "fill-accent text-accent" : "text-subtle",
+                  featured ? "fill-ink text-ink" : "text-subtle",
                 )}
                 aria-hidden
               />

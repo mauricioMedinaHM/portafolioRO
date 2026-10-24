@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, Share2 } from "lucide-react";
-import { Sheet } from "@/components/ui";
+import { Share2 } from "lucide-react";
+import { buttonVariants, Sheet } from "@/components/ui";
 import { ShareModal } from "@/components/share";
 import { cn } from "@/lib/utils";
 
@@ -25,53 +25,39 @@ export function NavBar({
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md">
-        <div className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between gap-3 px-5">
+      <header className="sticky top-0 z-40 border-b border-line bg-paper">
+        <div className="mx-auto flex h-12 w-full max-w-[1120px] items-center justify-between gap-4 px-5 md:h-14 md:px-16">
           <a
             href="#inicio"
-            className="min-w-0 truncate font-display text-lg font-medium text-foreground focus-visible:outline-2 focus-visible:outline-accent"
+            className="min-w-0 truncate text-[15px] text-ink-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
           >
             {name}
           </a>
-          <div className="flex shrink-0 items-center">
-            <button
-              type="button"
-              aria-label="Compartir portafolio"
-              onClick={() => setShareOpen(true)}
-              className="inline-flex min-h-12 min-w-12 items-center justify-center rounded-full text-subtle transition-colors hover:bg-foreground/5 hover:text-foreground focus-visible:outline-2 focus-visible:outline-accent"
-            >
-              <Share2 className="size-5" aria-hidden />
-            </button>
-            <button
-              type="button"
-              aria-label="Abrir menú"
-              aria-expanded={menuOpen}
-              onClick={() => setMenuOpen(true)}
-              className="inline-flex min-h-12 min-w-12 items-center justify-center rounded-full text-foreground transition-colors hover:bg-foreground/5 focus-visible:outline-2 focus-visible:outline-accent"
-            >
-              <Menu className="size-6" aria-hidden />
-            </button>
-          </div>
+          <button
+            type="button"
+            aria-expanded={menuOpen}
+            aria-controls="menu-secciones"
+            onClick={() => setMenuOpen(true)}
+            className="shrink-0 text-[15px] text-ink-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+          >
+            Menú
+          </button>
         </div>
       </header>
 
       <Sheet
         open={menuOpen}
         onOpenChange={setMenuOpen}
-        title={name}
+        title="Índice"
         side="right"
-        className="w-full sm:max-w-sm"
       >
-        <nav aria-label="Secciones" className="flex flex-col">
-          {anchors.map((anchor, i) => (
+        <nav id="menu-secciones" aria-label="Secciones" className="flex flex-col">
+          {anchors.map((anchor) => (
             <a
               key={anchor.href}
               href={anchor.href}
               onClick={() => setMenuOpen(false)}
-              className={cn(
-                "flex min-h-14 items-center border-b border-border/60 px-2 font-display text-2xl text-foreground transition-colors hover:text-accent-strong focus-visible:outline-2 focus-visible:outline-accent",
-                i === 0 && "border-t border-border/60",
-              )}
+              className="flex min-h-14 items-center border-b border-line font-display text-[32px] leading-none font-normal tracking-[-0.02em] text-ink transition-colors hover:text-ink-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
             >
               {anchor.label}
             </a>
@@ -83,10 +69,10 @@ export function NavBar({
             setMenuOpen(false);
             setShareOpen(true);
           }}
-          className="mt-8 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-accent px-6 font-medium text-white transition-colors hover:bg-accent-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className={cn(buttonVariants({ size: "lg" }), "mt-10 w-full")}
         >
           <Share2 className="size-4" aria-hidden />
-          Compartir portafolio
+          Compartir
         </button>
       </Sheet>
 

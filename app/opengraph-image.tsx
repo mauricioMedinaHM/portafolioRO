@@ -13,69 +13,48 @@ export default function OpengraphImage() {
         style={{
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "flex-end",
           width: "100%",
           height: "100%",
-          background: "#F7F1EA",
-          position: "relative",
+          background: "#FAFAF8",
+          padding: "72px 80px",
         }}
       >
         <div
           style={{
-            position: "absolute",
-            top: -120,
-            right: -80,
-            width: 420,
-            height: 420,
-            borderRadius: "50%",
-            background: "#F3DDD4",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            bottom: -140,
-            left: -100,
-            width: 460,
-            height: 460,
-            borderRadius: "50%",
-            background: "#E4E8DC",
-          }}
-        />
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 180,
-            height: 180,
-            borderRadius: "50%",
-            background: "#C2553A",
-            color: "#FFFFFF",
-            fontSize: 84,
-            fontWeight: 700,
-            marginBottom: 44,
+            fontSize: 22,
+            letterSpacing: 6,
+            textTransform: "uppercase",
+            color: "#6B6A64",
           }}
         >
-          RT
+          Salta · Argentina
         </div>
         <div
           style={{
-            fontSize: 72,
-            fontWeight: 700,
-            color: "#1F1A17",
-            letterSpacing: "-0.02em",
+            marginTop: 20,
+            fontSize: 84,
+            lineHeight: 0.92,
+            color: "#161616",
+            letterSpacing: -2,
+            maxWidth: 900,
           }}
         >
           {SITE_NAME}
         </div>
         <div
           style={{
-            marginTop: 18,
-            fontSize: 34,
-            color: "#C2553A",
-            fontWeight: 500,
+            marginTop: 28,
+            width: 96,
+            height: 2,
+            background: "#161616",
+          }}
+        />
+        <div
+          style={{
+            marginTop: 22,
+            fontSize: 28,
+            color: "#55544F",
           }}
         >
           {SITE_TAGLINE}

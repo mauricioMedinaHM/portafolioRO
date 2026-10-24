@@ -3,19 +3,22 @@ import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex min-h-12 min-w-12 cursor-pointer items-center justify-center gap-2 rounded-full px-6 text-base font-medium transition-colors select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex min-w-12 cursor-pointer items-center justify-center gap-2 rounded-none px-5 text-[15px] font-medium tracking-wide transition-colors select-none focus-visible:outline-2 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        primary: "bg-accent text-white hover:bg-accent-strong active:bg-accent-strong",
-        secondary:
-          "bg-secondary text-white hover:bg-secondary-strong active:bg-secondary-strong",
-        ghost: "text-foreground hover:bg-foreground/8 active:bg-foreground/10",
+        primary: "bg-ink text-paper hover:bg-ink-hover focus-visible:outline-ink",
+        outline:
+          "border border-ink bg-transparent text-ink hover:bg-paper-2 focus-visible:outline-ink",
+        ghost: "bg-transparent text-ink hover:bg-paper-2 focus-visible:outline-ink",
+        invert: "bg-paper text-ink hover:bg-paper-2 focus-visible:outline-paper",
+        "invert-outline":
+          "border border-mist bg-transparent text-paper hover:bg-ink-hover focus-visible:outline-paper",
       },
       size: {
-        md: "min-h-12 px-6",
-        sm: "min-h-12 px-4 text-sm",
-        lg: "min-h-14 px-8 text-lg",
+        md: "min-h-12 px-5",
+        sm: "min-h-12 px-4 text-[13px]",
+        lg: "min-h-[52px] px-6",
         icon: "min-h-12 w-12 px-0",
       },
     },

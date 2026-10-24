@@ -90,7 +90,7 @@ export function CategoryManager({ categories }: { categories: Category[] }) {
         </SortableContext>
       </DndContext>
 
-      <Button variant="secondary" onClick={() => setEditing("new")}>
+      <Button variant="outline" onClick={() => setEditing("new")}>
         <Plus className="size-4" aria-hidden />
         Nueva categoría
       </Button>
@@ -132,14 +132,14 @@ function SortableCategoryRow({
         ref={setNodeRef}
         style={{ transform: CSS.Translate.toString(transform), transition }}
         className={cn(
-          "flex items-center gap-2 rounded-card border border-border bg-surface p-3 shadow-card",
-          isDragging && "z-10 opacity-90 shadow-lift",
+          "flex items-center gap-2 rounded-card border border-border bg-surface p-3 ",
+          isDragging && "z-10 opacity-90 ",
         )}
       >
         <button
           type="button"
           aria-label={`Arrastrar ${category.name}`}
-          className="flex min-h-12 min-w-10 cursor-grab items-center justify-center rounded-lg text-subtle touch-none focus-visible:outline-2 focus-visible:outline-accent active:cursor-grabbing"
+          className="flex min-h-12 min-w-10 cursor-grab items-center justify-center rounded-lg text-subtle touch-none focus-visible:outline-2 focus-visible:outline-ink active:cursor-grabbing"
           {...attributes}
           {...listeners}
         >
@@ -149,7 +149,7 @@ function SortableCategoryRow({
         <button
           type="button"
           onClick={onEdit}
-          className="min-w-0 flex-1 rounded-lg py-1 text-left focus-visible:outline-2 focus-visible:outline-accent"
+          className="min-w-0 flex-1 rounded-lg py-1 text-left focus-visible:outline-2 focus-visible:outline-ink"
         >
           <p className="truncate font-medium text-foreground">{category.name}</p>
           <p className="truncate text-xs text-subtle">
@@ -179,7 +179,7 @@ function SortableCategoryRow({
           type="button"
           aria-label={`Editar ${category.name}`}
           onClick={onEdit}
-          className="inline-flex min-h-12 min-w-12 items-center justify-center rounded-lg text-subtle transition-colors hover:bg-foreground/5 hover:text-foreground focus-visible:outline-2 focus-visible:outline-accent"
+          className="inline-flex min-h-12 min-w-12 items-center justify-center rounded-lg text-subtle transition-colors hover:bg-foreground/5 hover:text-foreground focus-visible:outline-2 focus-visible:outline-ink"
         >
           <Pencil className="size-5" aria-hidden />
         </button>
@@ -282,7 +282,7 @@ function CategoryForm({
         <Switch label="Visible" checked={isVisible} onChange={setIsVisible} />
       </div>
 
-      {error ? <p className="text-sm text-accent-strong">{error}</p> : null}
+      {error ? <p className="text-sm text-ink">{error}</p> : null}
 
       <Button onClick={submit} disabled={busy} className="w-full">
         {busy ? "Guardando…" : "Guardar categoría"}

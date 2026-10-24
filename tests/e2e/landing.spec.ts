@@ -13,7 +13,7 @@ test.describe("landing", () => {
   test("hero muestra nombre y CTAs", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Rosario");
-    await expect(page.getByRole("link", { name: "Ver mi trabajo" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Ver su trabajo" })).toBeVisible();
     await expect(
       page.getByRole("link", { name: "WhatsApp" }).first(),
     ).toBeVisible();
@@ -21,7 +21,7 @@ test.describe("landing", () => {
 
   test("el menú muestra anclas y navega", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("button", { name: "Abrir menú" }).click();
+    await page.getByRole("button", { name: "Menú" }).click();
     const menu = page.getByRole("dialog");
     await expect(menu.getByRole("link", { name: "Contacto" })).toBeVisible();
     await menu.getByRole("link", { name: "Conducción" }).click();

@@ -7,10 +7,10 @@ import { AlertTriangle } from "lucide-react";
  */
 export function SetupNotice() {
   return (
-    <Card className="border-accent/40 bg-accent-soft/40">
+    <Card className="border-ink/40 bg-paper-2/40">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg">
-          <AlertTriangle className="size-5 text-accent-strong" aria-hidden />
+          <AlertTriangle className="size-5 text-ink" aria-hidden />
           Supabase no está configurado
         </CardTitle>
       </CardHeader>

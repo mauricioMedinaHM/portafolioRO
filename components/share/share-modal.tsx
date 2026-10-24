@@ -5,9 +5,7 @@ import { Modal } from "@/components/ui";
 
 const ShareContent = dynamic(() => import("./share-content"), {
   ssr: false,
-  loading: () => (
-    <div className="mx-auto h-72 w-full max-w-xs animate-pulse rounded-2xl bg-muted" />
-  ),
+  loading: () => <div className="mx-auto h-72 w-full max-w-xs animate-pulse bg-paper-2" />,
 });
 
 export interface ShareModalProps {

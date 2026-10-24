@@ -1,33 +1,41 @@
 @import "tailwindcss";
 
 /*
- * Dirección de estilo: "Estudio cálido"
- * fondo crema #F7F1EA · texto #1F1A17 · acento terracota #C2553A · oliva #6B7A5A
- * Títulos: Fraunces (--font-display) · Cuerpo: Inter (--font-sans)
+ * Dirección "Claro y limpio" (docs/DISENO.md)
+ * paper #FAFAF8 · paper-2 #F0EFEB · ink #161616 · ink-2 #55544F
+ * ink-3 #6B6A64 · line #E3E2DD · mist #A3A29C sobre ink
+ * Display: Newsreader Variable (eje opsz) · Texto: Hanken Grotesk Variable
  */
+
 @theme {
-  --color-background: #f7f1ea; /* crema */
-  --color-foreground: #1f1a17; /* texto principal */
-  --color-surface: #fffdf9; /* tarjetas */
-  --color-muted: #efe6db; /* fondos suaves */
-  --color-border: #e2d6c8; /* bordes */
-  --color-subtle: #6f6257; /* texto secundario */
+  --color-paper: #fafaf8;
+  --color-paper-2: #f0efeb;
+  --color-ink: #161616;
+  --color-ink-hover: #2a2a28;
+  --color-ink-2: #55544f;
+  --color-ink-3: #6b6a64;
+  --color-line: #e3e2dd;
+  --color-mist: #a3a29c;
 
-  --color-accent: #c2553a; /* terracota */
-  --color-accent-strong: #a8452d; /* terracota hover/active */
-  --color-accent-soft: #f3ddd4; /* terracota suave */
+  --color-background: #fafaf8;
+  --color-foreground: #161616;
+  --color-surface: #fafaf8;
+  --color-muted: #f0efeb;
+  --color-border: #e3e2dd;
+  --color-subtle: #6b6a64;
 
-  --color-secondary: #6b7a5a; /* oliva */
-  --color-secondary-strong: #56633f; /* oliva oscuro (texto sobre tinte) */
-  --color-secondary-soft: #e4e8dc; /* oliva suave */
+  --font-sans: "Hanken Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Newsreader Variable", "Iowan Old Style", Georgia, serif;
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --radius-card: 0px;
+}
 
-  --radius-card: 1.25rem;
-
-  --shadow-card: 0 1px 2px rgb(31 26 23 / 0.05), 0 4px 16px rgb(31 26 23 / 0.07);
-  --shadow-lift: 0 2px 4px rgb(31 26 23 / 0.08), 0 12px 32px rgb(31 26 23 / 0.12);
+@utility meta {
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 html {
@@ -35,17 +43,23 @@ html {
 }
 
 body {
-  background: var(--color-background);
-  color: var(--color-foreground);
+  background: var(--color-paper);
+  color: var(--color-ink);
   font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+
+.font-display {
+  font-optical-sizing: auto;
 }
 
 ::selection {
-  background: var(--color-accent-soft);
-  color: var(--color-foreground);
+  background: var(--color-ink);
+  color: var(--color-paper);
 }
 
-/* Lenis recomienda estas clases cuando está activo */
 html.lenis,
 html.lenis body {
   height: auto;
@@ -59,6 +73,21 @@ html.lenis body {
   overflow: hidden;
 }
 
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.reveal {
+  animation: reveal-in 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -66,24 +95,40 @@ html.lenis body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 
-/* Animaciones de entrada para overlay y contenido de Radix Dialog */
 @keyframes ui-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes ui-modal-in {
-  from { opacity: 0; transform: translate(-50%, -48%) scale(0.97); }
-  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 12px));
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
 }
 
 .ui-overlay[data-state="open"] {
-  animation: ui-fade-in 160ms ease-out;
+  animation: ui-fade-in 280ms ease-out;
 }
 
 .ui-modal[data-state="open"] {
-  animation: ui-modal-in 200ms cubic-bezier(0.22, 1, 0.36, 1);
+  animation: ui-modal-in 420ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }

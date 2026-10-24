@@ -4,10 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import { Download } from "lucide-react";
 import { toast } from "sonner";
+import { buttonVariants } from "@/components/ui";
 import { cn } from "@/lib/utils";
 
-const DARK = "#1F1A17";
-const LIGHT = "#F7F1EA";
+const DARK = "#161616";
+const LIGHT = "#FAFAF8";
 
 function isIos() {
   if (typeof navigator === "undefined") return false;
@@ -56,8 +57,6 @@ export function QrCode({ value, size = 220, downloadName, className }: QrCodePro
         color: { dark: DARK, light: LIGHT },
       });
       if (isIos()) {
-        // iOS Safari no descarga data URLs: abrir en pestaña nueva para
-        // «mantener apretado y guardar imagen».
         window.open(dataUrl, "_blank", "noopener");
         toast.success("Mantené apretada la imagen para guardarla");
       } else {
@@ -75,10 +74,10 @@ export function QrCode({ value, size = 220, downloadName, className }: QrCodePro
   }
 
   return (
-    <div className={cn("flex flex-col items-center gap-4", className)}>
+    <div className={cn("flex flex-col items-center gap-5", className)}>
       {failed ? (
         <div
-          className="flex items-center justify-center rounded-xl bg-muted text-sm text-subtle"
+          className="flex items-center justify-center bg-paper-2 text-[15px] text-ink-3"
           style={{ width: size, height: size }}
         >
           No se pudo generar el QR
@@ -88,7 +87,7 @@ export function QrCode({ value, size = 220, downloadName, className }: QrCodePro
           ref={canvasRef}
           aria-label={`Código QR para ${value}`}
           role="img"
-          className="rounded-lg"
+          className="bg-paper"
           style={{ width: size, height: size }}
         />
       )}
@@ -97,7 +96,7 @@ export function QrCode({ value, size = 220, downloadName, className }: QrCodePro
           type="button"
           onClick={download}
           disabled={busy || failed}
-          className="inline-flex min-h-12 items-center gap-2 rounded-full border border-border bg-surface px-5 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-accent disabled:opacity-50"
+          className={cn(buttonVariants({ variant: "outline" }), "w-full max-w-xs")}
         >
           <Download className="size-4" aria-hidden />
           {busy ? "Generando…" : "Descargar QR (PNG)"}

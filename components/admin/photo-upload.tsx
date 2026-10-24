@@ -33,7 +33,7 @@ export function PhotoUpload({
           type="button"
           disabled={busy}
           onClick={() => inputRef.current?.click()}
-          className="inline-flex min-h-12 items-center gap-2 rounded-full border border-border bg-surface px-5 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-accent disabled:opacity-50"
+          className="inline-flex min-h-12 items-center gap-2 rounded-full border border-border bg-surface px-5 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-ink disabled:opacity-50"
         >
           <RefreshCw className="size-4" aria-hidden />
           {busy ? "Subiendo…" : value ? "Cambiar foto" : "Subir foto"}

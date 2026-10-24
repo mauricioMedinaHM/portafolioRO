@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "motion/react";
 import { useState } from "react";
 
 import { parseMediaUrl } from "@/lib/embed/parseMediaUrl";
@@ -79,15 +78,11 @@ export function MediaCard({ project }: MediaCardProps) {
       (provider === "drive" && parsed.canEmbed));
 
   return (
-    <motion.article
-      className="flex w-full flex-col gap-3"
-      whileHover={{ y: -2 }}
-      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-    >
+    <article className="flex w-full flex-col">
       {provider === "image" && !thumbFailed ? (
         <div
           className={cn(
-            "relative w-full overflow-hidden rounded-xl bg-neutral-200",
+            "relative w-full overflow-hidden bg-ink",
             aspect === "9/16" ? "aspect-[9/16] max-w-sm" : "aspect-video",
           )}
         >
@@ -131,19 +126,19 @@ export function MediaCard({ project }: MediaCardProps) {
           aspect={aspect}
         />
       )}
-      <div className="flex flex-col gap-1">
-        <h3 className="text-base font-semibold leading-snug text-foreground">{project.title}</h3>
+      <div className="mt-4 flex flex-col gap-2">
         {project.date ? (
-          <time dateTime={project.date} className="text-sm text-foreground/70">
+          <time dateTime={project.date} className="meta text-ink-3">
             {formatDate(project.date)}
           </time>
         ) : null}
+        <h3 className="font-display text-[19px] leading-snug font-normal tracking-[-0.02em] text-ink md:text-[22px]">
+          {project.title}
+        </h3>
         {project.description ? (
-          <p className="text-sm leading-relaxed text-foreground/80">
-            {project.description}
-          </p>
+          <p className="max-w-[62ch] text-[17px] leading-relaxed text-ink-2">{project.description}</p>
         ) : null}
       </div>
-    </motion.article>
+    </article>
   );
 }

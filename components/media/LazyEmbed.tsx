@@ -1,7 +1,6 @@
 "use client";
 
 import { Play } from "lucide-react";
-import { motion } from "motion/react";
 import { useState } from "react";
 
 import { cn } from "@/lib/utils";
@@ -33,12 +32,7 @@ export function LazyEmbed({
 
   return (
     <div className={cn("flex w-full flex-col gap-2", aspect === "9/16" && "items-center")}>
-      <div
-        className={cn(
-          "relative w-full overflow-hidden rounded-xl bg-neutral-900",
-          frame,
-        )}
-      >
+      <div className={cn("relative w-full overflow-hidden bg-ink", frame)}>
         {active ? (
           <iframe
             className="absolute inset-0 h-full w-full border-0"
@@ -46,15 +40,14 @@ export function LazyEmbed({
             title={title}
             loading="lazy"
             allow="autoplay; fullscreen; picture-in-picture"
+            allowFullScreen
           />
         ) : (
-          <motion.button
+          <button
             type="button"
-            className="group absolute inset-0 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="group absolute inset-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-paper"
             onClick={() => setActive(true)}
             aria-label={`Reproducir ${title}`}
-            whileTap={{ scale: 0.985 }}
-            transition={{ type: "spring", stiffness: 420, damping: 28 }}
           >
             {thumbnailUrl ? (
               // Miniaturas externas (YouTube, Drive, Vimeo): el dominio no está en next/image.
@@ -67,13 +60,13 @@ export function LazyEmbed({
                 onError={onThumbnailError}
               />
             ) : (
-              <span className="absolute inset-0 bg-[radial-gradient(circle_at_center,#3f3834,#161311)]" />
+              <span className="absolute inset-0 bg-ink" />
             )}
-            <span className="absolute inset-0 bg-black/25" />
-            <span className="absolute left-1/2 top-1/2 flex h-14 min-h-[56px] w-14 min-w-[56px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white text-neutral-950 shadow-lg transition-transform group-hover:scale-105 motion-reduce:transform-none">
-              <Play className="size-7 translate-x-px" fill="currentColor" aria-hidden="true" />
+            <span className="absolute inset-0 bg-ink/15 transition-colors group-hover:bg-ink/25" />
+            <span className="absolute top-1/2 left-1/2 flex size-14 min-h-14 min-w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-paper text-ink">
+              <Play className="size-6 translate-x-px" fill="currentColor" aria-hidden="true" />
             </span>
-          </motion.button>
+          </button>
         )}
       </div>
       {active ? (
@@ -81,7 +74,7 @@ export function LazyEmbed({
           href={openUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-xs text-foreground/70 underline-offset-2 hover:underline"
+          className="text-[13px] text-ink-3 underline-offset-4 hover:text-ink hover:underline"
         >
           ¿No carga? Abrir en {providerLabel}
         </a>

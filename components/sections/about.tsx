@@ -1,5 +1,4 @@
-import { GraduationCap } from "lucide-react";
-import { Reveal, Section } from "@/components/ui";
+import { Reveal } from "@/components/ui";
 import type { Profile } from "@/lib/types";
 
 export function About({ profile }: { profile: Profile }) {
@@ -8,23 +7,45 @@ export function About({ profile }: { profile: Profile }) {
   if (!profile.bio && skills.length === 0 && education.length === 0) return null;
 
   return (
-    <Section id="sobre-mi" title="Sobre mí">
-      <div className="flex flex-col gap-8">
-        {profile.bio ? (
-          <Reveal>
-            <p className="max-w-2xl text-lg leading-relaxed text-foreground/90">
-              {profile.bio}
-            </p>
+    <section id="sobre-mi" className="scroll-mt-16 bg-paper-2 py-16 md:py-20">
+      <div className="mx-auto grid w-full max-w-[1120px] grid-cols-12 gap-x-6 gap-y-14 px-5 md:px-16">
+        <Reveal className="col-span-12 md:col-span-5">
+          <p className="meta text-ink-3">Perfil</p>
+          <h2 className="mt-4 font-display text-[30px] leading-[1.05] font-normal tracking-[-0.02em] text-ink md:text-[48px]">
+            Sobre mí
+          </h2>
+          {profile.bio ? (
+            <p className="mt-6 max-w-[62ch] text-[17px] leading-[1.65] text-ink">{profile.bio}</p>
+          ) : null}
+        </Reveal>
+
+        {education.length > 0 ? (
+          <Reveal delay={0.08} className="col-span-12 md:col-span-6 md:col-start-7">
+            <p className="meta text-ink-3">Trayectoria</p>
+            <ul className="mt-4 border-t border-line">
+              {education.map((item) => (
+                <li
+                  key={item}
+                  className="border-b border-line py-4 text-[17px] leading-relaxed text-ink"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
           </Reveal>
         ) : null}
 
         {skills.length > 0 ? (
-          <Reveal delay={0.05}>
-            <ul className="flex flex-wrap gap-2" aria-label="Habilidades">
+          <Reveal delay={0.12} className="col-span-12">
+            <p className="meta text-ink-3">Habilidades</p>
+            <ul
+              className="mt-4 grid grid-cols-1 border-t border-line sm:grid-cols-2 lg:grid-cols-3"
+              aria-label="Habilidades"
+            >
               {skills.map((skill) => (
                 <li
                   key={skill}
-                  className="rounded-full bg-secondary-soft px-4 py-2 text-sm font-medium text-secondary-strong"
+                  className="border-b border-line py-3.5 text-[17px] leading-snug text-ink"
                 >
                   {skill}
                 </li>
@@ -32,29 +53,7 @@ export function About({ profile }: { profile: Profile }) {
             </ul>
           </Reveal>
         ) : null}
-
-        {education.length > 0 ? (
-          <Reveal delay={0.1}>
-            <div>
-              <h3 className="mb-4 flex items-center gap-2 font-display text-xl text-foreground">
-                <GraduationCap className="size-5 text-accent" aria-hidden />
-                Trayectoria
-              </h3>
-              <ol className="relative ml-2 flex flex-col gap-4 border-l-2 border-border pl-5">
-                {education.map((item) => (
-                  <li key={item} className="relative text-sm leading-relaxed text-foreground/90">
-                    <span
-                      aria-hidden
-                      className="absolute top-1.5 -left-[1.65rem] size-2.5 rounded-full border-2 border-background bg-accent"
-                    />
-                    {item}
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </Reveal>
-        ) : null}
       </div>
-    </Section>
+    </section>
   );
 }

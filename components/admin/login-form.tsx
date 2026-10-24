@@ -85,7 +85,7 @@ export function LoginForm() {
       <button
         type="button"
         onClick={() => setMode(mode === "login" ? "recover" : "login")}
-        className="min-h-12 text-sm font-medium text-secondary-strong underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-accent"
+        className="min-h-12 text-sm font-medium text-ink underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-ink"
       >
         {mode === "login"
           ? "¿Olvidaste tu contraseña?"

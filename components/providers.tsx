@@ -14,7 +14,7 @@ export function Providers({ children }: { children: ReactNode }) {
       lerp: 0.12,
       smoothWheel: true,
       // scroll suave hacia las anclas de las secciones (offset = nav sticky)
-      anchors: { offset: -72 },
+      anchors: { offset: -56 },
     });
     let rafId = 0;
     const raf = (time: number) => {
@@ -37,10 +37,10 @@ export function Providers({ children }: { children: ReactNode }) {
         gap={8}
         toastOptions={{
           style: {
-            background: "var(--color-foreground)",
-            color: "var(--color-background)",
+            background: "var(--color-ink)",
+            color: "var(--color-paper)",
             border: "none",
-            borderRadius: "0.75rem",
+            borderRadius: "0",
           },
         }}
       />

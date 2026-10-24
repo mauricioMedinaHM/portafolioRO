@@ -47,12 +47,12 @@ export function LinkPreview({ url }: { url: string }) {
         <p
           className={cn(
             "text-xs",
-            media.canEmbed ? "text-secondary-strong" : "text-subtle",
+            media.canEmbed ? "text-ink" : "text-subtle",
           )}
         >
           {media.canEmbed ? "Se reproduce dentro de la landing." : "Abre en una pestaña nueva."}
         </p>
-        {note ? <p className="text-xs text-accent-strong">{note}</p> : null}
+        {note ? <p className="text-xs text-ink">{note}</p> : null}
       </div>
     </div>
   );

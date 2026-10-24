@@ -1,18 +1,21 @@
 import Image from "next/image";
-import { MessageCircle } from "lucide-react";
 import { buttonVariants, Reveal } from "@/components/ui";
 import { WHATSAPP_MESSAGE, whatsappLink } from "@/lib/links";
 import type { Profile } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
-function initials(name: string) {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((w) => w[0])
-    .join("")
-    .toUpperCase();
+function nameLines(fullName: string) {
+  const parts = fullName.trim().split(/\s+/).filter(Boolean);
+  if (parts.length >= 3) {
+    return {
+      mobile: [parts.slice(0, -1).join(" "), parts[parts.length - 1]],
+      desktop: parts,
+    };
+  }
+  if (parts.length === 2) {
+    return { mobile: [parts[0], parts[1]], desktop: parts };
+  }
+  return { mobile: [fullName, ""], desktop: [fullName] };
 }
 
 export function Hero({
@@ -23,84 +26,75 @@ export function Hero({
   firstCategorySlug?: string;
 }) {
   const wa = profile.whatsapp ? whatsappLink(profile.whatsapp, WHATSAPP_MESSAGE) : null;
+  const photo = profile.photoUrl || "/rosario.png";
+  const place = /salta/i.test(profile.tagline) ? profile.tagline : `${profile.tagline} · Salta`;
+  const lines = nameLines(profile.fullName);
 
   return (
-    <section id="inicio" className="relative scroll-mt-20 overflow-hidden">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-accent-soft/70 blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-32 -left-24 size-80 rounded-full bg-secondary-soft/80 blur-3xl"
-      />
+    <section id="inicio" className="scroll-mt-16">
+      <div className="mx-auto grid w-full max-w-[1120px] grid-cols-1 gap-5 px-5 pt-5 pb-6 md:grid-cols-12 md:items-center md:gap-x-6 md:px-16 md:pt-16 md:pb-12">
+        <div className="contents md:col-span-5 md:flex md:flex-col md:justify-center md:gap-8">
+          <Reveal>
+            <h1 className="font-display text-[44px] leading-[0.92] font-normal tracking-[-0.03em] text-ink md:text-[64px] md:leading-[0.86] lg:text-[80px] xl:text-[88px]">
+              <span className="md:hidden">
+                {lines.mobile[0]}
+                {lines.mobile[1] ? (
+                  <>
+                    <br />
+                    {lines.mobile[1]}
+                  </>
+                ) : null}
+              </span>
+              <span className="hidden md:block">
+                {lines.desktop.map((line, index) => (
+                  <span key={`${line}-${index}`} className="block">
+                    {line}
+                  </span>
+                ))}
+              </span>
+            </h1>
+          </Reveal>
 
-      <div className="relative mx-auto flex min-h-[88svh] w-full max-w-5xl flex-col items-center justify-center gap-6 px-5 py-14 text-center">
-        <Reveal>
-          {profile.heroVideoUrl ? (
-            <video
-              className="aspect-video w-full max-w-md rounded-3xl border border-border bg-foreground/5 object-cover shadow-lift"
-              src={profile.heroVideoUrl}
-              autoPlay
-              muted
-              loop
-              playsInline
-              poster={profile.photoUrl ?? undefined}
-            />
-          ) : profile.photoUrl ? (
-            <Image
-              src={profile.photoUrl}
-              alt={profile.fullName}
-              width={192}
-              height={192}
-              priority
-              className="size-40 rounded-full border-4 border-surface object-cover shadow-lift sm:size-48"
-            />
-          ) : (
-            <div className="flex size-40 items-center justify-center rounded-full border-4 border-surface bg-accent font-display text-5xl text-white shadow-lift sm:size-48">
-              {initials(profile.fullName)}
+          <Reveal delay={0.08}>
+            <p className="max-w-[36ch] text-[17px] leading-snug text-ink-2">{place}</p>
+          </Reveal>
+
+          <Reveal delay={0.16} className="max-md:order-2">
+            <div className="flex flex-col gap-3">
+              {firstCategorySlug ? (
+                <a
+                  href={`#${firstCategorySlug}`}
+                  className={cn(buttonVariants({ size: "lg" }), "w-full")}
+                >
+                  Ver su trabajo
+                </a>
+              ) : null}
+              {wa ? (
+                <a
+                  href={wa}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(buttonVariants({ variant: "outline", size: "lg" }), "w-full")}
+                >
+                  WhatsApp
+                </a>
+              ) : null}
             </div>
-          )}
-        </Reveal>
+          </Reveal>
+        </div>
 
-        <Reveal delay={0.05}>
-          <h1 className="font-display text-4xl leading-tight text-balance text-foreground sm:text-6xl">
-            {profile.fullName}
-          </h1>
-        </Reveal>
-
-        <Reveal delay={0.1}>
-          <p className="text-lg font-medium text-accent-strong sm:text-xl">
-            {profile.tagline}
-          </p>
-        </Reveal>
-
-        <Reveal delay={0.15}>
-          <div className="flex w-full max-w-xs flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row">
-            {firstCategorySlug ? (
-              <a
-                href={`#${firstCategorySlug}`}
-                className={cn(buttonVariants(), "w-full sm:w-auto")}
-              >
-                Ver mi trabajo
-              </a>
-            ) : null}
-            {wa ? (
-              <a
-                href={wa}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(
-                  buttonVariants({ variant: "secondary" }),
-                  "w-full sm:w-auto",
-                )}
-              >
-                <MessageCircle className="size-4" aria-hidden />
-                WhatsApp
-              </a>
-            ) : null}
+        <div className="max-md:order-1 md:col-span-7 md:w-full md:max-w-[520px] md:justify-self-end">
+          <div className="relative aspect-[4/5] w-full">
+            <Image
+              src={photo}
+              alt="Retrato de Rosario Tejerina Pittis"
+              fill
+              priority
+              sizes="(min-width: 768px) 520px, 100vw"
+              className="object-cover object-[center_18%]"
+            />
           </div>
-        </Reveal>
+        </div>
       </div>
     </section>
   );

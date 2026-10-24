@@ -26,12 +26,7 @@ export function MediaFallback({
 
   return (
     <div className={cn("flex w-full", aspect === "9/16" && "justify-center")}>
-      <div
-        className={cn(
-          "relative flex w-full items-center justify-center overflow-hidden rounded-xl bg-neutral-900",
-          frame,
-        )}
-      >
+      <div className={cn("relative flex w-full items-center justify-center overflow-hidden bg-ink", frame)}>
         {showThumb ? (
           // La miniatura puede venir de un og:image externo que no está en next/image.
           // eslint-disable-next-line @next/next/no-img-element
@@ -43,12 +38,12 @@ export function MediaFallback({
             onError={() => setThumbFailed(true)}
           />
         ) : null}
-        <span className="absolute inset-0 bg-black/45" />
+        {showThumb ? <span className="absolute inset-0 bg-ink/25" /> : null}
         <a
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className="relative z-10 inline-flex min-h-[56px] min-w-[56px] items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-neutral-950 shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          className="relative z-10 inline-flex min-h-14 min-w-14 items-center justify-center gap-2 bg-paper px-5 text-[15px] font-medium text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-paper"
         >
           {label}
           <ExternalLink className="size-4" aria-hidden="true" />

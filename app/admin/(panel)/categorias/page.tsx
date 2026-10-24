@@ -25,7 +25,7 @@ export default async function CategoriesPage() {
       {categories ? (
         <CategoryManager categories={categories} />
       ) : (
-        <Card className="border-accent/40">
+        <Card className="border-ink/40">
           <CardContent className="pt-5 text-sm text-subtle">
             No se pudo leer la base de datos. {error}
           </CardContent>

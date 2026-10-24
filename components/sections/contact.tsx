@@ -1,91 +1,74 @@
-import { ExternalLink, Mail, MessageCircle } from "lucide-react";
-
-function InstagramIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      aria-hidden
-    >
-      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-    </svg>
-  );
-}
-import { buttonVariants, Reveal, Section } from "@/components/ui";
+import { buttonVariants, Reveal } from "@/components/ui";
 import { WHATSAPP_MESSAGE, whatsappLink } from "@/lib/links";
 import type { Profile } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
+const SOCIAL_LABEL: Record<string, string> = {
+  instagram: "Instagram",
+  linkedin: "LinkedIn",
+  tiktok: "TikTok",
+  youtube: "YouTube",
+  x: "X",
+};
+
 export function Contact({ profile }: { profile: Profile }) {
-  const wa = profile.whatsapp
-    ? whatsappLink(profile.whatsapp, WHATSAPP_MESSAGE)
-    : null;
+  const wa = profile.whatsapp ? whatsappLink(profile.whatsapp, WHATSAPP_MESSAGE) : null;
   const socials = Object.entries(profile.socials).filter(
     (entry): entry is [string, string] => Boolean(entry[1]),
   );
   if (!wa && !profile.email && socials.length === 0) return null;
 
   return (
-    <Section
-      id="contacto"
-      title="Contacto"
-      intro="¿Charlamos? Escribime por el canal que te quede más cómodo."
-    >
-      <Reveal>
-        <div className="flex w-full max-w-md flex-col gap-3">
+    <section id="contacto" className="scroll-mt-16 bg-ink text-paper">
+      <div className="mx-auto grid w-full max-w-[1120px] grid-cols-12 gap-x-6 gap-y-10 px-5 py-16 md:px-16 md:py-24">
+        <Reveal className="col-span-12 md:col-span-5">
+          <p className="meta text-mist">Salta Capital</p>
+          <h2 className="mt-4 font-display text-[30px] leading-[1.05] font-normal tracking-[-0.02em] text-paper md:text-[48px]">
+            Contacto
+          </h2>
+          <p className="mt-5 max-w-[62ch] text-[17px] leading-relaxed text-mist">
+            Escribime por el canal que te quede más cómodo.
+          </p>
+        </Reveal>
+
+        <Reveal delay={0.08} className="col-span-12 flex flex-col gap-3 md:col-span-6 md:col-start-7">
           {wa ? (
             <a
               href={wa}
               target="_blank"
               rel="noopener noreferrer"
-              className={cn(buttonVariants(), "w-full")}
+              className={cn(buttonVariants({ variant: "invert", size: "lg" }), "w-full")}
             >
-              <MessageCircle className="size-5" aria-hidden />
-              Escribime por WhatsApp
+              WhatsApp
             </a>
           ) : null}
           {profile.email ? (
             <a
               href={`mailto:${profile.email}`}
-              className={cn(buttonVariants({ variant: "secondary" }), "w-full")}
+              className={cn(buttonVariants({ variant: "invert-outline", size: "lg" }), "w-full")}
             >
-              <Mail className="size-5" aria-hidden />
               {profile.email}
             </a>
           ) : null}
-        </div>
-      </Reveal>
-
-      {socials.length > 0 ? (
-        <Reveal delay={0.05}>
-          <ul className="mt-8 flex flex-wrap gap-3" aria-label="Redes sociales">
-            {socials.map(([network, href]) => (
-              <li key={network}>
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex min-h-12 items-center gap-2 rounded-full border border-border bg-surface px-5 text-sm font-medium text-foreground capitalize transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-accent"
-                >
-                  {network === "instagram" ? (
-                    <InstagramIcon className="size-4" />
-                  ) : (
-                    <ExternalLink className="size-4" aria-hidden />
-                  )}
-                  {network === "x" ? "X (Twitter)" : network}
-                </a>
-              </li>
-            ))}
-          </ul>
+          {socials.length > 0 ? (
+            <ul className="mt-6 flex flex-col" aria-label="Redes sociales">
+              {socials.map(([network, href]) => (
+                <li key={network} className="border-t border-mist/40">
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex min-h-12 items-center justify-between text-[15px] text-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-paper"
+                  >
+                    <span>{SOCIAL_LABEL[network] ?? network}</span>
+                    <span className="meta text-mist">↗</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : null}
         </Reveal>
-      ) : null}
-    </Section>
+      </div>
+    </section>
   );
 }

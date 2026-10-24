@@ -14,7 +14,7 @@ export function Field({ label, error, hint, children }: FieldProps) {
       <span className="text-sm font-medium text-foreground">{label}</span>
       {children}
       {error ? (
-        <span className="text-sm text-accent-strong">{error}</span>
+        <span className="text-sm text-ink">{error}</span>
       ) : hint ? (
         <span className="text-xs text-subtle">{hint}</span>
       ) : null}
