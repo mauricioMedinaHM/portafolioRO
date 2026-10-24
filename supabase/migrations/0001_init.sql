@@ -13,6 +13,8 @@ create table if not exists public.profile (
   email text,
   whatsapp text, -- formato E.164
   socials jsonb not null default '{}'::jsonb,
+  skills text[] not null default '{}', -- chips de habilidades
+  education text[] not null default '{}', -- formación y certificados
   updated_at timestamptz not null default now()
 );
 
@@ -52,6 +54,9 @@ create index if not exists projects_category_position_idx
 -- se agrega su user_id acá).
 create table if not exists public.admin_users (
   user_id uuid primary key references auth.users (id) on delete cascade,
+  -- se guarda el mail para poder dar de alta la usuaria por mail
+  -- sin buscar el uuid en el dashboard
+  email text,
   created_at timestamptz not null default now()
 );
 
@@ -63,7 +68,10 @@ security definer
 set search_path = public
 as $$
   select exists (
-    select 1 from public.admin_users where user_id = auth.uid()
+    select 1
+    from public.admin_users
+    where user_id = auth.uid()
+       or email = auth.jwt() ->> 'email'
   );
 $$;
 

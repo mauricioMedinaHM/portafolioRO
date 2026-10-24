@@ -23,6 +23,8 @@ export interface Profile {
     youtube?: string;
     x?: string;
   };
+  skills?: string[]; // chips de habilidades (sección Sobre mí)
+  education?: string[]; // formación y certificados ("Trayectoria")
   updatedAt: string;
 }
 

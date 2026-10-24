@@ -1,39 +1,45 @@
 import { describe, expect, it } from "vitest";
 import { mockCategories, mockProfile, mockProjects } from "@/lib/data/mocks";
 import { cn } from "@/lib/utils";
-import type { MediaProvider } from "@/lib/types";
 
-describe("mocks (contrato fase 0)", () => {
-  it("el perfil tiene nombre y tagline", () => {
+describe("mocks (contenido real de la clienta)", () => {
+  it("el perfil tiene nombre, tagline, contacto y trayectoria", () => {
     expect(mockProfile.id).toBe(1);
     expect(mockProfile.fullName.length).toBeGreaterThan(0);
     expect(mockProfile.tagline.length).toBeGreaterThan(0);
+    expect(mockProfile.whatsapp).toMatch(/^\+/);
+    expect((mockProfile.education ?? []).length).toBeGreaterThan(0);
+    expect((mockProfile.skills ?? []).length).toBeGreaterThan(0);
   });
 
-  it("hay 3 categorías y la primera es Conducción", () => {
-    expect(mockCategories).toHaveLength(3);
+  it("hay 5 categorías y la primera es Conducción", () => {
+    expect(mockCategories).toHaveLength(5);
     expect(mockCategories[0].slug).toBe("conduccion");
     expect(
       mockCategories.every((c) => c.isVisible && c.slug.length > 0),
     ).toBe(true);
   });
 
-  it("hay 8 proyectos y cada uno referencia una categoría existente", () => {
-    expect(mockProjects).toHaveLength(8);
+  it("cada proyecto referencia una categoría existente", () => {
     const ids = new Set(mockCategories.map((c) => c.id));
     for (const p of mockProjects) {
       expect(ids.has(p.categoryId)).toBe(true);
-      expect(p.url.length).toBeGreaterThan(0);
     }
   });
 
-  it("los providers cubren las variantes principales", () => {
-    const providers = new Set<MediaProvider>(
-      mockProjects.map((p) => p.provider),
-    );
-    for (const v of ["drive", "gphotos", "youtube", "vimeo", "link"] as const) {
-      expect(providers.has(v)).toBe(true);
+  it("los publicados tienen link http y los sin link están en borrador", () => {
+    for (const p of mockProjects) {
+      if (p.isPublished) {
+        expect(p.url).toMatch(/^https?:\/\//);
+        expect(p.provider).toBe("youtube");
+      } else {
+        expect(p.url).toBe("");
+      }
     }
+  });
+
+  it("hay destacados para la sección opcional", () => {
+    expect(mockProjects.some((p) => p.isFeatured)).toBe(true);
   });
 });
 
