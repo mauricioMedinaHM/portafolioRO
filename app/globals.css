@@ -325,3 +325,178 @@ body:has([data-theme="pop"]) ::selection {
 .ui-modal[data-state="open"] {
   animation: ui-modal-in 420ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
+
+/*
+ * Loader inicial (components/pop/intro-loader.tsx): micrófono "RT" que se
+ * balancea, rayitos de sonido y barra de progreso. Al terminar, la cortina
+ * crema sube (data-state="leaving") con borde inferior redondeado.
+ */
+@keyframes intro-mic-bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-14deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(-8deg);
+  }
+}
+
+@keyframes intro-mic-shadow {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scaleX(0.78);
+    opacity: 0.55;
+  }
+}
+
+@keyframes intro-mic-rays {
+  0%,
+  100% {
+    transform: scale(0.9);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+}
+
+@keyframes intro-mic-swoosh {
+  from {
+    stroke-dashoffset: 60;
+    opacity: 0;
+  }
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes intro-loader-bar {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes intro-loader-dot {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@keyframes intro-loader-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+}
+
+.intro-loader {
+  transition:
+    transform 950ms cubic-bezier(0.76, 0, 0.24, 1),
+    border-radius 950ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.intro-loader[data-state="leaving"] {
+  transform: translateY(-100%);
+  border-bottom-left-radius: 50% 120px;
+  border-bottom-right-radius: 50% 120px;
+  /* Borde naranja + rosa: la cortina es crema como la página, así se ve subir. */
+  box-shadow:
+    0 12px 0 var(--color-sun),
+    0 24px 0 var(--color-rose);
+  pointer-events: none;
+}
+
+.intro-loader-content {
+  animation: intro-loader-in 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition:
+    opacity 350ms ease,
+    transform 500ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.intro-loader[data-state="leaving"] .intro-loader-content {
+  opacity: 0;
+  transform: translateY(-40px);
+}
+
+.intro-mic-body,
+.intro-mic-shadow,
+.intro-mic-rays {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.intro-mic-body {
+  transform: rotate(-14deg);
+  animation: intro-mic-bob 1.3s ease-in-out infinite;
+}
+
+.intro-mic-shadow {
+  animation: intro-mic-shadow 1.3s ease-in-out infinite;
+}
+
+.intro-mic-rays {
+  animation: intro-mic-rays 0.65s ease-in-out infinite;
+}
+
+.intro-mic-swoosh {
+  stroke-dasharray: 60;
+  animation: intro-mic-swoosh 700ms ease-out both;
+}
+
+.intro-loader-bar {
+  animation: intro-loader-bar 1500ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+.intro-loader-dot {
+  animation: intro-loader-dot 1s steps(1) infinite;
+}
+
+/* El hero espera debajo de la cortina y anima cuando ésta sube. */
+body:has(#intro-loader[data-state="loading"]) :is(.pop-rise, .pop-write, .pop-burst, .pop-arch) {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Sin balanceo ni barrido: el loader aparece quieto y se desvanece. */
+  .intro-mic-body {
+    animation: none;
+    transform: rotate(-14deg);
+  }
+
+  .intro-mic-shadow,
+  .intro-mic-rays,
+  .intro-mic-swoosh,
+  .intro-loader-dot,
+  .intro-loader-content {
+    animation: none;
+  }
+
+  .intro-loader-bar {
+    animation: none;
+    transform: none;
+  }
+
+  .intro-loader {
+    transition: opacity 400ms ease;
+  }
+
+  .intro-loader[data-state="leaving"] {
+    transform: none;
+    border-radius: 0;
+    box-shadow: none;
+    opacity: 0;
+  }
+
+  .intro-loader[data-state="leaving"] .intro-loader-content {
+    transform: none;
+  }
+}

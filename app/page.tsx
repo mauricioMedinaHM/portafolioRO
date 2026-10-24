@@ -1,3 +1,4 @@
+import { IntroLoader } from "@/components/pop/intro-loader";
 import { CategorySection } from "@/components/sections/category-section";
 import { Contact } from "@/components/sections/contact";
 import { FloatingContact } from "@/components/sections/floating-contact";
@@ -69,6 +70,7 @@ export default async function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <IntroLoader name={profile.fullName} />
       <NavBar name={profile.fullName} anchors={anchors} siteUrl={SITE_URL} />
       <main id="contenido">
         <Hero profile={profile} />
