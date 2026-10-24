@@ -82,7 +82,7 @@ export function MediaCard({ project }: MediaCardProps) {
       {provider === "image" && !thumbFailed ? (
         <div
           className={cn(
-            "relative w-full overflow-hidden bg-ink",
+            "relative w-full overflow-hidden rounded-[22px] bg-cocoa",
             aspect === "9/16" ? "aspect-[9/16] max-w-sm" : "aspect-video",
           )}
         >
@@ -126,17 +126,17 @@ export function MediaCard({ project }: MediaCardProps) {
           aspect={aspect}
         />
       )}
-      <div className="mt-4 flex flex-col gap-2">
+      <div className="mt-4 flex flex-col gap-1.5 px-1">
         {project.date ? (
-          <time dateTime={project.date} className="meta text-ink-3">
+          <time dateTime={project.date} className="pop-label text-sun-deep">
             {formatDate(project.date)}
           </time>
         ) : null}
-        <h3 className="font-display text-[19px] leading-snug font-normal tracking-[-0.02em] text-ink md:text-[22px]">
+        <h3 className="text-[18px] leading-snug font-bold text-balance text-cocoa md:text-[19px]">
           {project.title}
         </h3>
         {project.description ? (
-          <p className="max-w-[62ch] text-[17px] leading-relaxed text-ink-2">{project.description}</p>
+          <p className="max-w-[62ch] text-[15px] leading-relaxed text-cocoa-2">{project.description}</p>
         ) : null}
       </div>
     </article>

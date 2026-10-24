@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource-variable/newsreader/opsz.css";
 import "@fontsource-variable/hanken-grotesk";
+import "@fontsource-variable/bricolage-grotesque/opsz.css";
+import "@fontsource/mr-dafoe/latin-400.css";
 import { Providers } from "@/components/providers";
 import { SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
 import "./globals.css";
@@ -48,7 +49,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#fafaf8",
+  themeColor: "#fff3e4",
 };
 
 export default function RootLayout({

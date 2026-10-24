@@ -1,11 +1,14 @@
 "use client";
 
+import { AnimatePresence, motion } from "motion/react";
 import { Play } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
 export type EmbedAspect = "16/9" | "9/16";
+
+const EASE_OUT = [0.16, 1, 0.3, 1] as const;
 
 export interface LazyEmbedProps {
   embedUrl: string;
@@ -27,47 +30,78 @@ export function LazyEmbed({
   onThumbnailError,
 }: LazyEmbedProps) {
   const [active, setActive] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   const frame = aspect === "9/16" ? "aspect-[9/16] max-w-sm" : "aspect-video";
   const openUrl = originalUrl || embedUrl;
 
+  useEffect(() => {
+    if (active) {
+      iframeRef.current?.focus();
+    }
+  }, [active]);
+
   return (
     <div className={cn("flex w-full flex-col gap-2", aspect === "9/16" && "items-center")}>
-      <div className={cn("relative w-full overflow-hidden bg-ink", frame)}>
-        {active ? (
-          <iframe
-            className="absolute inset-0 h-full w-full border-0"
-            src={embedUrl}
-            title={title}
-            loading="lazy"
-            allow="autoplay; fullscreen; picture-in-picture"
-            allowFullScreen
-          />
-        ) : (
-          <button
-            type="button"
-            className="group absolute inset-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-paper"
-            onClick={() => setActive(true)}
-            aria-label={`Reproducir ${title}`}
-          >
-            {thumbnailUrl ? (
-              // Miniaturas externas (YouTube, Drive, Vimeo): el dominio no está en next/image.
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                decoding="async"
-                src={thumbnailUrl}
-                alt=""
-                className="absolute inset-0 h-full w-full object-cover"
-                onError={onThumbnailError}
-              />
-            ) : (
-              <span className="absolute inset-0 bg-ink" />
-            )}
-            <span className="absolute inset-0 bg-ink/15 transition-colors group-hover:bg-ink/25" />
-            <span className="absolute top-1/2 left-1/2 flex size-14 min-h-14 min-w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-paper text-ink">
-              <Play className="size-6 translate-x-px" fill="currentColor" aria-hidden="true" />
-            </span>
-          </button>
-        )}
+      <div className={cn("relative w-full overflow-hidden rounded-[22px] bg-cocoa", frame)}>
+        <AnimatePresence initial={false} mode="sync">
+          {active ? (
+            <motion.iframe
+              key="iframe"
+              ref={iframeRef}
+              className="absolute inset-0 h-full w-full border-0"
+              src={embedUrl}
+              title={title}
+              loading="lazy"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25, ease: EASE_OUT }}
+            />
+          ) : (
+            <motion.button
+              key="thumb"
+              type="button"
+              className="group absolute inset-0 cursor-pointer focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-cream"
+              onClick={() => setActive(true)}
+              aria-label={`Reproducir ${title}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25, ease: EASE_OUT }}
+            >
+              {thumbnailUrl ? (
+                // Miniaturas externas (YouTube, Drive, Vimeo): el dominio no está en next/image.
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  decoding="async"
+                  loading="lazy"
+                  fetchPriority="low"
+                  width={480}
+                  height={360}
+                  src={thumbnailUrl}
+                  alt=""
+                  className="absolute inset-0 h-full w-full object-cover"
+                  onError={onThumbnailError}
+                />
+              ) : (
+                <span className="absolute inset-0 bg-ink" />
+              )}
+              <span className="absolute inset-0 bg-cocoa/10 transition-colors group-hover:bg-cocoa/25" />
+              <span className="absolute inset-0 flex items-center justify-center">
+                <motion.span
+                  className="flex size-16 items-center justify-center rounded-full bg-sun-deep text-white shadow-[0_10px_30px_-10px_rgb(59_31_20/0.6)] ring-4 ring-white/70"
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.96 }}
+                  transition={{ duration: 0.12, ease: EASE_OUT }}
+                >
+                  <Play className="size-6 translate-x-px" fill="currentColor" aria-hidden="true" />
+                </motion.span>
+              </span>
+            </motion.button>
+          )}
+        </AnimatePresence>
       </div>
       {active ? (
         <a

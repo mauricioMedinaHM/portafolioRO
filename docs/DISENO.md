@@ -1,16 +1,32 @@
-# Dirección de diseño "Claro y limpio" (aprobada) — referencia de tono: siena.cx (fondo claro, serif editorial grande, mucho aire, bloques de imagen grandes)
+# Dirección de diseño "Pop al aire" (landing)
 
-Señales: ancho de lectura acotado y centrado (texto max 62ch, grilla max 1120px) · 3 niveles de texto · color SOLO en el trabajo (foto y miniaturas, sin acentos de color en UI) · márgenes generosos y consistentes (20px lateral mobile, 64px+ desktop, 96–160px entre secciones). Evitar "vacío": jerarquía tipográfica fuerte.
+Reemplaza a "Claro y limpio". Referencia visual elegida por el cliente: estética "Solar Pop" (crema, naranja sol, rosa; titulares grotescos en mayúsculas con una palabra manuscrita; formas orgánicas; tarjetas redondeadas). Adaptada a una comunicadora: el vocabulario visual sale de la TV y la radio (arco de estudio, rayos de luz, insignia "Al aire · desde Salta", sol con micrófono).
 
-## Tokens
-paper #FAFAF8 (~60%) · paper-2 #F0EFEB franjas Sobre mí/Contacto (~12%) · ink #161616 texto + footer/contacto invertido (~8%) · ink-2 #55544F · ink-3 #6B6A64 metadatos · line #E3E2DD · invertido secundario #A3A29C · Trabajo (foto + thumbs 16:9) ~20%.
-Contraste esperado: ink/paper 17.3, ink-2/paper 7.3, ink-3/paper 5.2, ink-3/paper-2 4.7, paper/ink 17.3, #A3A29C/ink 7.1.
+Los componentes base (Sheet, Modal, QR, toasts) usan los tokens `paper/ink`; la landing los re-mapea con `data-theme="pop"` en `app/page.tsx` (`body:has([data-theme="pop"])`) para que alcance también a los portales.
 
-## Tipografía (autohospedada con @fontsource-variable, nada de next/font/google)
-Display: Newsreader (tamaños ópticos). Texto: Hanken Grotesk (cifras tabulares).
-Escala mobile→desktop: hero 44→88, h2 30→48, título tarjeta 19→22, cuerpo 17, metadatos 13 versalitas con tracking.
+## Tokens (app/globals.css)
 
-## Primer pantallazo mobile 390px (orden de lectura)
-1 barra fina: nombre Hanken 15 izq / "Menú" der, ink-2, sin logo · 2 "Rosario Tejerina Pittis" Newsreader 44 en dos líneas · 3 "Conductora · Locutora · Comunicadora audiovisual · Salta" Hanken 17 ink-2 · 4 foto public/rosario.png bloque 4:5 a ancho completo (primera región de color) · 5 botones "Ver su trabajo" (negro sólido) y "WhatsApp" (borde), 52px alto.
-Desktop: 2 columnas, texto 5/12, foto 7/12.
-Nota: la foto es 381x676, no usarla a pantalla completa en desktop (máx ~520px de ancho).
+cream #FFF3E4 fondo · peach #FDE3D0 y blush #FBD3DC paneles · candy #F7A4C0 tarjeta CTA · amber #FFB54A cifra · sun #EE4F14 titulares y banda de trabajos · sun-deep #C2410C botones, labels chicos, titulares sobre peach · rose #F26A9B formas · rose-ink #D63B72 palabra script · rose-deep #B4235F texto rosa sobre blush · cocoa #3B1F14 texto · cocoa-2 #6E4A3C texto secundario · seam #F1CDB5 bordes.
+
+Contraste: `lib/contrast.test.ts` verifica cada par usado (4.5:1 texto normal, 3:1 texto grande). Ojo: `sun` sólo como texto grande sobre cream (3.3) y nunca sobre peach (2.96, usar sun-deep); los botones son `sun-deep` con blanco (5.2).
+
+## Tipografía (autohospedada con @fontsource)
+
+- Display: Bricolage Grotesque Variable 800, mayúsculas, tracking -0.02em (`.font-pop`). Hero 64→112, h2 34→52.
+- Script: Mr Dafoe (`.font-script`), siempre una palabra o frase corta en rose-ink, dentro del h2 o h1.
+- Texto: Hanken Grotesk; labels en `pop-label` (12px, bold, tracking 0.14em).
+
+## Estructura de la landing
+
+Nav (logo en dos líneas, links en desktop y "Menú" en mobile, CTA "Hablemos") → Hero "Contar lo que pasa *en vivo*" + foto en ventana de arco → "Hola, soy Rosario" (bio, firma, áreas) → banda naranja "Trabajos destacados" (una tarjeta por área) → "Lo que hago" + "En números" (las cifras se calculan desde el contenido publicado, sin datos inventados) → secciones por categoría (videos + tarjetas de experiencia) → Trayectoria y formación + habilidades → Compartí (QR) → Hablemos (mail, Instagram, WhatsApp) → footer. Todo el contenido sale de `contenido.ts`.
+
+Sin testimonios: no hay citas reales. Si la clienta consigue alguna, va entre Trayectoria y Compartí.
+
+## Motion
+
+- **Momento focal "Al aire"** (hero, CSS `@keyframes`, corre antes de hidratar; el estado final es el visible): las líneas del titular suben desde una máscara (stagger 90ms), la palabra script se "escribe" con `clip-path`, el arco de la foto se abre de abajo hacia arriba, y los destellos aparecen con un rebote leve.
+- **Scroll (Motion)**: parallax de la foto y las formas del hero, la insignia gira con el scroll, la flor de "En números" rota, barra de progreso naranja de 3px bajo el header, y el header se vuelve translúcido.
+- **Feedback**: las tarjetas de trabajos suben 6px y la flecha gira 45° al hover; `whileTap` en tarjetas, botones y FAB; fundido de miniatura a iframe en los videos.
+- **FAB de WhatsApp contextual**: aparece después del primer pantallazo y se oculta en `#contacto`.
+
+Reglas: contenido siempre visible en SSR (nunca `opacity:0` inicial renderizado en el servidor); `MotionConfig reducedMotion="user"`; con `prefers-reduced-motion` se quitan los keyframes, el giro y el movimiento; ease `cubic-bezier(0.16, 1, 0.3, 1)`; íconos de lucide (sin glifos unicode).

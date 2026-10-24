@@ -29,7 +29,7 @@ export function Modal({
         <Dialog.Content
           className={cn(
             "ui-modal fixed top-1/2 left-1/2 z-50 w-[calc(100vw-2.5rem)] max-w-lg -translate-x-1/2 -translate-y-1/2",
-            "rounded-none border border-line bg-paper p-6",
+            "rounded-[28px] border-2 border-line bg-paper p-6",
             "max-h-[85dvh] overflow-y-auto",
             "focus:outline-none",
             className,
@@ -37,7 +37,7 @@ export function Modal({
         >
           <div className="flex items-start justify-between gap-4">
             {title ? (
-              <Dialog.Title className="font-display text-[30px] leading-none font-normal tracking-[-0.02em] text-ink">
+              <Dialog.Title className="font-pop text-[28px] leading-none text-sun">
                 {title}
               </Dialog.Title>
             ) : (

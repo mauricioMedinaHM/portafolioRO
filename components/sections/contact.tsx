@@ -1,15 +1,28 @@
-import { buttonVariants, Reveal } from "@/components/ui";
+import { ArrowUpRight, BriefcaseBusiness, Camera, Mail, MapPin, Mic, MonitorPlay, Music2, type LucideIcon } from "lucide-react";
+import { Flower, Rays, Sparkle } from "@/components/pop/decor";
+import { PopContainer } from "@/components/pop/heading";
+import { buttonVariants } from "@/components/ui";
 import { WHATSAPP_MESSAGE, whatsappLink } from "@/lib/links";
 import type { Profile } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
-const SOCIAL_LABEL: Record<string, string> = {
-  instagram: "Instagram",
-  linkedin: "LinkedIn",
-  tiktok: "TikTok",
-  youtube: "YouTube",
-  x: "X",
+const SOCIAL: Record<string, { label: string; icon: LucideIcon }> = {
+  instagram: { label: "Instagram", icon: Camera },
+  linkedin: { label: "LinkedIn", icon: BriefcaseBusiness },
+  tiktok: { label: "TikTok", icon: Music2 },
+  youtube: { label: "YouTube", icon: MonitorPlay },
+  x: { label: "X", icon: ArrowUpRight },
 };
+
+/** Usuario visible sin "@" (el único link con "@" es el mail). */
+function handleOf(href: string) {
+  try {
+    const path = new URL(href).pathname.replace(/^\/+|\/+$/g, "");
+    return path.replace(/^@/, "") || null;
+  } catch {
+    return null;
+  }
+}
 
 export function Contact({ profile }: { profile: Profile }) {
   const wa = profile.whatsapp ? whatsappLink(profile.whatsapp, WHATSAPP_MESSAGE) : null;
@@ -19,56 +32,88 @@ export function Contact({ profile }: { profile: Profile }) {
   if (!wa && !profile.email && socials.length === 0) return null;
 
   return (
-    <section id="contacto" className="scroll-mt-16 bg-ink text-paper">
-      <div className="mx-auto grid w-full max-w-[1120px] grid-cols-12 gap-x-6 gap-y-10 px-5 py-16 md:px-16 md:py-24">
-        <Reveal className="col-span-12 md:col-span-5">
-          <p className="meta text-mist">Salta Capital</p>
-          <h2 className="mt-4 font-display text-[30px] leading-[1.05] font-normal tracking-[-0.02em] text-paper md:text-[48px]">
-            Contacto
-          </h2>
-          <p className="mt-5 max-w-[62ch] text-[17px] leading-relaxed text-mist">
-            Escribime por el canal que te quede más cómodo.
-          </p>
-        </Reveal>
+    <section id="contacto" aria-labelledby="contacto-titulo" className="scroll-mt-20 py-10 md:py-14">
+      <PopContainer>
+        <div className="relative grid grid-cols-1 gap-8 overflow-hidden rounded-[36px] bg-peach p-6 md:p-10 lg:grid-cols-12 lg:items-center">
+          <Flower className="pointer-events-none absolute -right-20 -bottom-24 size-72 text-blush" />
 
-        <Reveal delay={0.08} className="col-span-12 flex flex-col gap-3 md:col-span-6 md:col-start-7">
-          {wa ? (
-            <a
-              href={wa}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(buttonVariants({ variant: "invert", size: "lg" }), "w-full")}
-            >
-              WhatsApp
-            </a>
-          ) : null}
-          {profile.email ? (
-            <a
-              href={`mailto:${profile.email}`}
-              className={cn(buttonVariants({ variant: "invert-outline", size: "lg" }), "w-full")}
-            >
-              {profile.email}
-            </a>
-          ) : null}
-          {socials.length > 0 ? (
-            <ul className="mt-6 flex flex-col" aria-label="Redes sociales">
-              {socials.map(([network, href]) => (
-                <li key={network} className="border-t border-mist/40">
+          <div className="relative lg:col-span-6">
+            <h2 id="contacto-titulo" className="font-pop text-[52px] leading-[0.86] text-sun-deep sm:text-[72px] md:text-[96px]">
+              Hablemos
+              <span className="font-script mt-1 block -rotate-3 text-[0.42em] leading-none text-rose-ink">
+                de tu próximo vivo
+              </span>
+            </h2>
+            <p className="mt-6 max-w-[44ch] text-[16px] leading-relaxed text-cocoa-2">
+              Escribime por el canal que te quede más cómodo y armamos la propuesta.
+            </p>
+
+            <ul className="mt-6 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-x-6">
+              {profile.email ? (
+                <li>
                   <a
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex min-h-12 items-center justify-between text-[15px] text-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-paper"
+                    href={`mailto:${profile.email}`}
+                    className="inline-flex min-h-11 items-center gap-2 text-[15px] font-semibold text-cocoa underline-offset-4 hover:text-sun-deep hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sun-deep"
                   >
-                    <span>{SOCIAL_LABEL[network] ?? network}</span>
-                    <span className="meta text-mist">↗</span>
+                    <Mail className="size-5 text-sun-deep" aria-hidden />
+                    {profile.email}
                   </a>
                 </li>
-              ))}
+              ) : null}
+              {socials.map(([network, href]) => {
+                const meta = SOCIAL[network] ?? { label: network, icon: ArrowUpRight };
+                const handle = handleOf(href);
+                return (
+                  <li key={network}>
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex min-h-11 items-center gap-2 text-[15px] font-semibold text-cocoa underline-offset-4 hover:text-sun-deep hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sun-deep"
+                    >
+                      <meta.icon className="size-5 text-sun-deep" aria-hidden />
+                      {meta.label}
+                      {handle ? <span className="font-normal text-cocoa-2">{handle}</span> : null}
+                    </a>
+                  </li>
+                );
+              })}
+              <li className="inline-flex min-h-11 items-center gap-2 text-[15px] font-semibold text-cocoa">
+                <MapPin className="size-5 text-sun-deep" aria-hidden />
+                Salta Capital, Argentina
+              </li>
             </ul>
-          ) : null}
-        </Reveal>
-      </div>
+          </div>
+
+          {/* Sol con micrófono: la "señal" de la marca */}
+          <div aria-hidden className="relative mx-auto hidden size-36 lg:col-span-2 lg:grid lg:place-items-center">
+            <Rays className="pop-spin absolute inset-0 size-full text-sun" />
+            <span className="relative grid size-24 place-items-center rounded-full bg-sun text-cream">
+              <Mic className="size-10" />
+            </span>
+          </div>
+
+          <div className="relative rounded-[28px] bg-candy p-6 md:p-7 lg:col-span-4">
+            <Sparkle className="absolute top-5 right-5 size-6 text-cream" />
+            <p className="font-pop text-[24px] leading-[0.95] text-cocoa md:text-[28px]">
+              ¿Tenés un proyecto, un programa o una cobertura?
+            </p>
+            <p className="mt-3 text-[15px] leading-relaxed text-cocoa">
+              Conducción, móviles, entrevistas, locución o contenido para redes: contame la idea.
+            </p>
+            {wa ? (
+              <a
+                href={wa}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(buttonVariants({ variant: "pop", size: "lg" }), "mt-6 w-full sm:w-auto")}
+              >
+                Escribime por WhatsApp
+              </a>
+            ) : null}
+          </div>
+        </div>
+      </PopContainer>
     </section>
   );
 }

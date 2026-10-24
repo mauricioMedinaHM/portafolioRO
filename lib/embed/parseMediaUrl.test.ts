@@ -266,9 +266,9 @@ const cases: Array<{ name: string; input: string; expected: ParsedMedia }> = [
     expected: vimeo("112233445", "https://vimeo.com/channels/staffpicks/112233445"),
   },
   {
-    name: "imagen supabase jpg",
-    input: "https://abcd.supabase.co/storage/v1/object/public/media/retrato.jpg",
-    expected: image("https://abcd.supabase.co/storage/v1/object/public/media/retrato.jpg"),
+    name: "imagen en un storage (jpg)",
+    input: "https://cdn.example.com/media/retrato.jpg",
+    expected: image("https://cdn.example.com/media/retrato.jpg"),
   },
   {
     name: "imagen png http",
@@ -282,8 +282,8 @@ const cases: Array<{ name: string; input: string; expected: ParsedMedia }> = [
   },
   {
     name: "video subido mp4",
-    input: "https://abcd.supabase.co/storage/v1/object/public/media/reel.mp4",
-    expected: image("https://abcd.supabase.co/storage/v1/object/public/media/reel.mp4"),
+    input: "https://cdn.example.com/media/reel.mp4",
+    expected: image("https://cdn.example.com/media/reel.mp4"),
   },
   {
     name: "imagen webp con query",

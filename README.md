@@ -1,26 +1,35 @@
 # Portafolio — Rosario Tejerina Pittis
 
-Landing mobile-first de portafolio audiovisual + panel admin.
-Next.js 15 (App Router) · TypeScript · Tailwind v4 · Supabase · Vercel.
+Landing mobile-first de portafolio audiovisual.
+Next.js 15 (App Router) · TypeScript · Tailwind v4 · Motion · Vercel. Sin base de datos ni panel admin.
+
+## Cómo cargar trabajos
+
+Todo el contenido está en **`contenido.ts`** (raíz del repo): perfil, formación, habilidades y las secciones con sus trabajos.
+
+Para sumar un video, copiá un bloque dentro de la sección y pegá el link:
+
+```ts
+{
+  titulo: "Programa — detalle",
+  link: "https://www.youtube.com/watch?v=XXXXXXXXXXX",
+  descripcion: "Una o dos frases.", // opcional
+  fecha: "2026-10-24",              // opcional
+  destacado: true,                   // opcional
+},
+```
+
+El sitio detecta el tipo de link y arma el reproductor y la miniatura: YouTube (videos, vivos, shorts, youtu.be), Vimeo, Google Drive (compartido como "cualquier persona con el enlace"), Google Fotos, e imágenes/videos directos. Cualquier otro link se muestra como botón "Ver video". Sin link, el trabajo aparece como tarjeta de experiencia.
+
+Guardar y hacer `git push`: Vercel redeploya solo.
 
 ## Setup
 
 ```bash
 pnpm install
-cp .env.example .env.local   # completar vars de Supabase
+cp .env.example .env.local   # NEXT_PUBLIC_SITE_URL (OG, sitemap, QR)
 pnpm dev
 ```
-
-Variables de entorno (`docs/SUPABASE_SETUP.md` tiene el paso a paso):
-
-- `NEXT_PUBLIC_SITE_URL` — URL pública (OG, sitemap, QR)
-- `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- Sin Supabase configurado, la landing sirve los datos de `lib/data/mocks.ts`
-  y `/admin` muestra un aviso de configuración.
-
-Base de datos: ejecutar `supabase/migrations/0001_init.sql` y luego
-`supabase/seed.sql` en el SQL Editor de Supabase, crear la usuaria en
-Auth y sumarla a la tabla `admin_users` (por mail alcanza).
 
 ## Scripts
 
@@ -33,16 +42,13 @@ Auth y sumarla a la tabla `admin_users` (por mail alcanza).
 
 ## Estructura
 
-- `app/` — landing (`page.tsx`), admin (`/admin`), auth callback, `/dev/ui`
-- `components/` — `ui/` base, `sections/` landing, `media/` embeds,
-  `share/` QR, `admin/` panel
-- `lib/` — tipos, schemas zod, supabase clients, queries, embed parser
-- `supabase/` — migración + seed (contenido real en `docs/CONTENIDO.md`)
+- `contenido.ts` — el contenido (lo único que hay que editar)
+- `app/` — landing (`page.tsx`), OG, sitemap, robots
+- `components/` — `sections/` landing, `pop/` decoración y títulos, `media/` embeds, `share/` QR, `ui/` base
+- `lib/` — tipos, parser de links (`embed/`), armado de datos (`data/content.ts`)
+- `docs/DISENO.md` — dirección visual y motion
 - `tests/e2e` — Playwright
 
 ## Deploy (Vercel)
 
-1. Importar el repo en Vercel (framework Next.js, sin config extra).
-2. Cargar las env vars en Project Settings → Environment Variables.
-3. El cron de `vercel.json` hace ping semanal a `/api/ping` para que el
-   plan free de Supabase no se pause.
+Importar el repo en Vercel (framework Next.js, sin config extra) y cargar `NEXT_PUBLIC_SITE_URL` en Environment Variables.

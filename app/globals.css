@@ -1,10 +1,9 @@
 @import "tailwindcss";
 
 /*
- * Dirección "Claro y limpio" (docs/DISENO.md)
- * paper #FAFAF8 · paper-2 #F0EFEB · ink #161616 · ink-2 #55544F
- * ink-3 #6B6A64 · line #E3E2DD · mist #A3A29C sobre ink
- * Display: Newsreader Variable (eje opsz) · Texto: Hanken Grotesk Variable
+ * Dirección "Pop al aire" (docs/DISENO.md) — crema, naranja sol y rosa.
+ * paper/ink son tokens base de los componentes compartidos; se re-mapean abajo.
+ * Display landing: Bricolage Grotesque Variable · Script: Mr Dafoe · Texto: Hanken Grotesk
  */
 
 @theme {
@@ -24,8 +23,26 @@
   --color-border: #e3e2dd;
   --color-subtle: #6b6a64;
 
+  /* Paleta "Pop al aire" (landing). Contrastes en lib/contrast.test.ts. */
+  --color-cream: #fff3e4;
+  --color-peach: #fde3d0;
+  --color-blush: #fbd3dc;
+  --color-sun: #ee4f14;
+  --color-sun-deep: #c2410c;
+  --color-sun-hover: #a8380a;
+  --color-rose: #f26a9b;
+  --color-rose-ink: #d63b72;
+  --color-rose-deep: #b4235f;
+  --color-candy: #f7a4c0;
+  --color-amber: #ffb54a;
+  --color-cocoa: #3b1f14;
+  --color-cocoa-2: #6e4a3c;
+  --color-sand: #f4c9b4;
+  --color-seam: #f1cdb5;
+
+  --font-pop: "Bricolage Grotesque Variable", "Arial Black", ui-sans-serif, sans-serif;
+  --font-script: "Mr Dafoe", "Brush Script MT", cursive;
   --font-sans: "Hanken Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Newsreader Variable", "Iowan Old Style", Georgia, serif;
 
   --radius-card: 0px;
 }
@@ -38,8 +55,28 @@
   text-transform: uppercase;
 }
 
+:root {
+  color-scheme: light;
+}
+
 html {
   -webkit-tap-highlight-color: transparent;
+  scrollbar-color: var(--color-mist) var(--color-paper);
+  scrollbar-width: thin;
+}
+
+html::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html::-webkit-scrollbar-track {
+  background: var(--color-paper);
+}
+
+html::-webkit-scrollbar-thumb {
+  background: var(--color-mist);
+  border: 2px solid var(--color-paper);
 }
 
 body {
@@ -49,10 +86,21 @@ body {
   font-size: 17px;
   line-height: 1.5;
   font-variant-numeric: tabular-nums;
+  caret-color: var(--color-ink);
 }
 
-.font-display {
-  font-optical-sizing: auto;
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a {
+  text-underline-offset: 0.2em;
 }
 
 ::selection {
@@ -73,35 +121,177 @@ html.lenis body {
   overflow: hidden;
 }
 
-@keyframes reveal-in {
+/*
+ * Tema de la landing: los componentes compartidos (Sheet, QR, toasts) usan
+ * tokens neutros; dentro de la landing se re-mapean a la paleta pop.
+ * Se aplica en body para alcanzar también a los portales (menú, modales).
+ */
+body:has([data-theme="pop"]) {
+  --color-paper: #fff3e4;
+  --color-paper-2: #fde3d0;
+  --color-ink: #3b1f14;
+  --color-ink-hover: #57301f;
+  --color-ink-2: #6e4a3c;
+  --color-ink-3: #6e4a3c;
+  --color-line: #f1cdb5;
+  --color-mist: #f4c9b4;
+  background: var(--color-cream);
+  color: var(--color-cocoa);
+}
+
+body:has([data-theme="pop"]) ::selection {
+  background: var(--color-sun-deep);
+  color: #fff;
+}
+
+.font-pop {
+  font-family: var(--font-pop);
+  font-weight: 800;
+  font-optical-sizing: auto;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.font-script {
+  font-family: var(--font-script);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+@utility pop-label {
+  font-size: 12px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/*
+ * Momento focal "Al aire" (hero). CSS @keyframes: corren antes de hidratar y
+ * el estado final es el visible (fill both). Con reduced motion no corren.
+ */
+@keyframes pop-rise {
   from {
-    opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(105%);
   }
   to {
-    opacity: 1;
-    transform: none;
+    transform: translateY(0);
   }
 }
 
-.reveal {
-  animation: reveal-in 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+@keyframes pop-write {
+  from {
+    clip-path: inset(-20% 100% -20% -5%);
+  }
+  to {
+    clip-path: inset(-20% -5% -20% -5%);
+  }
+}
+
+@keyframes pop-burst {
+  from {
+    transform: scale(0.4) rotate(-40deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pop-arch {
+  from {
+    clip-path: inset(100% 0 0 0 round 999px 999px 32px 32px);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 999px 999px 32px 32px);
+  }
+}
+
+@keyframes pop-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.pop-rise {
+  animation: pop-rise 850ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.pop-write {
+  animation: pop-write 900ms cubic-bezier(0.65, 0, 0.35, 1) 520ms both;
+}
+
+.pop-burst {
+  animation: pop-burst 700ms cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+
+.pop-arch {
+  animation: pop-arch 1000ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both;
+}
+
+.pop-spin {
+  animation: pop-spin 22s linear infinite;
+}
+
+/* Carrusel continuo de izquierda a derecha (habilidades). */
+@keyframes pop-marquee {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.pop-marquee {
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+.pop-marquee-track {
+  animation: pop-marquee 48s linear infinite;
+}
+
+/* Pausa al pasar el mouse o tocar, para poder leer tranquila. */
+.pop-marquee:hover .pop-marquee-track,
+.pop-marquee:active .pop-marquee-track {
+  animation-play-state: paused;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  /* Sin movimiento: vuelve a chips en varias líneas y se oculta la copia. */
+  .pop-marquee {
+    mask-image: none;
+  }
+
+  .pop-marquee-track {
+    animation: none;
+    width: auto;
+  }
+
+  .pop-marquee-group {
+    flex-wrap: wrap;
+    flex-shrink: 1;
+  }
+
+  .pop-marquee-group[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Sólo se quita el movimiento; color y opacidad siguen transicionando. */
+  html {
     scroll-behavior: auto !important;
   }
 
-  .reveal {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
+  .pop-rise,
+  .pop-write,
+  .pop-burst,
+  .pop-arch,
+  .pop-spin {
+    animation: none;
   }
 }
 
@@ -114,14 +304,17 @@ html.lenis body {
   }
 }
 
+/* Sólo el desplazamiento de entrada: el centrado lo hace la propiedad
+   `translate` de Tailwind (-translate-x/y-1/2) y `transform` se compone
+   encima. Si acá se repitiera el -50%, se duplicaría el corrimiento. */
 @keyframes ui-modal-in {
   from {
     opacity: 0;
-    transform: translate(-50%, calc(-50% + 12px));
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -50%);
+    transform: none;
   }
 }
 

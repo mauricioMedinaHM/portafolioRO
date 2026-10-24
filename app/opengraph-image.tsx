@@ -16,7 +16,7 @@ export default function OpengraphImage() {
           justifyContent: "flex-end",
           width: "100%",
           height: "100%",
-          background: "#FAFAF8",
+          background: "#FFF3E4",
           padding: "72px 80px",
         }}
       >
@@ -25,17 +25,20 @@ export default function OpengraphImage() {
             fontSize: 22,
             letterSpacing: 6,
             textTransform: "uppercase",
-            color: "#6B6A64",
+            color: "#C2410C",
+            fontWeight: 700,
           }}
         >
-          Salta · Argentina
+          Al aire desde Salta · Argentina
         </div>
         <div
           style={{
             marginTop: 20,
-            fontSize: 84,
-            lineHeight: 0.92,
-            color: "#161616",
+            fontSize: 96,
+            lineHeight: 0.9,
+            fontWeight: 900,
+            textTransform: "uppercase",
+            color: "#EE4F14",
             letterSpacing: -2,
             maxWidth: 900,
           }}
@@ -45,16 +48,17 @@ export default function OpengraphImage() {
         <div
           style={{
             marginTop: 28,
-            width: 96,
-            height: 2,
-            background: "#161616",
+            width: 140,
+            height: 14,
+            borderRadius: 999,
+            background: "#F26A9B",
           }}
         />
         <div
           style={{
             marginTop: 22,
             fontSize: 28,
-            color: "#55544F",
+            color: "#6E4A3C",
           }}
         >
           {SITE_TAGLINE}

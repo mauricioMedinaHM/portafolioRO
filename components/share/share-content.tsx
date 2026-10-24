@@ -16,7 +16,7 @@ export default function ShareContent({
 }) {
   const qrValue = `${url}/?utm_source=qr`;
   return (
-    <div className="flex w-full flex-col items-center gap-6">
+    <div className="flex min-h-[424px] w-full flex-col items-center gap-6">
       <QrCode value={qrValue} size={224} downloadName={downloadName} />
       <ShareButtons
         url={qrValue}

@@ -1,101 +1,138 @@
+"use client";
+
 import Image from "next/image";
-import { buttonVariants, Reveal } from "@/components/ui";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
+import { ArrowRight, Mic } from "lucide-react";
+import { Burst, Flower, OnAirBadge, Rays, Sparkle, Squiggle } from "@/components/pop/decor";
+import { PopContainer } from "@/components/pop/heading";
+import { buttonVariants } from "@/components/ui";
 import { WHATSAPP_MESSAGE, whatsappLink } from "@/lib/links";
 import type { Profile } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
-function nameLines(fullName: string) {
-  const parts = fullName.trim().split(/\s+/).filter(Boolean);
-  if (parts.length >= 3) {
-    return {
-      mobile: [parts.slice(0, -1).join(" "), parts[parts.length - 1]],
-      desktop: parts,
-    };
-  }
-  if (parts.length === 2) {
-    return { mobile: [parts[0], parts[1]], desktop: parts };
-  }
-  return { mobile: [fullName, ""], desktop: [fullName] };
+const LINES = ["Contar", "lo que", "pasa"] as const;
+
+/** Línea del titular con máscara: sube desde abajo (CSS, antes de hidratar). */
+function RiseLine({ children, index }: { children: React.ReactNode; index: number }) {
+  return (
+    <span className="-my-[0.1em] block overflow-hidden py-[0.1em]">
+      <span className="pop-rise block" style={{ animationDelay: `${index * 90}ms` }}>
+        {children}
+      </span>
+    </span>
+  );
 }
 
-export function Hero({
-  profile,
-  firstCategorySlug,
-}: {
-  profile: Profile;
-  firstCategorySlug?: string;
-}) {
+export function Hero({ profile }: { profile: Profile; firstCategorySlug?: string }) {
+  const heroRef = useRef<HTMLElement>(null);
   const wa = profile.whatsapp ? whatsappLink(profile.whatsapp, WHATSAPP_MESSAGE) : null;
-  const photo = profile.photoUrl || "/rosario.png";
-  const place = /salta/i.test(profile.tagline) ? profile.tagline : `${profile.tagline} · Salta`;
-  const lines = nameLines(profile.fullName);
+  const photo = profile.photoUrl;
+
+  // Parallax sutil: la foto y las formas se separan al scrollear (estado inicial visible).
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const photoY = useTransform(scrollYProgress, [0, 1], [0, 48]);
+  const shapeY = useTransform(scrollYProgress, [0, 1], [0, -36]);
+  const spin = useTransform(scrollYProgress, [0, 1], [0, 90]);
 
   return (
-    <section id="inicio" className="scroll-mt-16">
-      <div className="mx-auto grid w-full max-w-[1120px] grid-cols-1 gap-5 px-5 pt-5 pb-6 md:grid-cols-12 md:items-center md:gap-x-6 md:px-16 md:pt-16 md:pb-12">
-        <div className="contents md:col-span-5 md:flex md:flex-col md:justify-center md:gap-8">
-          <Reveal>
-            <h1 className="font-display text-[44px] leading-[0.92] font-normal tracking-[-0.03em] text-ink md:text-[64px] md:leading-[0.86] lg:text-[80px] xl:text-[88px]">
-              <span className="md:hidden">
-                {lines.mobile[0]}
-                {lines.mobile[1] ? (
-                  <>
-                    <br />
-                    {lines.mobile[1]}
-                  </>
-                ) : null}
-              </span>
-              <span className="hidden md:block">
-                {lines.desktop.map((line, index) => (
-                  <span key={`${line}-${index}`} className="block">
-                    {line}
+    <section id="inicio" ref={heroRef} className="relative scroll-mt-20 overflow-hidden">
+      {/* Forma orgánica de fondo */}
+      <Flower className="pointer-events-none absolute -bottom-56 -left-40 size-[420px] text-peach md:-left-24 md:size-[560px]" />
+
+      <PopContainer className="relative grid grid-cols-1 gap-8 pt-6 pb-14 md:grid-cols-12 md:items-center md:gap-x-8 md:pt-10 md:pb-20">
+        <div className="relative md:col-span-6">
+          <Burst
+            className="pop-burst absolute -top-2 -left-1 size-10 text-rose md:-top-6 md:-left-10 md:size-14"
+            style={{ animationDelay: "650ms" }}
+          />
+
+          <h1 className="font-pop relative pt-8 text-[64px] leading-[0.86] text-sun sm:text-[84px] md:pt-6 lg:text-[112px]">
+            <span className="sr-only">{profile.fullName}: </span>
+            {LINES.map((line, index) => (
+              <RiseLine key={line} index={index}>
+                {line}
+                {index === LINES.length - 1 ? (
+                  <span className="font-script pop-write ml-3 inline-block -rotate-6 align-[0.08em] text-[0.62em] text-rose-ink">
+                    en vivo
                   </span>
-                ))}
-              </span>
-            </h1>
-          </Reveal>
+                ) : null}
+              </RiseLine>
+            ))}
+          </h1>
 
-          <Reveal delay={0.08}>
-            <p className="max-w-[36ch] text-[17px] leading-snug text-ink-2">{place}</p>
-          </Reveal>
+          <p className="mt-6 max-w-[42ch] text-[17px] leading-relaxed text-cocoa-2 md:mt-8 md:text-[18px]">
+            Soy <strong className="font-semibold text-cocoa">{profile.fullName}</strong>,
+            conductora, locutora y comunicadora audiovisual en Salta. Conduzco estudio y móviles
+            en vivo, hago entrevistas y produzco contenido para streaming, TV y redes.
+          </p>
 
-          <Reveal delay={0.16} className="max-md:order-2">
-            <div className="flex flex-col gap-3">
-              {firstCategorySlug ? (
-                <a
-                  href={`#${firstCategorySlug}`}
-                  className={cn(buttonVariants({ size: "lg" }), "w-full")}
-                >
-                  Ver su trabajo
-                </a>
-              ) : null}
-              {wa ? (
-                <a
-                  href={wa}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(buttonVariants({ variant: "outline", size: "lg" }), "w-full")}
-                >
-                  WhatsApp
-                </a>
-              ) : null}
-            </div>
-          </Reveal>
-        </div>
-
-        <div className="max-md:order-1 md:col-span-7 md:w-full md:max-w-[520px] md:justify-self-end">
-          <div className="relative aspect-[4/5] w-full">
-            <Image
-              src={photo}
-              alt="Retrato de Rosario Tejerina Pittis"
-              fill
-              priority
-              sizes="(min-width: 768px) 520px, 100vw"
-              className="object-cover object-[center_18%]"
-            />
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <a href="#trabajos" className={cn(buttonVariants({ variant: "pop", size: "lg" }), "group")}>
+              Ver mi trabajo
+              <ArrowRight
+                className="size-4 transition-transform duration-150 group-hover:translate-x-1"
+                aria-hidden
+              />
+            </a>
+            {wa ? (
+              <a
+                href={wa}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(buttonVariants({ variant: "pop-outline", size: "lg" }))}
+              >
+                WhatsApp
+              </a>
+            ) : null}
           </div>
+
+          <Squiggle className="mt-8 hidden w-28 text-rose md:block" />
         </div>
-      </div>
+
+        {/* Composición: arco rosa, medio sol naranja, rayos y foto en ventana de arco */}
+        <div className="relative mx-auto aspect-[5/6] w-full max-w-[540px] md:col-span-6">
+          <motion.div
+            style={{ y: shapeY }}
+            className="absolute top-0 right-0 h-[92%] w-[84%] rounded-t-full rounded-b-[40px] bg-rose"
+          />
+          <motion.div
+            style={{ y: shapeY }}
+            className="absolute bottom-[4%] left-0 aspect-[2/1] w-[46%] rounded-t-full bg-sun"
+          />
+          <Rays
+            className="pop-burst absolute top-[2%] right-[2%] size-[34%] text-cream"
+            style={{ animationDelay: "500ms" }}
+          />
+          <Sparkle
+            className="pop-burst absolute top-[30%] left-[4%] size-7 text-sun md:size-9"
+            style={{ animationDelay: "800ms" }}
+          />
+
+          <div className="pop-arch absolute right-[9%] bottom-0 h-[86%] w-[64%] overflow-hidden rounded-t-full rounded-b-[32px] border-[6px] border-cream bg-peach">
+            <motion.div className="absolute inset-[-6%]" style={{ y: photoY }}>
+              <Image
+                src={photo}
+                alt="Retrato de Rosario Tejerina Pittis"
+                fill
+                priority
+                sizes="(min-width: 768px) 360px, 64vw"
+                className="object-cover object-[center_20%]"
+              />
+            </motion.div>
+          </div>
+
+          <motion.div style={{ rotate: spin }} className="absolute bottom-[10%] left-[3%] md:left-[1%]">
+            <OnAirBadge
+              text="Al aire · desde Salta · "
+              label="Al aire desde Salta"
+              className="pop-burst size-[104px] shadow-[0_10px_30px_-12px_rgb(180_35_95/0.45)] md:size-[128px]"
+            >
+              <Mic className="size-7 md:size-8" />
+            </OnAirBadge>
+          </motion.div>
+        </div>
+      </PopContainer>
     </section>
   );
 }

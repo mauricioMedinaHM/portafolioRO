@@ -46,3 +46,6 @@ next-env.d.ts
 # Playwright
 test-results/
 playwright-report/
+
+# CV original de la clienta (datos personales: DNI/CUIL). No subir.
+/DatosROSARIO_CV/

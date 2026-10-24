@@ -7,8 +7,8 @@ import { toast } from "sonner";
 import { buttonVariants } from "@/components/ui";
 import { cn } from "@/lib/utils";
 
-const DARK = "#161616";
-const LIGHT = "#FAFAF8";
+const DARK = "#3B1F14";
+const LIGHT = "#FFF3E4";
 
 function isIos() {
   if (typeof navigator === "undefined") return false;
@@ -87,7 +87,7 @@ export function QrCode({ value, size = 220, downloadName, className }: QrCodePro
           ref={canvasRef}
           aria-label={`Código QR para ${value}`}
           role="img"
-          className="bg-paper"
+          className="rounded-xl bg-paper"
           style={{ width: size, height: size }}
         />
       )}
@@ -96,7 +96,7 @@ export function QrCode({ value, size = 220, downloadName, className }: QrCodePro
           type="button"
           onClick={download}
           disabled={busy || failed}
-          className={cn(buttonVariants({ variant: "outline" }), "w-full max-w-xs")}
+          className={cn(buttonVariants({ variant: "pop-outline" }), "w-full max-w-xs")}
         >
           <Download className="size-4" aria-hidden />
           {busy ? "Generando…" : "Descargar QR (PNG)"}

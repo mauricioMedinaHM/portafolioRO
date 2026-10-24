@@ -23,6 +23,7 @@ export function contrastRatio(foreground: string, background: string) {
 }
 
 function token(css: string, name: string) {
+  if (name === "white") return "#FFFFFF";
   const match = css.match(new RegExp(`--color-${name}:\\s*(#[0-9a-fA-F]{6})`));
   if (!match) throw new Error(`Falta --color-${name} en app/globals.css`);
   return match[1].toUpperCase();
@@ -41,6 +42,29 @@ const USED_PAIRS = [
   ["paper / ink", "paper", "ink"],
   ["mist / ink", "mist", "ink"],
   ["paper / ink-hover", "paper", "ink-hover"],
+  // Landing "Pop al aire"
+  ["cocoa / cream", "cocoa", "cream"],
+  ["cocoa-2 / cream", "cocoa-2", "cream"],
+  ["cocoa-2 / peach", "cocoa-2", "peach"],
+  ["cocoa / blush", "cocoa", "blush"],
+  ["cocoa / candy", "cocoa", "candy"],
+  ["cocoa / amber", "cocoa", "amber"],
+  ["sun-deep / cream", "sun-deep", "cream"],
+  ["rose-deep / blush", "rose-deep", "blush"],
+  ["white / sun-deep (botones)", "white", "sun-deep"],
+  ["white / sun-hover", "white", "sun-hover"],
+  ["cream / cocoa", "cream", "cocoa"],
+] as const;
+
+/** Texto grande (≥24px o ≥18.66px bold): alcanza 3:1. Titulares pop y script. */
+const LARGE_PAIRS = [
+  ["sun / cream (titulares)", "sun", "cream"],
+  ["cream / sun (banda)", "cream", "sun"],
+  ["rose-ink / cream (script)", "rose-ink", "cream"],
+  ["rose-ink / peach (script)", "rose-ink", "peach"],
+  ["sun-deep / peach (titulares y cifras)", "sun-deep", "peach"],
+  ["sun-deep / blush (cifras)", "sun-deep", "blush"],
+  ["rose-deep / blush (titular)", "rose-deep", "blush"],
 ] as const;
 
 function walk(dir: string, acc: string[] = []) {
@@ -60,6 +84,11 @@ describe("contraste del texto", () => {
   it.each(USED_PAIRS)("%s alcanza 4.5:1", (_label, fgName, bgName) => {
     const ratio = contrastRatio(token(css, fgName), token(css, bgName));
     expect(ratio).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it.each(LARGE_PAIRS)("%s alcanza 3:1 (texto grande)", (_label, fgName, bgName) => {
+    const ratio = contrastRatio(token(css, fgName), token(css, bgName));
+    expect(ratio).toBeGreaterThanOrEqual(3);
   });
 
   it("no quedan clases de la paleta anterior", () => {

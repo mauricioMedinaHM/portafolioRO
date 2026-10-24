@@ -174,10 +174,9 @@ const VIDEO_EXT = /\.(m4v|mov|mp4|ogg|webm)$/i;
 
 function parseImage(url: URL, originalUrl: string): ParsedMedia | null {
   const host = url.hostname.toLowerCase();
-  const isSupabase = host.endsWith(".supabase.co") && url.pathname.includes("/storage/");
   const isUnsplash = host === "images.unsplash.com" || host === "plus.unsplash.com";
   const isFile = IMAGE_EXT.test(url.pathname) || VIDEO_EXT.test(url.pathname);
-  if (!isSupabase && !isUnsplash && !isFile) return null;
+  if (!isUnsplash && !isFile) return null;
 
   return {
     provider: "image",

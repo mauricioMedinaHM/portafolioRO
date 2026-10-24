@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, type ReactNode } from "react";
+import { MotionConfig } from "motion/react";
 import Lenis from "lenis";
 import { Toaster } from "sonner";
 
@@ -30,7 +31,7 @@ export function Providers({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <>
+    <MotionConfig reducedMotion="user" transition={{ ease: [0.16, 1, 0.3, 1] }}>
       {children}
       <Toaster
         position="bottom-center"
@@ -44,6 +45,6 @@ export function Providers({ children }: { children: ReactNode }) {
           },
         }}
       />
-    </>
+    </MotionConfig>
   );
 }

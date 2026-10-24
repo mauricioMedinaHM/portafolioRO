@@ -37,11 +37,11 @@ export function ShareButtons({ url, title, text, className }: ShareButtonsProps)
 
   return (
     <div className={cn("flex flex-col gap-3", className)}>
-      <Button onClick={share} className="w-full">
+      <Button variant="pop" onClick={share} className="w-full">
         <Share2 className="size-4" aria-hidden />
         Compartir
       </Button>
-      <Button variant="ghost" onClick={copy} className="w-full">
+      <Button variant="ghost" onClick={copy} className="w-full rounded-full">
         <Copy className="size-4" aria-hidden />
         Copiar link
       </Button>

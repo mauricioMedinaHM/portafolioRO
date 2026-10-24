@@ -7,13 +7,10 @@ export type MediaProvider =
   | "link";
 
 export interface Profile {
-  // fila única
-  id: 1;
   fullName: string;
   tagline: string;
   bio: string;
-  photoUrl: string | null;
-  heroVideoUrl: string | null;
+  photoUrl: string;
   email: string | null;
   whatsapp: string | null; // formato E.164
   socials: {
@@ -25,7 +22,6 @@ export interface Profile {
   };
   skills?: string[]; // chips de habilidades (sección Sobre mí)
   education?: string[]; // formación y certificados ("Trayectoria")
-  updatedAt: string;
 }
 
 export interface Category {
@@ -35,7 +31,6 @@ export interface Category {
   intro: string | null; // cualidades y habilidades (markdown simple)
   skills: string[]; // chips destacados
   position: number;
-  isVisible: boolean;
 }
 
 export interface Project {
@@ -44,15 +39,12 @@ export interface Project {
   title: string;
   description: string | null; // máx. ~280 caracteres
   url: string;
-  provider: MediaProvider; // provider se calcula al guardar
+  provider: MediaProvider; // detectado desde el link (parseMediaUrl)
   embedUrl: string | null;
-  thumbnailUrl: string | null; // calculado o subido a mano
+  thumbnailUrl: string | null; // calculada desde el link
   date: string | null; // YYYY-MM-DD
   position: number;
-  isPublished: boolean;
   isFeatured: boolean;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface ParsedMedia {
