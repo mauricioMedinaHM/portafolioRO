@@ -21,7 +21,7 @@ export function MediaFallback({
   aspect = "16/9",
 }: MediaFallbackProps) {
   const [thumbFailed, setThumbFailed] = useState(false);
-  const frame = aspect === "9/16" ? "aspect-[9/16] max-w-sm" : "aspect-video";
+  const frame = aspect === "9/16" ? "aspect-[9/16] max-w-[300px]" : "aspect-video";
   const showThumb = Boolean(thumbnailUrl) && !thumbFailed;
 
   return (

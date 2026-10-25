@@ -3,6 +3,7 @@ export type MediaProvider =
   | "gphotos"
   | "youtube"
   | "vimeo"
+  | "instagram"
   | "image"
   | "link";
 
@@ -30,6 +31,9 @@ export interface Category {
   slug: string; // slug = ancla #conduccion
   intro: string | null; // cualidades y habilidades (markdown simple)
   skills: string[]; // chips destacados
+  badge: string | null; // etiqueta de color junto al título (ej. "UCaSal")
+  channel: { label: string; url: string } | null; // botón al canal del programa
+  socials: ProjectSocials; // Instagram / LinkedIn del programa
   position: number;
 }
 
@@ -37,7 +41,7 @@ export interface Project {
   id: string;
   categoryId: string;
   title: string;
-  description: string | null; // máx. ~280 caracteres
+  description: string | null; // 1–2 párrafos (separados por \n\n)
   url: string;
   provider: MediaProvider; // detectado desde el link (parseMediaUrl)
   embedUrl: string | null;
@@ -45,6 +49,18 @@ export interface Project {
   date: string | null; // YYYY-MM-DD
   position: number;
   isFeatured: boolean;
+  socials: ProjectSocials; // vacío si el proyecto no tiene redes cargadas
+  links: ProjectLink[]; // otros perfiles / enlaces del proyecto
+}
+
+export interface ProjectLink {
+  label: string;
+  url: string;
+}
+
+export interface ProjectSocials {
+  instagram?: string;
+  linkedin?: string;
 }
 
 export interface ParsedMedia {

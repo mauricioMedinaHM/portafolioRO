@@ -37,7 +37,7 @@ export function Modal({
         >
           <div className="flex items-start justify-between gap-4">
             {title ? (
-              <Dialog.Title className="font-pop text-[28px] leading-none text-sun">
+              <Dialog.Title className="font-pop text-[28px] leading-none text-cocoa">
                 {title}
               </Dialog.Title>
             ) : (

@@ -1,11 +1,13 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
+import { GraduationCap, MonitorPlay, Tv } from "lucide-react";
 import { useState } from "react";
 import { MediaCard } from "@/components/media";
 import { PopContainer, PopHeading } from "@/components/pop/heading";
 import { categoryIcon } from "@/components/pop/icons";
-import { Button } from "@/components/ui";
+import { ProjectSocialLinks } from "@/components/pop/social-links";
+import { Button, buttonVariants } from "@/components/ui";
 import type { Category, Project } from "@/lib/types";
 
 const INITIAL_COUNT = 6;
@@ -25,10 +27,16 @@ function NoteCard({ project }: { project: Project }) {
         {project.title}
       </h3>
       {project.description ? (
-        <p className="mt-2 max-w-[62ch] text-[15px] leading-relaxed text-cocoa-2">
+        <p className="mt-2 max-w-[62ch] text-[15px] leading-relaxed whitespace-pre-line text-cocoa-2">
           {project.description}
         </p>
       ) : null}
+      <ProjectSocialLinks
+        socials={project.socials}
+        links={project.links}
+        title={project.title}
+        className="mt-auto pt-4"
+      />
     </article>
   );
 }
@@ -51,16 +59,28 @@ export function CategorySection({
   const additionalNotes = additionalProjects.filter((project) => !project.url);
   const hasMore = additionalProjects.length > 0;
   const Icon = categoryIcon(category.slug);
+  const isUniversity = category.badge
+    ? /ucasal|universi/i.test(category.badge)
+    : false;
+  const BadgeIcon = isUniversity ? GraduationCap : Tv;
 
   return (
     <section id={category.slug} className="scroll-mt-20 py-10 md:py-16">
       <PopContainer>
         <div className="grid grid-cols-12 gap-y-5 md:gap-x-8">
           <div className="col-span-12 flex items-start gap-4 md:col-span-6">
-            <span className="mt-1 grid size-12 shrink-0 place-items-center rounded-full bg-sun text-white md:size-14">
+            <span className="mt-1 grid size-12 shrink-0 place-items-center rounded-full bg-sun text-cocoa md:size-14">
               <Icon className="size-6" aria-hidden />
             </span>
-            <PopHeading className="text-[32px] md:text-[48px]">{category.name}</PopHeading>
+            <div className="flex min-w-0 flex-col gap-3">
+              <PopHeading className="text-[27px] [overflow-wrap:anywhere] hyphens-auto sm:text-[32px] md:text-[48px]">{category.name}</PopHeading>
+              {category.badge ? (
+                <span className="pop-label inline-flex w-fit items-center gap-1.5 rounded-full bg-candy px-3 py-1.5 text-cocoa">
+                  <BadgeIcon className="size-4" aria-hidden />
+                  {category.badge}
+                </span>
+              ) : null}
+            </div>
           </div>
           <div className="col-span-12 md:col-span-6">
             {category.intro ? (
@@ -79,6 +99,22 @@ export function CategorySection({
                   </li>
                 ))}
               </ul>
+            ) : null}
+            {category.channel || Object.keys(category.socials).length > 0 ? (
+              <div className="mt-5 flex flex-wrap items-center gap-3">
+                {category.channel ? (
+                  <a
+                    href={category.channel.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={buttonVariants({ variant: "pop-outline", size: "md" })}
+                  >
+                    <MonitorPlay className="size-5" aria-hidden />
+                    {category.channel.label}
+                  </a>
+                ) : null}
+                <ProjectSocialLinks socials={category.socials} title={category.name} size="lg" />
+              </div>
             ) : null}
           </div>
         </div>

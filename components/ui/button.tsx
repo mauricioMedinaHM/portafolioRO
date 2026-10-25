@@ -15,7 +15,7 @@ const buttonVariants = cva(
         "invert-outline":
           "border border-mist bg-transparent text-paper hover:bg-ink-hover focus-visible:outline-paper",
         // Landing "Pop al aire": píldoras naranja/rosa.
-        pop: "rounded-full bg-sun-deep font-bold text-white hover:bg-sun-hover focus-visible:outline-sun-deep",
+        pop: "rounded-full bg-sun-deep font-bold text-cream hover:bg-sun-hover focus-visible:outline-sun-deep",
         "pop-outline":
           "rounded-full border-2 border-cocoa bg-transparent font-bold text-cocoa hover:bg-cocoa hover:text-cream focus-visible:outline-cocoa",
         "pop-cream":

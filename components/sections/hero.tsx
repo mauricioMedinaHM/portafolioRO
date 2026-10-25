@@ -47,7 +47,7 @@ export function Hero({ profile }: { profile: Profile; firstCategorySlug?: string
             style={{ animationDelay: "650ms" }}
           />
 
-          <h1 className="font-pop relative pt-8 text-[64px] leading-[0.86] text-sun sm:text-[84px] md:pt-6 lg:text-[112px]">
+          <h1 className="font-pop relative pt-8 text-[64px] leading-[0.86] text-cocoa sm:text-[84px] md:pt-6 lg:text-[112px]">
             <span className="sr-only">{profile.fullName}: </span>
             {LINES.map((line, index) => (
               <RiseLine key={line} index={index}>
@@ -126,7 +126,7 @@ export function Hero({ profile }: { profile: Profile; firstCategorySlug?: string
             <OnAirBadge
               text="Al aire · desde Salta · "
               label="Al aire desde Salta"
-              className="pop-burst size-[104px] shadow-[0_10px_30px_-12px_rgb(180_35_95/0.45)] md:size-[128px]"
+              className="pop-burst size-[104px] shadow-[0_10px_30px_-12px_rgb(91_5_80/0.45)] md:size-[128px]"
             >
               <Mic className="size-7 md:size-8" />
             </OnAirBadge>

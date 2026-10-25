@@ -19,6 +19,7 @@ const GRID_COLS: Record<number, string> = {
   3: "lg:grid-cols-3",
   4: "lg:grid-cols-4",
   5: "lg:grid-cols-5",
+  6: "lg:grid-cols-3", // 2 filas de 3
 };
 
 /** "Título — subtítulo" → partes; el título va grande, el resto como bajada. */
@@ -30,13 +31,13 @@ function splitTitle(title: string) {
 /** Banda naranja: una tarjeta por área, con la pieza más representativa. */
 export function WorksBand({ groups }: { groups: WorkGroup[] }) {
   if (groups.length === 0) return null;
-  const cols = GRID_COLS[Math.min(groups.length, 5)];
+  const cols = GRID_COLS[Math.min(groups.length, 6)];
 
   return (
     <section id="trabajos" aria-labelledby="trabajos-titulo" className="scroll-mt-20 py-6 md:py-10">
       <PopContainer>
-        <div className="relative overflow-hidden rounded-[36px] bg-sun px-5 py-8 md:px-8 md:py-10">
-          <Burst className="pointer-events-none absolute -top-8 -right-8 size-32 text-cream/15" />
+        <div className="relative overflow-hidden rounded-[36px] bg-cocoa px-5 py-8 md:px-8 md:py-10">
+          <Burst className="pointer-events-none absolute -top-8 -right-8 size-32 text-sun/40" />
           <div className="relative flex flex-wrap items-end justify-between gap-4">
             <PopHeading tone="cream" className="text-[30px] md:text-[40px]">
               <span id="trabajos-titulo">Trabajos destacados</span>
@@ -59,6 +60,7 @@ export function WorksBand({ groups }: { groups: WorkGroup[] }) {
             {groups.map(({ category, projects }) => {
               const lead =
                 projects.find((p) => p.isFeatured && p.thumbnailUrl) ??
+                projects.find((p) => p.isFeatured) ??
                 projects.find((p) => p.thumbnailUrl) ??
                 projects[0];
               const { head, sub } = splitTitle(lead.title);
@@ -74,8 +76,8 @@ export function WorksBand({ groups }: { groups: WorkGroup[] }) {
                     transition={{ duration: 0.2 }}
                     className="flex h-full flex-col rounded-[24px] bg-cream p-4 text-cocoa focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-cream"
                   >
-                    <span className="pop-label text-sun-deep">{category.name}</span>
-                    <span className="font-pop mt-2 text-[22px] leading-[0.95] text-sun md:text-[24px]">
+                    <span className="pop-label line-clamp-2 text-sun-deep">{category.name}</span>
+                    <span className="font-pop mt-2 text-[22px] leading-[0.95] text-cocoa md:text-[24px]">
                       {head}
                     </span>
                     {sub ? (
@@ -106,7 +108,7 @@ export function WorksBand({ groups }: { groups: WorkGroup[] }) {
                       <motion.span
                         variants={{ hover: { rotate: 45, scale: 1.08 } }}
                         transition={{ duration: 0.2 }}
-                        className="absolute right-3 bottom-3 grid size-10 place-items-center rounded-full bg-cream text-sun-deep"
+                        className="absolute right-3 bottom-3 grid size-10 place-items-center rounded-full bg-sun text-cocoa"
                       >
                         <ArrowUpRight className="size-5" aria-hidden />
                       </motion.span>

@@ -27,7 +27,7 @@ export function PopHeading({
     <Tag
       className={cn(
         "font-pop text-[34px] md:text-[52px]",
-        tone === "sun" && "text-sun",
+        tone === "sun" && "text-cocoa",
         tone === "cream" && "text-cream",
         tone === "cocoa" && "text-cocoa",
         className,

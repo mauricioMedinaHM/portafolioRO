@@ -41,7 +41,7 @@ export function FloatingContact({ whatsapp }: { whatsapp: string | null }) {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Contactar por WhatsApp"
-          className="fixed right-5 bottom-[calc(1.25rem+env(safe-area-inset-bottom))] z-40 inline-flex size-14 items-center justify-center rounded-full bg-sun-deep text-white shadow-[0_12px_30px_-10px_rgb(194_65_12/0.7)] ring-4 ring-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sun-deep"
+          className="fixed right-5 bottom-[calc(1.25rem+env(safe-area-inset-bottom))] z-40 inline-flex size-14 items-center justify-center rounded-full bg-sun-deep text-white shadow-[0_12px_30px_-10px_rgb(91_5_80/0.7)] ring-4 ring-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sun-deep"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 12, transition: { duration: 0.15 } }}

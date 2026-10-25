@@ -24,8 +24,8 @@ test.describe("landing", () => {
     if ((viewport?.width ?? 0) >= 1024) {
       // Desktop: navegación principal visible en el header (sin botón Menú).
       const nav = page.getByRole("navigation", { name: "Principal" });
-      await nav.getByRole("link", { name: "Trayectoria" }).click();
-      await expect(page).toHaveURL(/#trayectoria$/);
+      await nav.getByRole("link", { name: "Formación" }).click();
+      await expect(page).toHaveURL(/#formacion$/);
       return;
     }
     await page.getByRole("button", { name: "Menú" }).click();
@@ -38,7 +38,7 @@ test.describe("landing", () => {
 
   test("las categorías con contenido tienen ancla", async ({ page }) => {
     await page.goto("/");
-    for (const id of ["conduccion", "streaming", "moviles", "trabajos", "servicios", "trayectoria", "contacto"]) {
+    for (const id of ["conduccion", "streaming", "generacion-tech", "moviles", "extension", "experiencia", "trabajos", "servicios", "formacion", "contacto"]) {
       await expect(page.locator(`#${id}`)).toBeAttached();
     }
   });
@@ -108,5 +108,38 @@ test.describe("landing", () => {
     await page.goto("/");
     const box = await page.getByRole("button", { name: "Menú" }).boundingBox();
     expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
+  });
+
+  test("Generación Tech tiene 4 videos y link al canal", async ({ page }) => {
+    await page.goto("/");
+    const section = page.locator("#generacion-tech");
+    await expect(section).toBeAttached();
+    await expect(
+      section.locator("button[aria-label^='Reproducir']"),
+    ).toHaveCount(4);
+    await expect(
+      section.locator('a[href*="youtube.com/@generaciontech"]').first(),
+    ).toBeAttached();
+    await expect(
+      section.getByRole("link", { name: "Instagram de Generación Tech" }),
+    ).toHaveAttribute("href", "https://www.instagram.com/generacion.tech/");
+  });
+
+  test("Extensión universitaria menciona a UCaSal", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("#extension")).toContainText(/UCaSal/);
+  });
+  test("Grupo Scout muestra sus 3 Instagram y el reel destacado", async ({ page }) => {
+    await page.goto("/");
+    const section = page.locator("#experiencia");
+    await expect(section.getByRole("heading", { name: /Grupo Scout N\.º 811/ })).toBeVisible();
+    for (const handle of ["aonayamana811", "zona27.saac", "distrito4z27.saac"]) {
+      await expect(section.locator(`a[href="https://www.instagram.com/${handle}"]`)).toBeAttached();
+    }
+    await expect(
+      page.locator('#trabajos a[href="#experiencia"]').first(),
+    ).toContainText(/Proyectos y eventos/i);
+    await section.locator("button[aria-label^='Reproducir Proyectos y eventos']").click();
+    await expect(section.locator("iframe")).toHaveAttribute("src", /instagram\.com\/reel\/DenJBl1CFQd\/embed/);
   });
 });

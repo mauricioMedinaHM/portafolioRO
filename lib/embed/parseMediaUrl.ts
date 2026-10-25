@@ -123,6 +123,23 @@ function parseVimeo(url: URL, host: string, originalUrl: string): ParsedMedia | 
   };
 }
 
+/** Reels y posts de Instagram (los perfiles quedan como link común). */
+function parseInstagram(url: URL, host: string, originalUrl: string): ParsedMedia | null {
+  if (host !== "instagram.com" && host !== "m.instagram.com") return null;
+  const match = /^\/(?:[^/]+\/)?(reel|reels|p|tv)\/([A-Za-z0-9_-]+)/.exec(url.pathname);
+  if (!match) return null;
+  const kind = match[1] === "reels" ? "reel" : match[1];
+  const id = match[2];
+  return {
+    provider: "instagram",
+    id,
+    embedUrl: `https://www.instagram.com/${kind}/${encodeURIComponent(id)}/embed/`,
+    thumbnailUrl: null,
+    canEmbed: true,
+    originalUrl,
+  };
+}
+
 function parseDrive(url: URL, host: string, originalUrl: string): ParsedMedia | null {
   if (host !== "drive.google.com") return null;
 
@@ -207,6 +224,7 @@ export function parseMediaUrl(url: string): ParsedMedia {
   return (
     parseYouTube(parsed, host, originalUrl) ??
     parseVimeo(parsed, host, originalUrl) ??
+    parseInstagram(parsed, host, originalUrl) ??
     parseDrive(parsed, host, originalUrl) ??
     parsePhotos(host, originalUrl) ??
     parseImage(parsed, originalUrl) ??

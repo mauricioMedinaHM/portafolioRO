@@ -17,7 +17,7 @@ const DESKTOP_LINKS: NavAnchor[] = [
   { href: "#trabajos", label: "Trabajos" },
   { href: "#servicios", label: "Qué hago" },
   { href: "#sobre-mi", label: "Sobre mí" },
-  { href: "#trayectoria", label: "Trayectoria" },
+  { href: "#formacion", label: "Formación" },
   { href: "#contacto", label: "Contacto" },
 ];
 
@@ -48,14 +48,14 @@ export function NavBar({
       <header
         className={cn(
           "sticky top-0 z-40 transition-[background-color,box-shadow] duration-200",
-          scrolled ? "bg-cream/90 shadow-[0_6px_24px_-12px_rgb(59_31_20/0.25)] backdrop-blur-md" : "bg-cream",
+          scrolled ? "bg-cream/90 shadow-[0_6px_24px_-12px_rgb(91_5_80/0.25)] backdrop-blur-md" : "bg-cream",
         )}
       >
         <div className="mx-auto flex h-16 w-full max-w-[1200px] items-center justify-between gap-6 px-5 md:h-20 md:px-10">
           <a
             href="#inicio"
             aria-label={`${name}, inicio`}
-            className="font-pop flex flex-col text-[17px] leading-[0.9] text-sun focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sun-deep md:text-[20px]"
+            className="font-pop flex flex-col text-[17px] leading-[0.9] text-cocoa focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sun-deep md:text-[20px]"
           >
             <span>{logoTop}</span>
             {logoBottom ? <span>{logoBottom}</span> : null}

@@ -30,7 +30,7 @@ describe("contenido.ts → datos de la landing", () => {
 
   it("un link de YouTube se convierte en embed + miniatura sin tocar nada más", () => {
     const projects = buildProjects();
-    const withLink = projects.filter((p) => p.url);
+    const withLink = projects.filter((p) => p.url && p.provider !== "instagram");
     expect(withLink.length).toBeGreaterThan(0);
     for (const p of withLink) {
       expect(p.provider).toBe("youtube");
@@ -49,7 +49,8 @@ describe("contenido.ts → datos de la landing", () => {
           { titulo: "Vimeo", link: "https://vimeo.com/76979871" },
           { titulo: "Drive", link: "https://drive.google.com/file/d/1AbCdEfGhIjKlMn/view?usp=sharing" },
           { titulo: "Imagen", link: "https://example.com/foto.jpg" },
-          { titulo: "Otro sitio", link: "https://www.instagram.com/p/abc/" },
+          { titulo: "Reel", link: "https://www.instagram.com/reel/DenJBl1CFQd/?vrfl=x" },
+          { titulo: "Perfil de Instagram", link: "https://www.instagram.com/aonayamana811" },
           { titulo: "Sin link" },
         ],
       },
@@ -59,9 +60,12 @@ describe("contenido.ts → datos de la landing", () => {
       "vimeo",
       "drive",
       "image",
+      "instagram",
       "link",
       "link",
     ]);
+    const reel = buildProjects(prueba)[4];
+    expect(reel.embedUrl).toBe("https://www.instagram.com/reel/DenJBl1CFQd/embed/");
   });
 
   it("sin link queda como tarjeta de experiencia; fechas inválidas se ignoran", () => {
@@ -80,11 +84,57 @@ describe("contenido.ts → datos de la landing", () => {
   it("hay destacados y las descripciones son breves", () => {
     const projects = buildProjects();
     expect(projects.some((p) => p.isFeatured)).toBe(true);
-    for (const p of projects) expect((p.description ?? "").length).toBeLessThanOrEqual(280);
+    for (const p of projects) {
+      for (const paragraph of (p.description ?? "").split("\n\n")) {
+        expect(paragraph.length).toBeLessThanOrEqual(320);
+      }
+    }
   });
 
-  it("el contenido trae las 5 secciones del CV", () => {
-    expect(secciones).toHaveLength(5);
+  it("el contenido trae las 6 secciones y los videos de Generación Tech", () => {
+    expect(secciones).toHaveLength(6);
+    const gt = buildProjects().filter((p) => p.categoryId === "cat-generacion-tech");
+    expect(gt.filter((p) => p.provider === "youtube")).toHaveLength(4);
+    const cat = buildCategories().find((c) => c.slug === "generacion-tech");
+    expect(cat?.channel?.url).toMatch(/youtube\.com\/@generaciontech/);
+  });
+
+  it("miniatura propia y enlaces: se limpian los parámetros de rastreo", () => {
+    const [p] = buildProjects([
+      {
+        nombre: "X",
+        ancla: "x",
+        trabajos: [
+          {
+            titulo: "Scout",
+            link: "https://www.instagram.com/reel/abc/",
+            miniatura: "/trabajos/x.jpg",
+            enlaces: [
+              { nombre: "Zona", link: "https://www.instagram.com/zona27.saac?mdxt=ajc2" },
+              { nombre: "", link: "https://x.com" },
+              { nombre: "Roto", link: "no-es-link" },
+            ],
+          },
+        ],
+      },
+    ]);
+    expect(p.thumbnailUrl).toBe("/trabajos/x.jpg");
+    expect(p.links).toEqual([{ label: "Zona", url: "https://www.instagram.com/zona27.saac" }]);
+  });
+
+  it("las redes vacías del proyecto no se muestran; las cargadas sí", () => {
+    const [vacio, cargado] = buildProjects([
+      {
+        nombre: "X",
+        ancla: "x",
+        trabajos: [
+          { titulo: "A", redes: { instagram: "", linkedin: "" } },
+          { titulo: "B", redes: { instagram: "https://instagram.com/x", linkedin: "nope" } },
+        ],
+      },
+    ]);
+    expect(vacio.socials).toEqual({});
+    expect(cargado.socials).toEqual({ instagram: "https://instagram.com/x" });
   });
 });
 

@@ -43,7 +43,7 @@ export function Intro({
           ) : null}
 
           <div className="md:col-span-5">
-            <h2 className="font-pop text-[34px] leading-[0.95] text-sun md:text-[44px]">
+            <h2 className="font-pop text-[34px] leading-[0.95] text-cocoa md:text-[44px]">
               Hola, soy {firstName}.
             </h2>
             <p className="font-pop mt-2 text-[19px] leading-tight text-sun-deep md:text-[22px]">
@@ -67,12 +67,12 @@ export function Intro({
                   <li key={category.id}>
                     <a
                       href={`#${category.slug}`}
-                      className="group flex min-h-11 items-center gap-3 rounded-full text-[15px] font-semibold text-cocoa transition-colors hover:text-sun-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sun-deep"
+                      className="group flex min-h-11 items-start gap-3 rounded-full text-[15px] leading-snug font-semibold text-cocoa transition-colors hover:text-sun-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sun-deep"
                     >
-                      <span className="grid size-8 shrink-0 place-items-center rounded-full bg-sun text-white transition-transform duration-150 group-hover:scale-110">
+                      <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-sun text-cocoa transition-transform duration-150 group-hover:scale-110">
                         <Icon className="size-4" aria-hidden />
                       </span>
-                      {category.name}
+                      <span className="self-center">{category.name}</span>
                     </a>
                   </li>
                 );

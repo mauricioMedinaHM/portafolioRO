@@ -37,7 +37,7 @@ export default async function Home() {
       href: `#${category.slug}`,
       label: category.name,
     })),
-    { href: "#trayectoria", label: "Trayectoria" },
+    { href: "#formacion", label: "Formación" },
     { href: "#contacto", label: "Contacto" },
   ];
 

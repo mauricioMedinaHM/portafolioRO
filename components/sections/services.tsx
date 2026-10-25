@@ -10,10 +10,10 @@ import { cn } from "@/lib/utils";
 const SERVICES: { icon: LucideIcon; title: string; text: string }[] = [
   { icon: Tv, title: "Conducción", text: "En estudio y en vivo, con escucha activa e improvisación." },
   { icon: Mic, title: "Móviles y entrevistas", text: "Trabajo en campo y coberturas de eventos masivos." },
-  { icon: MonitorPlay, title: "Streaming y TV", text: "Segmentos, entrevistas y producción para el vivo." },
-  { icon: Radio, title: "Locución y radio", text: "Locución, producción radial y capacitación." },
-  { icon: Smartphone, title: "Redes y contenido", text: "Copys, planificación de publicaciones y coberturas." },
-  { icon: Clapperboard, title: "Producción y edición", text: "Asistencia en transmisiones · Canva, Premiere, CapCut." },
+  { icon: MonitorPlay, title: "Streaming y TV", text: "Otra Vez Sopa y Generación Tech (El10TV)." },
+  { icon: Clapperboard, title: "Producción y eventos", text: "Soporte de producción en Streaming Day, organización y logística." },
+  { icon: Radio, title: "Locución y capacitación", text: "Radio y proyectos de extensión universitaria (UCaSal)." },
+  { icon: Smartphone, title: "Redes y contenido", text: "Gestión de redes, copys y planificación." },
 ];
 
 // Fondo + color de cifra con contraste ≥3:1 (ver lib/contrast.test.ts).

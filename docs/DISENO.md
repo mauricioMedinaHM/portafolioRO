@@ -4,11 +4,16 @@ Reemplaza a "Claro y limpio". Referencia visual elegida por el cliente: estétic
 
 Los componentes base (Sheet, Modal, QR, toasts) usan los tokens `paper/ink`; la landing los re-mapea con `data-theme="pop"` en `app/page.tsx` (`body:has([data-theme="pop"])`) para que alcance también a los portales.
 
-## Tokens (app/globals.css)
+## Paleta (app/globals.css)
 
-cream #FFF3E4 fondo · peach #FDE3D0 y blush #FBD3DC paneles · candy #F7A4C0 tarjeta CTA · amber #FFB54A cifra · sun #EE4F14 titulares y banda de trabajos · sun-deep #C2410C botones, labels chicos, titulares sobre peach · rose #F26A9B formas · rose-ink #D63B72 palabra script · rose-deep #B4235F texto rosa sobre blush · cocoa #3B1F14 texto · cocoa-2 #6E4A3C texto secundario · seam #F1CDB5 bordes.
+Marca: **Plum #5B0550 · Lilac #F9A0F0 · Tangerine #FE682B · Butter #FFF6BF**.
 
-Contraste: `lib/contrast.test.ts` verifica cada par usado (4.5:1 texto normal, 3:1 texto grande). Ojo: `sun` sólo como texto grande sobre cream (3.3) y nunca sobre peach (2.96, usar sun-deep); los botones son `sun-deep` con blanco (5.2).
+- Butter: fondo de página (`cream`). Plum: texto, titulares, botones, labels y foco (`cocoa`, `sun-deep`, `rose-deep`); `cocoa-2` #6E2A63 es el texto secundario.
+- Tangerine: rellenos, formas, íconos en círculo, botón de play, Instagram, barra de progreso (`sun`, `amber`). Lilac: arco del hero, formas, paneles y etiquetas (`candy`, `rose`).
+- Tintes derivados sólo para paneles: `peach` #FFE2C2, `blush` #FCD9F4, borde `seam` #EBD69A.
+- La banda "Trabajos destacados" va en Plum con texto Butter.
+
+Contraste (`lib/contrast.test.ts`): Tangerine sobre Butter da 2.65, así que **nunca va como texto**; los titulares son Plum. La palabra manuscrita usa `rose-ink` #D9480F (Tangerine oscurecido, 3.9 sobre Butter, sólo texto grande). Sobre Tangerine el texto siempre es Plum (4.57).
 
 ## Tipografía (autohospedada con @fontsource)
 

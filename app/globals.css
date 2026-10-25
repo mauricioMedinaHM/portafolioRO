@@ -23,22 +23,32 @@
   --color-border: #e3e2dd;
   --color-subtle: #6b6a64;
 
-  /* Paleta "Pop al aire" (landing). Contrastes en lib/contrast.test.ts. */
-  --color-cream: #fff3e4;
-  --color-peach: #fde3d0;
-  --color-blush: #fbd3dc;
-  --color-sun: #ee4f14;
-  --color-sun-deep: #c2410c;
-  --color-sun-hover: #a8380a;
-  --color-rose: #f26a9b;
-  --color-rose-ink: #d63b72;
-  --color-rose-deep: #b4235f;
-  --color-candy: #f7a4c0;
-  --color-amber: #ffb54a;
-  --color-cocoa: #3b1f14;
-  --color-cocoa-2: #6e4a3c;
-  --color-sand: #f4c9b4;
-  --color-seam: #f1cdb5;
+  /*
+   * Paleta de marca: Plum #5B0550 · Lilac #F9A0F0 · Tangerine #FE682B · Butter #FFF6BF.
+   * Los nombres de rol (cream, sun, cocoa…) se mantienen en los componentes;
+   * acá se mapean a la paleta. Tintes derivados sólo para paneles y texto
+   * secundario. Contrastes verificados en lib/contrast.test.ts.
+   */
+  --color-plum: #5b0550;
+  --color-lilac: #f9a0f0;
+  --color-tangerine: #fe682b;
+  --color-butter: #fff6bf;
+
+  --color-cream: #fff6bf; /* Butter: fondo */
+  --color-peach: #ffe2c2; /* tinte Butter→Tangerine: paneles */
+  --color-blush: #fcd9f4; /* tinte Lilac: paneles y chips */
+  --color-candy: #f9a0f0; /* Lilac */
+  --color-amber: #fe682b; /* Tangerine (fondo de cifras, texto plum encima) */
+  --color-sun: #fe682b; /* Tangerine: rellenos, formas, íconos */
+  --color-sun-deep: #5b0550; /* Plum: botones, labels, foco */
+  --color-sun-hover: #7a1a6c; /* Plum aclarado: hover de botones */
+  --color-rose: #f9a0f0; /* Lilac: formas */
+  --color-rose-ink: #d9480f; /* Tangerine oscurecido: palabra script (texto grande) */
+  --color-rose-deep: #5b0550; /* Plum */
+  --color-cocoa: #5b0550; /* Plum: texto principal y titulares */
+  --color-cocoa-2: #6e2a63; /* Plum aclarado: texto secundario */
+  --color-sand: #e9c9e5;
+  --color-seam: #ebd69a; /* borde sobre Butter */
 
   --font-pop: "Bricolage Grotesque Variable", "Arial Black", ui-sans-serif, sans-serif;
   --font-script: "Mr Dafoe", "Brush Script MT", cursive;
@@ -127,14 +137,14 @@ html.lenis body {
  * Se aplica en body para alcanzar también a los portales (menú, modales).
  */
 body:has([data-theme="pop"]) {
-  --color-paper: #fff3e4;
-  --color-paper-2: #fde3d0;
-  --color-ink: #3b1f14;
-  --color-ink-hover: #57301f;
-  --color-ink-2: #6e4a3c;
-  --color-ink-3: #6e4a3c;
-  --color-line: #f1cdb5;
-  --color-mist: #f4c9b4;
+  --color-paper: #fff6bf;
+  --color-paper-2: #ffe2c2;
+  --color-ink: #5b0550;
+  --color-ink-hover: #7a1a6c;
+  --color-ink-2: #6e2a63;
+  --color-ink-3: #6e2a63;
+  --color-line: #ebd69a;
+  --color-mist: #e9c9e5;
   background: var(--color-cream);
   color: var(--color-cocoa);
 }

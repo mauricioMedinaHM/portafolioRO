@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { ProjectSocialLinks } from "@/components/pop/social-links";
 import { parseMediaUrl } from "@/lib/embed/parseMediaUrl";
 import type { MediaProvider, Project } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -15,6 +16,7 @@ const PROVIDER_LABEL: Record<MediaProvider, string> = {
   gphotos: "Google Fotos",
   youtube: "YouTube",
   vimeo: "Vimeo",
+  instagram: "Instagram",
   image: "la imagen",
   link: "el enlace",
 };
@@ -69,12 +71,14 @@ export function MediaCard({ project }: MediaCardProps) {
   const provider = project.provider;
   const embedUrl = project.embedUrl ?? parsed.embedUrl;
   const thumbnailUrl = project.thumbnailUrl ?? parsed.thumbnailUrl;
-  const aspect: EmbedAspect = isYouTubeShort(project.url) ? "9/16" : "16/9";
+  const aspect: EmbedAspect =
+    isYouTubeShort(project.url) || provider === "instagram" ? "9/16" : "16/9";
   const canInlineEmbed =
     !thumbFailed &&
     Boolean(embedUrl) &&
     (provider === "youtube" ||
       provider === "vimeo" ||
+      provider === "instagram" ||
       (provider === "drive" && parsed.canEmbed));
 
   return (
@@ -83,7 +87,7 @@ export function MediaCard({ project }: MediaCardProps) {
         <div
           className={cn(
             "relative w-full overflow-hidden rounded-[22px] bg-cocoa",
-            aspect === "9/16" ? "aspect-[9/16] max-w-sm" : "aspect-video",
+            aspect === "9/16" ? "aspect-[9/16] max-w-[300px]" : "aspect-video",
           )}
         >
           {isVideoFile(project.url) ? (
@@ -136,8 +140,14 @@ export function MediaCard({ project }: MediaCardProps) {
           {project.title}
         </h3>
         {project.description ? (
-          <p className="max-w-[62ch] text-[15px] leading-relaxed text-cocoa-2">{project.description}</p>
+          <p className="max-w-[62ch] text-[15px] leading-relaxed whitespace-pre-line text-cocoa-2">{project.description}</p>
         ) : null}
+        <ProjectSocialLinks
+          socials={project.socials}
+          links={project.links}
+          title={project.title}
+          className="mt-3"
+        />
       </div>
     </article>
   );

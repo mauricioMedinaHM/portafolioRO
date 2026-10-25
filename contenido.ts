@@ -12,6 +12,9 @@
  *    · Google Drive (el archivo tiene que estar compartido como
  *      "Cualquier persona con el enlace")
  *    · Google Fotos (abre en una pestaña nueva)
+ *    · Instagram: reels y posts se reproducen en la página. Instagram no
+ *      deja tomar la miniatura: guardá una imagen en /public/trabajos y
+ *      ponela en `miniatura`.
  *    · Imagen o video directo (.jpg, .png, .mp4…)
  *
  *  Campos de cada trabajo:
@@ -21,6 +24,17 @@
  *    descripcion  opcional, 1–2 frases.
  *    fecha        opcional, formato "AAAA-MM-DD".
  *    destacado    opcional, true = aparece primero en las tarjetas de arriba.
+ *    redes        opcional, { instagram, linkedin } del proyecto: se muestran
+ *                 como botones de color debajo de la tarjeta.
+ *    enlaces      opcional, lista de { nombre, link } (otros perfiles o páginas).
+ *    miniatura    opcional, imagen propia para la tarjeta ("/trabajos/foto.jpg").
+ *    descripcion  admite un segundo párrafo separado por una línea en blanco (\n\n).
+ *
+ *  Campos de cada sección (además de nombre, ancla, intro, habilidades):
+ *    etiqueta     opcional, cartelito de color junto al título (ej. "UCaSal").
+ *    canal        opcional, { nombre, link } botón al canal de YouTube del programa.
+ *    redes        opcional, { instagram, linkedin } del programa: botones de color
+ *                 junto al botón del canal.
  *
  *  El orden en la página es el orden de este archivo.
  *  Después de editar: guardar, y en producción hacer deploy (git push).
@@ -32,6 +46,14 @@ export interface Trabajo {
   descripcion?: string;
   fecha?: string;
   destacado?: boolean;
+  redes?: RedesProyecto;
+  enlaces?: { nombre: string; link: string }[];
+  miniatura?: string;
+}
+
+export interface RedesProyecto {
+  instagram?: string;
+  linkedin?: string;
 }
 
 export interface Seccion {
@@ -41,6 +63,9 @@ export interface Seccion {
   ancla: string;
   intro?: string;
   habilidades?: string[];
+  etiqueta?: string;
+  canal?: { nombre: string; link: string };
+  redes?: RedesProyecto;
   trabajos: Trabajo[];
 }
 
@@ -50,28 +75,32 @@ export const perfil = {
   bio: "Soy estudiante de Comunicación Social y Locución Nacional en UCaSal y me entusiasma contar historias frente a cámara y detrás del micrófono. En coberturas, streaming y Generación Tech para El10TV conduzco, entrevisto y acompaño la producción de contenidos en vivo. También llevo esa escucha a la radio, las redes y la capacitación.",
   /** Foto del hero (en /public). */
   foto: "/rosario.png",
-  email: "vrtejerinapittis@gmail.com",
+  email: "tejerinarosario4@gmail.com",
   /** WhatsApp con código de país, sin espacios. */
   whatsapp: "+5493875174774",
   redes: {
     instagram: "https://instagram.com/rooo_tp",
-    // linkedin: "https://www.linkedin.com/in/…",
+    // TODO: pegar la URL de LinkedIn de Rosario (ej. "https://www.linkedin.com/in/usuario").
+    linkedin: "",
     // tiktok: "https://www.tiktok.com/@…",
     // youtube: "https://www.youtube.com/@…",
   },
   habilidades: [
-    "Comunicación oral y audiovisual",
-    "Conducción en estudio y en vivo",
-    "Móviles y entrevistas en campo",
-    "Producción de contenidos y programas en vivo",
-    "Asistencia en producción y transmisiones",
-    "Operación básica de cámara y consola de radio",
-    "Redacción de contenido digital",
-    "Planificación de publicaciones",
-    "Interacción con audiencias",
-    "Trabajo en equipo interdisciplinario",
+    "Comunicación",
+    "Conducción",
+    "Producción audiovisual",
+    "Creatividad",
+    "Trabajo en equipo",
+    "Improvisación",
     "Adaptabilidad",
-    "Edición: Canva, Premiere, CapCut, InShot",
+    "Gestión de contenidos",
+    "Organización",
+    "Resolución de problemas",
+    "Entrevistas y móviles",
+    "Comunicación digital",
+    "Planificación estratégica",
+    "Edición audiovisual",
+    "Gestión de redes sociales",
   ],
   /** "Título — detalle": el guion largo separa el título del detalle. */
   formacion: [
@@ -154,6 +183,41 @@ export const secciones: Seccion[] = [
         descripcion:
           "Edición dedicada a la felicidad, con conducción de segmentos, entrevistas y producción de contenidos para el vivo.",
       },
+      {
+        titulo: "Streaming Day — Primera Cumbre de Streaming del Norte",
+        descripcion:
+          "Staff del evento: soporte de producción y producción de contenidos, y organización y logística de la jornada.",
+        redes: { instagram: "", linkedin: "" },
+      },
+    ],
+  },
+  {
+    nombre: "Generación Tech",
+    ancla: "generacion-tech",
+    intro:
+      "Programa de televisión sobre tecnología, innovación y emprendedurismo (El10TV): producción de contenidos para TV y plataformas digitales, cobertura de eventos tecnológicos y entrevistas a expositores, emprendedores y referentes.",
+    habilidades: ["Producción de TV", "Entrevistas", "Tecnología e innovación"],
+    etiqueta: "El10TV",
+    canal: { nombre: "Canal de YouTube", link: "https://youtube.com/@generaciontech-sl" },
+    redes: { instagram: "https://www.instagram.com/generacion.tech/" },
+    trabajos: [
+      {
+        titulo: "Generación Tech — Programa 19 de octubre",
+        link: "https://youtu.be/aoMs_YE_RtE",
+        destacado: true,
+      },
+      {
+        titulo: "Generación Tech — Programa 28 de septiembre",
+        link: "https://youtu.be/N4lWIgW44AE",
+      },
+      {
+        titulo: "Generación Tech — Programa 24 de agosto",
+        link: "https://youtu.be/lPLNkncoVp4",
+      },
+      {
+        titulo: "Generación Tech — Programa 10 de agosto",
+        link: "https://youtu.be/UDSYj-nO2e4",
+      },
     ],
   },
   {
@@ -181,42 +245,61 @@ export const secciones: Seccion[] = [
         titulo: "Puna Tech — Cobertura de evento tecnológico",
         descripcion:
           "Prensa y marketing para la cobertura periodística y audiovisual en tiempo real: entrevistas a participantes, expositores y autoridades, contenido para redes y material institucional.",
-      },
-      {
-        titulo: "Generación Tech — El10TV",
-        descripcion:
-          "Producción de contenidos para TV y plataformas digitales; cobertura de eventos tecnológicos, entrevistas a expositores, emprendedores y referentes, y asistencia en producción y coordinación de transmisiones.",
+        redes: { instagram: "", linkedin: "" },
       },
     ],
   },
   {
-    nombre: "Radio y capacitación",
-    ancla: "radio",
-    intro: "Locución, producción radial y capacitación en proyectos de extensión universitaria.",
+    nombre: "Capacitaciones y proyectos de extensión universitaria",
+    ancla: "extension",
+    intro:
+      "Proyectos de extensión de la Universidad Católica de Salta: capacitación en radio y locución, producción radial y comunicación de jornadas.",
     habilidades: ["Radio", "Locución", "Capacitación"],
+    etiqueta: "UCaSal · Extensión universitaria",
     trabajos: [
       {
         titulo: "Mi Huella Verde",
         descripcion:
           "Diseño y dictado de capacitaciones en radiofonía y locución para estudiantes del Colegio Secundario 5051 N.S. de la Merced; asesoramiento en estructura y contenidos, y acompañamiento en la salida al aire.",
+        redes: { instagram: "", linkedin: "" },
       },
       {
         titulo: "Puentes Generacionales",
         descripcion:
           "Diseño de dinámicas y juegos, planificación de propuestas intergeneracionales, gestión de redes, y registro y comunicación de las jornadas.",
+        redes: { instagram: "", linkedin: "" },
       },
     ],
   },
   {
-    nombre: "Redes y comunicación",
-    ancla: "redes",
-    intro: "Experiencia laboral en contenidos, eventos y atención al público.",
+    nombre: "Experiencia profesional complementaria",
+    ancla: "experiencia",
+    intro: "Experiencia laboral en contenidos para redes, eventos y atención al público.",
     habilidades: ["Community management", "Contenido digital", "Eventos"],
     trabajos: [
+      {
+        titulo: "Proyectos y eventos — Jota Joti 2026",
+        link: "https://www.instagram.com/reel/DenJBl1CFQd/",
+        miniatura: "/trabajos/jota-joti-2026.jpg",
+        descripcion:
+          "Comunidad Rover Aona Yamana (Grupo Scout N.º 811) en el Jota Joti 2026: creación y difusión de contenido para redes.",
+        destacado: true,
+      },
+      {
+        titulo: "Grupo Scout N.º 811 Santo Domingo Savio — Comunicación",
+        descripcion:
+          "Salta Capital. Equipos de comunicación a nivel de grupo, distrito y zona: creación y difusión de contenidos digitales, cobertura y comunicación de actividades y eventos scouts, y trabajo colaborativo en la comunicación institucional y comunitaria.\n\nUn proyecto que nace para impulsar nuevas iniciativas y aprovechar las herramientas del escultismo para conectar con distintas áreas de la sociedad, con un compromiso de servicio permanente y un impacto positivo y transformador en la comunidad.",
+        enlaces: [
+          { nombre: "Aona Yamana 811", link: "https://www.instagram.com/aonayamana811" },
+          { nombre: "Zona 27 SAAC", link: "https://www.instagram.com/zona27.saac" },
+          { nombre: "Distrito 4 · Zona 27", link: "https://www.instagram.com/distrito4z27.saac" },
+        ],
+      },
       {
         titulo: "Productora Plastilina — Community Manager",
         descripcion:
           "Gestión y planificación de contenidos para redes, redacción de copys, cobertura de actividades y eventos, y coordinación con equipos de producción.",
+        redes: { instagram: "", linkedin: "" },
       },
       {
         titulo: "Lozainas.makeup — Coordinación de eventos",

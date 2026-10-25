@@ -42,29 +42,29 @@ const USED_PAIRS = [
   ["paper / ink", "paper", "ink"],
   ["mist / ink", "mist", "ink"],
   ["paper / ink-hover", "paper", "ink-hover"],
-  // Landing "Pop al aire"
-  ["cocoa / cream", "cocoa", "cream"],
+  // Paleta Plum / Lilac / Tangerine / Butter (texto normal)
+  ["cocoa(plum) / cream(butter)", "cocoa", "cream"],
   ["cocoa-2 / cream", "cocoa-2", "cream"],
   ["cocoa-2 / peach", "cocoa-2", "peach"],
+  ["cocoa-2 / blush", "cocoa-2", "blush"],
+  ["cocoa-2 / candy(lilac)", "cocoa-2", "candy"],
   ["cocoa / blush", "cocoa", "blush"],
-  ["cocoa / candy", "cocoa", "candy"],
-  ["cocoa / amber", "cocoa", "amber"],
-  ["sun-deep / cream", "sun-deep", "cream"],
+  ["cocoa / candy(lilac)", "cocoa", "candy"],
+  ["cocoa / sun(tangerine)", "cocoa", "sun"],
+  ["cocoa / amber(tangerine)", "cocoa", "amber"],
+  ["sun-deep(plum) / cream", "sun-deep", "cream"],
   ["rose-deep / blush", "rose-deep", "blush"],
-  ["white / sun-deep (botones)", "white", "sun-deep"],
-  ["white / sun-hover", "white", "sun-hover"],
-  ["cream / cocoa", "cream", "cocoa"],
+  ["cream / sun-deep (botones)", "cream", "sun-deep"],
+  ["cream / sun-hover", "cream", "sun-hover"],
+  ["cream / cocoa (banda de trabajos)", "cream", "cocoa"],
+  ["white / sun-deep (FAB)", "white", "sun-deep"],
 ] as const;
 
 /** Texto grande (≥24px o ≥18.66px bold): alcanza 3:1. Titulares pop y script. */
 const LARGE_PAIRS = [
-  ["sun / cream (titulares)", "sun", "cream"],
-  ["cream / sun (banda)", "cream", "sun"],
   ["rose-ink / cream (script)", "rose-ink", "cream"],
   ["rose-ink / peach (script)", "rose-ink", "peach"],
-  ["sun-deep / peach (titulares y cifras)", "sun-deep", "peach"],
-  ["sun-deep / blush (cifras)", "sun-deep", "blush"],
-  ["rose-deep / blush (titular)", "rose-deep", "blush"],
+  ["rose-ink / blush (script)", "rose-ink", "blush"],
 ] as const;
 
 function walk(dir: string, acc: string[] = []) {

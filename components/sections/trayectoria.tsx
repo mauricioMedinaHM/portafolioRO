@@ -5,6 +5,15 @@ import { cn } from "@/lib/utils";
 
 const TONES = ["bg-blush", "bg-peach", "bg-white/70 ring-1 ring-seam"] as const;
 
+// Chips de habilidades: fondos variados con contraste verificado (lib/contrast.test.ts).
+const CHIP_TONES = [
+  "bg-blush text-rose-deep",
+  "bg-peach text-cocoa",
+  "bg-candy text-cocoa",
+  "bg-amber text-cocoa",
+  "bg-cocoa text-cream",
+] as const;
+
 /** Ícono según el tipo de formación (heurística sobre el texto de contenido.ts). */
 function iconFor(item: string): LucideIcon {
   if (/idioma|ingl|anglia|english/i.test(item)) return Languages;
@@ -26,9 +35,9 @@ export function Trayectoria({ profile }: { profile: Profile }) {
   if (education.length === 0 && skills.length === 0) return null;
 
   return (
-    <section id="trayectoria" className="relative scroll-mt-20 py-10 md:py-16">
+    <section id="formacion" className="relative scroll-mt-20 py-10 md:py-16">
       <PopContainer>
-        <PopHeading script="y formación">Trayectoria</PopHeading>
+        <PopHeading script="y certificados">Formación</PopHeading>
 
         {education.length > 0 ? (
           <ul className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -37,7 +46,7 @@ export function Trayectoria({ profile }: { profile: Profile }) {
               const { head, detail } = splitItem(item);
               return (
                 <li key={item} className={cn("flex gap-4 rounded-[24px] p-5", TONES[i % TONES.length])}>
-                  <span className="grid size-11 shrink-0 place-items-center rounded-full bg-sun text-white">
+                  <span className="grid size-11 shrink-0 place-items-center rounded-full bg-sun text-cocoa">
                     <Icon className="size-5" aria-hidden />
                   </span>
                   <span>
@@ -55,32 +64,19 @@ export function Trayectoria({ profile }: { profile: Profile }) {
         {skills.length > 0 ? (
           <div className="mt-10">
             <h3 className="font-pop text-[22px] text-sun-deep md:text-[26px]">Habilidades</h3>
-            {/* Carrusel continuo: la lista se duplica (copia aria-hidden) y la
-                pista se desplaza -50% → 0 para que el loop no tenga salto. */}
-            <div className="pop-marquee mt-4 overflow-hidden py-1">
-              <div
-                className="pop-marquee-track flex w-max"
-                style={{ animationDuration: `${Math.max(skills.length * 4, 20)}s` }}
-              >
-                {[0, 1].map((copy) => (
-                  <ul
-                    key={copy}
-                    aria-label={copy === 0 ? "Habilidades" : undefined}
-                    aria-hidden={copy === 1 ? true : undefined}
-                    className="pop-marquee-group flex shrink-0 gap-2 pr-2"
-                  >
-                    {skills.map((skill) => (
-                      <li
-                        key={skill}
-                        className="rounded-full border-2 border-seam bg-cream px-4 py-2 text-[14px] font-semibold whitespace-nowrap text-cocoa"
-                      >
-                        {skill}
-                      </li>
-                    ))}
-                  </ul>
-                ))}
-              </div>
-            </div>
+            <ul aria-label="Habilidades" className="mt-5 flex flex-wrap gap-2.5 md:gap-3">
+              {skills.map((skill, i) => (
+                <li
+                  key={skill}
+                  className={cn(
+                    "rounded-full px-4 py-2.5 text-[15px] font-bold md:text-[17px]",
+                    CHIP_TONES[i % CHIP_TONES.length],
+                  )}
+                >
+                  {skill}
+                </li>
+              ))}
+            </ul>
           </div>
         ) : null}
       </PopContainer>

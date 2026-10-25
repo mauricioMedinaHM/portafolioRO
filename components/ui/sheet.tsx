@@ -40,7 +40,7 @@ export function Sheet({
           ) : null}
           <div className="flex items-center justify-between gap-4 px-5 pt-5">
             {title ? (
-              <Drawer.Title className="font-pop text-[26px] leading-none text-sun">
+              <Drawer.Title className="font-pop text-[26px] leading-none text-cocoa">
                 {title}
               </Drawer.Title>
             ) : (
