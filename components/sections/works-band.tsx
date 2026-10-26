@@ -108,7 +108,7 @@ export function WorksBand({ groups }: { groups: WorkGroup[] }) {
                       <motion.span
                         variants={{ hover: { rotate: 45, scale: 1.08 } }}
                         transition={{ duration: 0.2 }}
-                        className="absolute right-3 bottom-3 grid size-10 place-items-center rounded-full bg-sun text-cocoa"
+                        className="absolute right-3 bottom-3 grid size-10 place-items-center rounded-full bg-sun text-cream"
                       >
                         <ArrowUpRight className="size-5" aria-hidden />
                       </motion.span>

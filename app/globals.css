@@ -1,54 +1,56 @@
 @import "tailwindcss";
 
 /*
- * Dirección "Pop al aire" (docs/DISENO.md) — crema, naranja sol y rosa.
+ * Dirección "Pop al aire" (docs/DISENO.md) — Honeydew, Vanilla, Periwinkle, Amethyst y Ultramarine.
  * paper/ink son tokens base de los componentes compartidos; se re-mapean abajo.
  * Display landing: Bricolage Grotesque Variable · Script: Mr Dafoe · Texto: Hanken Grotesk
  */
 
 @theme {
-  --color-paper: #fafaf8;
-  --color-paper-2: #f0efeb;
-  --color-ink: #161616;
-  --color-ink-hover: #2a2a28;
-  --color-ink-2: #55544f;
-  --color-ink-3: #6b6a64;
-  --color-line: #e3e2dd;
-  --color-mist: #a3a29c;
+  --color-paper: #f9fce9;
+  --color-paper-2: #eef0da;
+  --color-ink: #180d3f;
+  --color-ink-hover: #2d1a66;
+  --color-ink-2: #4b4374;
+  --color-ink-3: #685f8e;
+  --color-line: #dde0c9;
+  --color-mist: #a0a78c;
 
-  --color-background: #fafaf8;
-  --color-foreground: #161616;
-  --color-surface: #fafaf8;
-  --color-muted: #f0efeb;
-  --color-border: #e3e2dd;
-  --color-subtle: #6b6a64;
+  --color-background: #f9fce9;
+  --color-foreground: #180d3f;
+  --color-surface: #f9fce9;
+  --color-muted: #eef0da;
+  --color-border: #dde0c9;
+  --color-subtle: #685f8e;
 
   /*
-   * Paleta de marca: Plum #5B0550 · Lilac #F9A0F0 · Tangerine #FE682B · Butter #FFF6BF.
+   * Paleta de marca: Honeydew #F6FFE9 · Vanilla Custard #F2E0A4 ·
+   * Periwinkle #CAC5E5 · Amethyst #A230A4 · Dark Ultramarine #290087.
    * Los nombres de rol (cream, sun, cocoa…) se mantienen en los componentes;
-   * acá se mapean a la paleta. Tintes derivados sólo para paneles y texto
-   * secundario. Contrastes verificados en lib/contrast.test.ts.
+   * acá se mapean a la paleta. Tintes derivados sólo para paneles, bordes
+   * y texto secundario. Contrastes verificados en lib/contrast.test.ts.
    */
-  --color-plum: #5b0550;
-  --color-lilac: #f9a0f0;
-  --color-tangerine: #fe682b;
-  --color-butter: #fff6bf;
+  --color-honeydew: #f6ffe9;
+  --color-vanilla: #f2e0a4;
+  --color-periwinkle: #cac5e5;
+  --color-amethyst: #a230a4;
+  --color-ultramarine: #290087;
 
-  --color-cream: #fff6bf; /* Butter: fondo */
-  --color-peach: #ffe2c2; /* tinte Butter→Tangerine: paneles */
-  --color-blush: #fcd9f4; /* tinte Lilac: paneles y chips */
-  --color-candy: #f9a0f0; /* Lilac */
-  --color-amber: #fe682b; /* Tangerine (fondo de cifras, texto plum encima) */
-  --color-sun: #fe682b; /* Tangerine: rellenos, formas, íconos */
-  --color-sun-deep: #5b0550; /* Plum: botones, labels, foco */
-  --color-sun-hover: #7a1a6c; /* Plum aclarado: hover de botones */
-  --color-rose: #f9a0f0; /* Lilac: formas */
-  --color-rose-ink: #d9480f; /* Tangerine oscurecido: palabra script (texto grande) */
-  --color-rose-deep: #5b0550; /* Plum */
-  --color-cocoa: #5b0550; /* Plum: texto principal y titulares */
-  --color-cocoa-2: #6e2a63; /* Plum aclarado: texto secundario */
-  --color-sand: #e9c9e5;
-  --color-seam: #ebd69a; /* borde sobre Butter */
+  --color-cream: #f6ffe9; /* Honeydew: fondo */
+  --color-peach: #f2e0a4; /* Vanilla Custard: paneles */
+  --color-blush: #dcd8f1; /* tinte Periwinkle claro: paneles y chips */
+  --color-candy: #cac5e5; /* Periwinkle */
+  --color-amber: #a230a4; /* Amethyst (fondo de cifras, texto Honeydew encima) */
+  --color-sun: #a230a4; /* Amethyst: rellenos, formas, íconos */
+  --color-sun-deep: #290087; /* Ultramarine: botones, labels, foco */
+  --color-sun-hover: #3d1aa3; /* Ultramarine aclarado: hover de botones */
+  --color-rose: #cac5e5; /* Periwinkle: formas */
+  --color-rose-ink: #a230a4; /* Amethyst: palabra script (texto grande) */
+  --color-rose-deep: #290087; /* Ultramarine */
+  --color-cocoa: #290087; /* Ultramarine: texto principal y titulares */
+  --color-cocoa-2: #4b2fbe; /* Ultramarine aclarado: texto secundario (≥4.5 en los 3 fondos) */
+  --color-sand: #bfb8dd; /* borde derivado de Periwinkle */
+  --color-seam: #e0cd8c; /* borde derivado de Vanilla */
 
   --font-pop: "Bricolage Grotesque Variable", "Arial Black", ui-sans-serif, sans-serif;
   --font-script: "Mr Dafoe", "Brush Script MT", cursive;
@@ -137,14 +139,14 @@ html.lenis body {
  * Se aplica en body para alcanzar también a los portales (menú, modales).
  */
 body:has([data-theme="pop"]) {
-  --color-paper: #fff6bf;
-  --color-paper-2: #ffe2c2;
-  --color-ink: #5b0550;
-  --color-ink-hover: #7a1a6c;
-  --color-ink-2: #6e2a63;
-  --color-ink-3: #6e2a63;
-  --color-line: #ebd69a;
-  --color-mist: #e9c9e5;
+  --color-paper: #f6ffe9;
+  --color-paper-2: #f2e0a4;
+  --color-ink: #290087;
+  --color-ink-hover: #3d1aa3;
+  --color-ink-2: #4b2fbe;
+  --color-ink-3: #4b2fbe;
+  --color-line: #e0cd8c;
+  --color-mist: #bfb8dd;
   background: var(--color-cream);
   color: var(--color-cocoa);
 }

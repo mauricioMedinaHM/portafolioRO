@@ -61,7 +61,7 @@ export function ProjectSocialLinks({
   size = "sm",
 }: {
   socials: ProjectSocials;
-  /** Otros perfiles del proyecto: Instagram en tangerine, el resto en lila. */
+  /** Otros perfiles del proyecto: Instagram en amethyst, el resto en periwinkle. */
   links?: ProjectLink[];
   title: string;
   className?: string;
@@ -81,7 +81,7 @@ export function ProjectSocialLinks({
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`Instagram de ${title}`}
-          className={cn(pill, "bg-sun text-cocoa")}
+          className={cn(pill, "bg-sun text-cream")}
         >
           <InstagramGlyph />
           Instagram
@@ -108,7 +108,7 @@ export function ProjectSocialLinks({
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`${link.label} (${isInstagram ? "Instagram" : "enlace"}), de ${title}`}
-            className={cn(pill, isInstagram ? "bg-sun text-cocoa" : "bg-candy text-cocoa")}
+            className={cn(pill, isInstagram ? "bg-sun text-cream" : "bg-candy text-cocoa")}
           >
             {isInstagram ? <InstagramGlyph /> : <ArrowUpRight className="size-4" aria-hidden />}
             {link.label}

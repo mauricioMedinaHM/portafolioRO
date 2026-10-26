@@ -69,7 +69,7 @@ export function Intro({
                       href={`#${category.slug}`}
                       className="group flex min-h-11 items-start gap-3 rounded-full text-[15px] leading-snug font-semibold text-cocoa transition-colors hover:text-sun-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sun-deep"
                     >
-                      <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-sun text-cocoa transition-transform duration-150 group-hover:scale-110">
+                      <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-sun text-cream transition-transform duration-150 group-hover:scale-110">
                         <Icon className="size-4" aria-hidden />
                       </span>
                       <span className="self-center">{category.name}</span>

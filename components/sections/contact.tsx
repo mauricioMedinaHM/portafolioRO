@@ -108,7 +108,7 @@ export function Contact({ profile }: { profile: Profile }) {
           {/* Sol con micrófono: la "señal" de la marca */}
           <div aria-hidden className="relative mx-auto hidden size-36 lg:col-span-2 lg:grid lg:place-items-center">
             <Rays className="pop-spin absolute inset-0 size-full text-sun" />
-            <span className="relative grid size-24 place-items-center rounded-full bg-sun text-cocoa">
+            <span className="relative grid size-24 place-items-center rounded-full bg-sun text-cream">
               <Mic className="size-10" />
             </span>
           </div>

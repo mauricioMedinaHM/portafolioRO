@@ -42,29 +42,37 @@ const USED_PAIRS = [
   ["paper / ink", "paper", "ink"],
   ["mist / ink", "mist", "ink"],
   ["paper / ink-hover", "paper", "ink-hover"],
-  // Paleta Plum / Lilac / Tangerine / Butter (texto normal)
-  ["cocoa(plum) / cream(butter)", "cocoa", "cream"],
+  // Paleta Honeydew / Vanilla / Periwinkle / Amethyst / Ultramarine
+  ["cocoa(ultramarine) / cream(honeydew)", "cocoa", "cream"],
+  ["cocoa / peach(vanilla)", "cocoa", "peach"],
+  ["cocoa / blush", "cocoa", "blush"],
+  ["cocoa / candy(periwinkle)", "cocoa", "candy"],
   ["cocoa-2 / cream", "cocoa-2", "cream"],
   ["cocoa-2 / peach", "cocoa-2", "peach"],
   ["cocoa-2 / blush", "cocoa-2", "blush"],
-  ["cocoa-2 / candy(lilac)", "cocoa-2", "candy"],
-  ["cocoa / blush", "cocoa", "blush"],
-  ["cocoa / candy(lilac)", "cocoa", "candy"],
-  ["cocoa / sun(tangerine)", "cocoa", "sun"],
-  ["cocoa / amber(tangerine)", "cocoa", "amber"],
-  ["sun-deep(plum) / cream", "sun-deep", "cream"],
+  ["cocoa-2 / candy", "cocoa-2", "candy"],
+  ["sun-deep(ultramarine) / cream", "sun-deep", "cream"],
+  ["sun-deep / peach", "sun-deep", "peach"],
+  ["sun-deep / candy", "sun-deep", "candy"],
   ["rose-deep / blush", "rose-deep", "blush"],
   ["cream / sun-deep (botones)", "cream", "sun-deep"],
   ["cream / sun-hover", "cream", "sun-hover"],
   ["cream / cocoa (banda de trabajos)", "cream", "cocoa"],
   ["white / sun-deep (FAB)", "white", "sun-deep"],
+  // Texto claro sobre rellenos Amethyst (sun/amber): siempre Honeydew/cream
+  ["cream / sun (píldoras e íconos)", "cream", "sun"],
+  ["cream / amber (cifras)", "cream", "amber"],
+  ["cocoa / candy (píldoras de enlaces)", "cocoa", "candy"],
 ] as const;
 
 /** Texto grande (≥24px o ≥18.66px bold): alcanza 3:1. Titulares pop y script. */
 const LARGE_PAIRS = [
-  ["rose-ink / cream (script)", "rose-ink", "cream"],
+  ["rose-ink(amethyst) / cream (script)", "rose-ink", "cream"],
   ["rose-ink / peach (script)", "rose-ink", "peach"],
   ["rose-ink / blush (script)", "rose-ink", "blush"],
+  // Nombres de marca grandes: ultramarine siempre pasa, amethyst solo sobre claro
+  ["cocoa / peach (titulares)", "cocoa", "peach"],
+  ["sun-deep / blush (titulares)", "sun-deep", "blush"],
 ] as const;
 
 function walk(dir: string, acc: string[] = []) {
@@ -91,9 +99,9 @@ describe("contraste del texto", () => {
     expect(ratio).toBeGreaterThanOrEqual(3);
   });
 
-  it("no quedan clases de la paleta anterior", () => {
+  it("no quedan nombres de la paleta anterior", () => {
     const forbidden = new RegExp(
-      ["acc", "ent"].join("") + "|" + ["second", "ary"].join("") + "|" + ["terra", "cota"].join(""),
+      ["pl", "um"].join("") + "|" + ["lil", "ac"].join("") + "|" + ["tang", "erine"].join("") + "|" + ["but", "ter"].join(""),
       "i",
     );
     const hits: string[] = [];
