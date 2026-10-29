@@ -3,7 +3,7 @@ import { ArrowUpRight, Mail, MapPin, Mic, MonitorPlay, Music2 } from "lucide-rea
 import { Flower, Rays, Sparkle } from "@/components/pop/decor";
 import { PopContainer } from "@/components/pop/heading";
 import { InstagramGlyph, LinkedinGlyph } from "@/components/pop/social-links";
-import { buttonVariants } from "@/components/ui";
+import { buttonVariants, MagneticButton } from "@/components/ui";
 import { WHATSAPP_MESSAGE, whatsappLink } from "@/lib/links";
 import type { Profile } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -37,7 +37,7 @@ export function Contact({ profile }: { profile: Profile }) {
   if (!wa && !profile.email && !linkedin && socials.length === 0) return null;
 
   return (
-    <section id="contacto" aria-labelledby="contacto-titulo" className="scroll-mt-20 py-10 md:py-14">
+    <section id="contacto" aria-labelledby="contacto-titulo" className="scroll-mt-28 py-10 md:py-14">
       <PopContainer>
         <div className="relative grid grid-cols-1 gap-8 overflow-hidden rounded-[36px] bg-peach p-6 md:p-10 lg:grid-cols-12 lg:items-center">
           <Flower className="pointer-events-none absolute -right-20 -bottom-24 size-72 text-blush" />
@@ -71,7 +71,7 @@ export function Contact({ profile }: { profile: Profile }) {
                     href={linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex min-h-11 items-center gap-2 rounded-full bg-cocoa px-4 text-[15px] font-bold text-cream transition-colors hover:bg-cocoa-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cocoa"
+                    className="inline-flex min-h-11 items-center gap-2 rounded-full border border-sand bg-cream px-3.5 text-[15px] font-bold text-cocoa transition-[transform,background-color,border-color] duration-200 hover:border-amethyst hover:bg-blush motion-safe:hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sun-deep"
                   >
                     <LinkedinGlyph className="size-5" />
                     LinkedIn
@@ -87,7 +87,7 @@ export function Contact({ profile }: { profile: Profile }) {
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex min-h-11 items-center gap-2 text-[15px] font-semibold text-cocoa underline-offset-4 hover:text-sun-deep hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sun-deep"
+                      className="inline-flex min-h-11 items-center gap-2 rounded-full border border-sand bg-cream px-3.5 text-[15px] font-semibold text-cocoa transition-[transform,background-color,border-color] duration-200 hover:border-amethyst hover:bg-blush motion-safe:hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sun-deep"
                     >
                       <span aria-hidden className="text-sun-deep">
                         <meta.icon className="size-5" />
@@ -122,14 +122,15 @@ export function Contact({ profile }: { profile: Profile }) {
               Conducción, móviles, entrevistas, locución o contenido para redes: contame la idea.
             </p>
             {wa ? (
-              <a
+              <MagneticButton
                 href={wa}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={cn(buttonVariants({ variant: "pop", size: "lg" }), "mt-6 w-full sm:w-auto")}
+                shellClassName="mt-6 w-full sm:w-auto"
+                className={cn(buttonVariants({ variant: "pop", size: "lg" }), "w-full")}
               >
                 Escribime por WhatsApp
-              </a>
+              </MagneticButton>
             ) : null}
           </div>
         </div>

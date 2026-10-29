@@ -2,12 +2,31 @@ import { expect, test } from "@playwright/test";
 
 test.describe("landing", () => {
   test("no hay scroll horizontal", async ({ page }) => {
+    const errors: string[] = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    page.on("console", (message) => {
+      if (message.type() !== "error") return;
+      const text = message.text();
+      if (/favicon|Failed to load resource|net::ERR/i.test(text)) return;
+      errors.push(text);
+    });
     await page.goto("/");
+    await page.waitForSelector("#intro-loader", { state: "detached", timeout: 12_000 });
+    await page.evaluate(async () => {
+      const height = document.documentElement.scrollHeight;
+      const step = Math.max(240, Math.floor(window.innerHeight * 0.85));
+      for (let y = 0; y < height; y += step) {
+        window.scrollTo(0, y);
+        await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
+      }
+      window.scrollTo(0, 0);
+    });
     const { scrollW, clientW } = await page.evaluate(() => ({
       scrollW: document.documentElement.scrollWidth,
       clientW: document.documentElement.clientWidth,
     }));
     expect(scrollW).toBeLessThanOrEqual(clientW);
+    expect(errors, errors.join("\n")).toEqual([]);
   });
 
   test("hero muestra nombre y CTAs", async ({ page }) => {

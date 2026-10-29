@@ -271,6 +271,36 @@ body:has([data-theme="pop"]) ::selection {
   animation-play-state: paused;
 }
 
+@keyframes ui-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.ui-marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    var(--color-cocoa) 5%,
+    var(--color-cocoa) 95%,
+    transparent
+  );
+}
+
+.ui-marquee-track {
+  animation: ui-marquee 42s linear infinite;
+}
+
+.group\/marquee:hover .ui-marquee-track,
+.group\/marquee:active .ui-marquee-track,
+.group\/marquee:focus-within .ui-marquee-track {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   /* Sin movimiento: vuelve a chips en varias líneas y se oculta la copia. */
   .pop-marquee {
@@ -288,6 +318,23 @@ body:has([data-theme="pop"]) ::selection {
   }
 
   .pop-marquee-group[aria-hidden="true"] {
+    display: none;
+  }
+
+  .ui-marquee {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .ui-marquee::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ui-marquee-track {
+    animation: none;
+  }
+
+  .ui-marquee-copy {
     display: none;
   }
 }

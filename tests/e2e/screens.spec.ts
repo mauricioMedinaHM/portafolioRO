@@ -24,4 +24,26 @@ test("capturas de la landing a 390 y 1280", async ({ page }, testInfo) => {
     path: `docs/screens/landing-${width}.png`,
     fullPage: true,
   });
+
+  await page.waitForSelector("#intro-loader", { state: "detached", timeout: 12_000 });
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({
+    path: `docs/screens/21st-hero-${width}.png`,
+    fullPage: false,
+  });
+  await page.locator("#servicios").scrollIntoViewIfNeeded();
+  await page.screenshot({
+    path: `docs/screens/21st-servicios-${width}.png`,
+    fullPage: false,
+  });
+  await page.locator("#formacion").scrollIntoViewIfNeeded();
+  await page.screenshot({
+    path: `docs/screens/21st-formacion-${width}.png`,
+    fullPage: false,
+  });
+  await page.locator("#trabajos").scrollIntoViewIfNeeded();
+  await page.screenshot({
+    path: `docs/screens/21st-trabajos-${width}.png`,
+    fullPage: false,
+  });
 });

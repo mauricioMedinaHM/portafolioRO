@@ -17,7 +17,7 @@ export function Intro({
   const firstName = profile.fullName.trim().split(/\s+/)[0] ?? profile.fullName;
 
   return (
-    <section id="sobre-mi" className="scroll-mt-20 py-6 md:py-10">
+    <section id="sobre-mi" className="scroll-mt-28 py-6 md:py-10">
       <PopContainer>
         <div className="grid grid-cols-1 gap-8 rounded-[32px] bg-white/55 p-5 ring-1 ring-seam md:grid-cols-12 md:items-center md:gap-10 md:p-8">
           {spotlight?.thumbnailUrl ? (

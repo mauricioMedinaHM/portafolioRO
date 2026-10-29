@@ -2,13 +2,14 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { GraduationCap, MonitorPlay, Tv } from "lucide-react";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { MediaCard } from "@/components/media";
 import { PopContainer, PopHeading } from "@/components/pop/heading";
 import { categoryIcon } from "@/components/pop/icons";
 import { ProjectSocialLinks } from "@/components/pop/social-links";
-import { Button, buttonVariants } from "@/components/ui";
+import { Button, buttonVariants, SpotlightCard } from "@/components/ui";
 import type { Category, Project } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 const INITIAL_COUNT = 6;
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
@@ -41,6 +42,47 @@ function NoteCard({ project }: { project: Project }) {
   );
 }
 
+function VideoRail({ carousel, children }: { carousel: boolean; children: ReactNode }) {
+  return (
+    <ul
+      className={cn(
+        "mt-10 md:mt-12",
+        carousel
+          ? "flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-2 [scrollbar-width:none] lg:grid lg:grid-cols-3 lg:gap-5 lg:overflow-visible lg:pb-0 [&::-webkit-scrollbar]:hidden"
+          : "grid grid-cols-1 gap-y-10 sm:grid-cols-2 sm:gap-x-5 lg:grid-cols-3",
+      )}
+    >
+      {children}
+    </ul>
+  );
+}
+
+function VideoItem({
+  carousel,
+  children,
+  animated = false,
+  index = 0,
+}: {
+  carousel: boolean;
+  children: ReactNode;
+  animated?: boolean;
+  index?: number;
+}) {
+  const className = cn(carousel ? "w-[85%] shrink-0 snap-start sm:w-[46%] lg:w-auto lg:shrink" : "min-w-0");
+  if (!animated) return <li className={className}>{children}</li>;
+  return (
+    <motion.li
+      className={className}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 8, transition: { duration: 0.15 } }}
+      transition={{ duration: 0.3, delay: index * 0.04, ease: EASE_OUT_EXPO }}
+    >
+      {children}
+    </motion.li>
+  );
+}
+
 export function CategorySection({
   category,
   projects,
@@ -58,6 +100,7 @@ export function CategorySection({
   const initialNotes = initialProjects.filter((project) => !project.url);
   const additionalNotes = additionalProjects.filter((project) => !project.url);
   const hasMore = additionalProjects.length > 0;
+  const clipsCarousel = initialClips.length + (expanded ? additionalClips.length : 0) > 2;
   const Icon = categoryIcon(category.slug);
   const isUniversity = category.badge
     ? /ucasal|universi/i.test(category.badge)
@@ -65,7 +108,7 @@ export function CategorySection({
   const BadgeIcon = isUniversity ? GraduationCap : Tv;
 
   return (
-    <section id={category.slug} className="scroll-mt-20 py-10 md:py-16">
+    <section id={category.slug} className="scroll-mt-28 py-10 md:py-16">
       <PopContainer>
         <div className="grid grid-cols-12 gap-y-5 md:gap-x-8">
           <div className="col-span-12 flex items-start gap-4 md:col-span-6">
@@ -120,29 +163,31 @@ export function CategorySection({
         </div>
 
         {initialClips.length > 0 || additionalClips.length > 0 ? (
-          <ul className="mt-10 grid grid-cols-12 gap-y-10 sm:gap-x-5 md:mt-12">
+          <VideoRail carousel={clipsCarousel}>
             {initialClips.map((project) => (
-              <li key={project.id} className="col-span-12 sm:col-span-6 lg:col-span-4">
-                <MediaCard project={project} />
-              </li>
+              <VideoItem key={project.id} carousel={clipsCarousel}>
+                <SpotlightCard>
+                  <MediaCard project={project} />
+                </SpotlightCard>
+              </VideoItem>
             ))}
             <AnimatePresence initial={false}>
               {expanded
                 ? additionalClips.map((project, index) => (
-                    <motion.li
+                    <VideoItem
                       key={project.id}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 8, transition: { duration: 0.15 } }}
-                      transition={{ duration: 0.3, delay: index * 0.04, ease: EASE_OUT_EXPO }}
-                      className="col-span-12 sm:col-span-6 lg:col-span-4"
+                      carousel={clipsCarousel}
+                      animated
+                      index={index}
                     >
-                      <MediaCard project={project} />
-                    </motion.li>
+                      <SpotlightCard>
+                        <MediaCard project={project} />
+                      </SpotlightCard>
+                    </VideoItem>
                   ))
                 : null}
             </AnimatePresence>
-          </ul>
+          </VideoRail>
         ) : null}
 
         {initialNotes.length > 0 || additionalNotes.length > 0 ? (

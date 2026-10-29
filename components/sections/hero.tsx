@@ -3,26 +3,13 @@
 import Image from "next/image";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
-import { ArrowRight, Mic } from "lucide-react";
+import { Mic } from "lucide-react";
 import { Burst, Flower, OnAirBadge, Rays, Sparkle, Squiggle } from "@/components/pop/decor";
 import { PopContainer } from "@/components/pop/heading";
-import { buttonVariants } from "@/components/ui";
+import { buttonVariants, InteractiveButton, TextReveal } from "@/components/ui";
 import { WHATSAPP_MESSAGE, whatsappLink } from "@/lib/links";
 import type { Profile } from "@/lib/types";
 import { cn } from "@/lib/utils";
-
-const LINES = ["Contar", "lo que", "pasa"] as const;
-
-/** Línea del titular con máscara: sube desde abajo (CSS, antes de hidratar). */
-function RiseLine({ children, index }: { children: React.ReactNode; index: number }) {
-  return (
-    <span className="-my-[0.1em] block overflow-hidden py-[0.1em]">
-      <span className="pop-rise block" style={{ animationDelay: `${index * 90}ms` }}>
-        {children}
-      </span>
-    </span>
-  );
-}
 
 export function Hero({ profile }: { profile: Profile; firstCategorySlug?: string }) {
   const heroRef = useRef<HTMLElement>(null);
@@ -36,7 +23,7 @@ export function Hero({ profile }: { profile: Profile; firstCategorySlug?: string
   const spin = useTransform(scrollYProgress, [0, 1], [0, 90]);
 
   return (
-    <section id="inicio" ref={heroRef} className="relative scroll-mt-20 overflow-hidden">
+    <section id="inicio" ref={heroRef} className="relative scroll-mt-28 overflow-hidden">
       {/* Forma orgánica de fondo */}
       <Flower className="pointer-events-none absolute -bottom-56 -left-40 size-[420px] text-peach md:-left-24 md:size-[560px]" />
 
@@ -49,16 +36,16 @@ export function Hero({ profile }: { profile: Profile; firstCategorySlug?: string
 
           <h1 className="font-pop relative pt-8 text-[64px] leading-[0.86] text-cocoa sm:text-[84px] md:pt-6 lg:text-[112px]">
             <span className="sr-only">{profile.fullName}: </span>
-            {LINES.map((line, index) => (
-              <RiseLine key={line} index={index}>
-                {line}
-                {index === LINES.length - 1 ? (
-                  <span className="font-script pop-write ml-3 inline-block -rotate-6 align-[0.08em] text-[0.62em] text-rose-ink">
-                    en vivo
-                  </span>
-                ) : null}
-              </RiseLine>
-            ))}
+            <TextReveal text="Contar" className="block" startIndex={0} />
+            <TextReveal text="lo que" className="block" startIndex={1} />
+            <span className="-my-[0.06em] block overflow-hidden py-[0.12em]">
+              <TextReveal text="pasa" startIndex={3} />
+              <TextReveal
+                text="en vivo"
+                startIndex={4}
+                className="font-script ml-3 inline-block -rotate-6 align-[0.08em] text-[0.62em] text-rose-ink"
+              />
+            </span>
           </h1>
 
           <p className="mt-6 max-w-[42ch] text-[17px] leading-relaxed text-cocoa-2 md:mt-8 md:text-[18px]">
@@ -68,13 +55,7 @@ export function Hero({ profile }: { profile: Profile; firstCategorySlug?: string
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <a href="#trabajos" className={cn(buttonVariants({ variant: "pop", size: "lg" }), "group")}>
-              Ver mi trabajo
-              <ArrowRight
-                className="size-4 transition-transform duration-150 group-hover:translate-x-1"
-                aria-hidden
-              />
-            </a>
+            <InteractiveButton href="#trabajos">Ver mi trabajo</InteractiveButton>
             {wa ? (
               <a
                 href={wa}

@@ -1,4 +1,5 @@
 import { IntroLoader } from "@/components/pop/intro-loader";
+import { ScrollProgress } from "@/components/ui";
 import { CategorySection } from "@/components/sections/category-section";
 import { Contact } from "@/components/sections/contact";
 import { FloatingContact } from "@/components/sections/floating-contact";
@@ -66,6 +67,7 @@ export default async function Home() {
 
   return (
     <div data-theme="pop" className="bg-cream text-cocoa">
+      <ScrollProgress />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

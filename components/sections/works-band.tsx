@@ -5,6 +5,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Burst } from "@/components/pop/decor";
 import { PopContainer, PopHeading } from "@/components/pop/heading";
 import { categoryIcon } from "@/components/pop/icons";
+import { Marquee } from "@/components/ui";
 import type { Category, Project } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -34,7 +35,7 @@ export function WorksBand({ groups }: { groups: WorkGroup[] }) {
   const cols = GRID_COLS[Math.min(groups.length, 6)];
 
   return (
-    <section id="trabajos" aria-labelledby="trabajos-titulo" className="scroll-mt-20 py-6 md:py-10">
+    <section id="trabajos" aria-labelledby="trabajos-titulo" className="scroll-mt-28 py-6 md:py-10">
       <PopContainer>
         <div className="relative overflow-hidden rounded-[36px] bg-cocoa px-5 py-8 md:px-8 md:py-10">
           <Burst className="pointer-events-none absolute -top-8 -right-8 size-32 text-sun/40" />
@@ -51,9 +52,10 @@ export function WorksBand({ groups }: { groups: WorkGroup[] }) {
             </a>
           </div>
 
+          <div className="mt-6 flex w-full min-w-0 flex-col gap-6">
           <ul
             className={cn(
-              "relative -mx-5 mt-8 flex snap-x snap-mandatory scroll-px-5 gap-4 overflow-x-auto px-5 pb-2 [scrollbar-width:none] md:mx-0 md:px-0 lg:grid lg:overflow-visible",
+              "relative order-2 -mx-5 flex snap-x snap-mandatory scroll-px-5 gap-4 overflow-x-auto px-5 pb-2 [scrollbar-width:none] md:mx-0 md:px-0 lg:grid lg:overflow-visible",
               cols,
             )}
           >
@@ -119,6 +121,27 @@ export function WorksBand({ groups }: { groups: WorkGroup[] }) {
               );
             })}
           </ul>
+          <Marquee label="Categorías y proyectos" className="order-1 text-cream">
+            {groups.flatMap(({ category, projects }) => [
+              <span
+                key={`cat-${category.id}`}
+                className="pop-label mx-3 inline-flex items-center gap-3 whitespace-nowrap text-cream"
+              >
+                {category.name}
+                <span aria-hidden className="size-1.5 rounded-full bg-sun" />
+              </span>,
+              ...projects.map((project) => (
+                <span
+                  key={project.id}
+                  className="mx-3 inline-flex items-center gap-3 text-[15px] font-semibold whitespace-nowrap text-cream"
+                >
+                  {project.title}
+                  <span aria-hidden className="size-1.5 rounded-full bg-vanilla" />
+                </span>
+              )),
+            ])}
+          </Marquee>
+          </div>
         </div>
       </PopContainer>
     </section>

@@ -1,5 +1,6 @@
 import { Award, BookOpen, GraduationCap, Languages, Mic, type LucideIcon } from "lucide-react";
 import { PopContainer, PopHeading } from "@/components/pop/heading";
+import { Timeline } from "@/components/ui";
 import type { Profile } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -35,30 +36,27 @@ export function Trayectoria({ profile }: { profile: Profile }) {
   if (education.length === 0 && skills.length === 0) return null;
 
   return (
-    <section id="formacion" className="relative scroll-mt-20 py-10 md:py-16">
+    <section id="formacion" className="relative scroll-mt-28 py-10 md:py-16">
       <PopContainer>
         <PopHeading script="y certificados">Formación</PopHeading>
 
         {education.length > 0 ? (
-          <ul className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {education.map((item, i) => {
-              const Icon = iconFor(item);
-              const { head, detail } = splitItem(item);
-              return (
-                <li key={item} className={cn("flex gap-4 rounded-[24px] p-5", TONES[i % TONES.length])}>
-                  <span className="grid size-11 shrink-0 place-items-center rounded-full bg-sun text-cocoa">
-                    <Icon className="size-5" aria-hidden />
-                  </span>
-                  <span>
-                    <span className="block text-[16px] leading-snug font-bold text-cocoa">{head}</span>
-                    {detail ? (
-                      <span className="mt-1 block text-[14px] leading-snug text-cocoa-2">{detail}</span>
-                    ) : null}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
+          <div className="mt-8">
+            <Timeline
+              label="Formación"
+              items={education.map((item, i) => {
+                const Icon = iconFor(item);
+                const { head, detail } = splitItem(item);
+                return {
+                  id: `${i}-${head}`,
+                  title: head,
+                  detail: detail || undefined,
+                  tone: TONES[i % TONES.length],
+                  icon: <Icon className="size-5" aria-hidden />,
+                };
+              })}
+            />
+          </div>
         ) : null}
 
         {skills.length > 0 ? (
