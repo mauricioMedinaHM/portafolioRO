@@ -1,10 +1,13 @@
 export { BentoCard, BentoGrid } from "./bento-grid";
 export { Button, buttonVariants, type ButtonProps } from "./button";
+export { ChromaCard } from "./chroma-card";
+export { ImageReel, type ImageReelItem } from "./image-reel";
 export { InteractiveButton } from "./interactive-button";
 export { MagneticButton } from "./magnetic-button";
 export { Marquee } from "./marquee";
 export { Modal, type ModalProps } from "./modal";
 export { NumberTicker } from "./number-ticker";
+export { RisingDigits } from "./rising-digits";
 export { ScrollProgress } from "./scroll-progress";
 export { Sheet, type SheetProps } from "./sheet";
 export { SpotlightCard } from "./spotlight-card";

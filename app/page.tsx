@@ -52,6 +52,11 @@ export default async function Home() {
     { value: String(new Set(published.map((p) => p.date?.slice(0, 4)).filter(Boolean)).size || 1), label: "Años de coberturas" },
   ];
   const spotlight = featured.find((p) => p.thumbnailUrl) ?? videos[0];
+  const backdrop = published
+    .flatMap((project) =>
+      project.thumbnailUrl ? [{ src: project.thumbnailUrl, alt: project.title }] : [],
+    )
+    .slice(0, 8);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -82,7 +87,7 @@ export default async function Home() {
           spotlight={featured[1] ?? spotlight}
         />
         <WorksBand groups={withProjects} />
-        <Services stats={stats} />
+        <Services stats={stats} backdrop={backdrop} />
         {withProjects.map(({ category, projects: list }) => (
           <CategorySection
             key={category.id}

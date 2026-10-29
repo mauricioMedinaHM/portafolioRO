@@ -15,6 +15,15 @@ function luminance(hex: string) {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
+/** Source-over en sRGB. Alfa 1 pinta el primer color encima del segundo. */
+function mixHex(foreground: string, background: string, alpha: number) {
+  const at = (hex: string, index: number) => parseInt(hex.slice(1 + index * 2, 3 + index * 2), 16);
+  const mixed = [0, 1, 2].map((index) =>
+    Math.round(at(foreground, index) * alpha + at(background, index) * (1 - alpha)),
+  );
+  return `#${mixed.map((value) => value.toString(16).padStart(2, "0")).join("")}`;
+}
+
 /** Relación WCAG 2.x entre un color de texto y su fondo. */
 export function contrastRatio(foreground: string, background: string) {
   const lighter = Math.max(luminance(foreground), luminance(background));
@@ -97,6 +106,15 @@ describe("contraste del texto", () => {
   it.each(LARGE_PAIRS)("%s alcanza 3:1 (texto grande)", (_label, fgName, bgName) => {
     const ratio = contrastRatio(token(css, fgName), token(css, bgName));
     expect(ratio).toBeGreaterThanOrEqual(3);
+  });
+
+  it("el reel (foto negra al 0.18 y velo cream al 0.58) no baja el titular de 4.5", () => {
+    const cream = token(css, "cream");
+    const overPhoto = mixHex("#000000", cream, 0.18);
+    const scrim = mixHex(cream, overPhoto, 0.58);
+    expect(contrastRatio(token(css, "cocoa"), scrim)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(token(css, "sun-deep"), scrim)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(token(css, "cocoa-2"), scrim)).toBeGreaterThanOrEqual(4.5);
   });
 
   it("no quedan nombres de la paleta anterior", () => {

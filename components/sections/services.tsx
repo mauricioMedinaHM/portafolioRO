@@ -1,11 +1,10 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { useEffect, useRef } from "react";
+import { animate, useReducedMotion } from "motion/react";
 import { Clapperboard, Mic, MonitorPlay, Radio, Smartphone, Tv, type LucideIcon } from "lucide-react";
-import { Flower } from "@/components/pop/decor";
 import { PopContainer, PopHeading } from "@/components/pop/heading";
-import { BentoCard, BentoGrid, NumberTicker } from "@/components/ui";
+import { ChromaCard, ImageReel, RisingDigits, type ImageReelItem } from "@/components/ui";
 import { cn } from "@/lib/utils";
 
 const SERVICES: { icon: LucideIcon; title: string; text: string }[] = [
@@ -17,12 +16,12 @@ const SERVICES: { icon: LucideIcon; title: string; text: string }[] = [
   { icon: Smartphone, title: "Redes y contenido", text: "Gestión de redes, copys y planificación." },
 ];
 
-// Fondo + color de cifra con contraste ≥3:1 (ver lib/contrast.test.ts).
+// Bloques opacos: el reel no participa del contraste (pares en lib/contrast.test.ts).
 const STAT_TONES = [
-  "bg-peach [&_dd]:text-sun-deep [&_dt]:text-cocoa",
-  "bg-candy [&_dd]:text-cocoa [&_dt]:text-cocoa",
-  "bg-blush [&_dd]:text-sun-deep [&_dt]:text-cocoa",
-  "bg-amber [&_dd]:text-cream [&_dt]:text-cream",
+  "bg-peach text-sun-deep",
+  "bg-candy text-cocoa",
+  "bg-blush text-cocoa",
+  "bg-amber text-cream",
 ] as const;
 
 export interface Stat {
@@ -30,56 +29,101 @@ export interface Stat {
   label: string;
 }
 
-/** "Lo que hago" + "En números" (cifras calculadas desde el contenido real). */
-export function Services({ stats }: { stats: Stat[] }) {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const rotate = useTransform(scrollYProgress, [0, 1], [-25, 35]);
+function ServiceGrid() {
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    if (reduce !== false) return;
+    const root = ref.current;
+    if (!root) return;
+
+    let stopped = false;
+    const stops: Array<() => void> = [];
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting || stopped) return;
+        io.disconnect();
+        root.querySelectorAll<HTMLElement>("[data-service]").forEach((node, index) => {
+          const playback = animate(
+            node,
+            { y: ["14px", "0px"] },
+            { duration: 0.58, delay: index * 0.07, ease: [0.16, 1, 0.3, 1] },
+          );
+          stops.push(() => playback.stop());
+        });
+      },
+      { rootMargin: "0px 0px -8% 0px" },
+    );
+    io.observe(root);
+
+    return () => {
+      stopped = true;
+      io.disconnect();
+      stops.forEach((stop) => stop());
+    };
+  }, [reduce]);
 
   return (
-    <section id="servicios" ref={ref} className="relative scroll-mt-28 py-6 md:py-10">
-      <PopContainer className="grid grid-cols-1 gap-5 lg:grid-cols-12">
-        <div className="rounded-[32px] bg-peach p-6 md:p-8 lg:col-span-7">
+    <ul ref={ref} className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+      {SERVICES.map(({ icon: Icon, title, text }) => (
+        <li key={title} data-service className="min-w-0">
+          <ChromaCard>
+            <div className="flex h-full gap-3 rounded-[24px] bg-cream p-4 ring-1 ring-sand">
+              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-blush text-rose-deep">
+                <Icon className="size-5" aria-hidden />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-[16px] font-bold text-cocoa">{title}</span>
+                <span className="mt-0.5 block text-[14px] leading-snug text-cocoa-2">{text}</span>
+              </span>
+            </div>
+          </ChromaCard>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** "Lo que hago" + "En números" (cifras calculadas desde el contenido real). */
+export function Services({ stats, backdrop }: { stats: Stat[]; backdrop: ImageReelItem[] }) {
+  return (
+    <section id="servicios" className="relative scroll-mt-28 py-6 md:py-10">
+      <PopContainer className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-12">
+        <div className="min-w-0 rounded-[32px] bg-peach p-5 sm:p-6 md:p-8 lg:col-span-5">
           <PopHeading className="text-[28px] text-sun-deep md:text-[36px]">Lo que hago</PopHeading>
-          <ul className="mt-6 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
-            {SERVICES.map(({ icon: Icon, title, text }) => (
-              <li key={title} className="flex gap-4">
-                <span className="grid size-12 shrink-0 place-items-center rounded-full bg-blush text-rose-deep">
-                  <Icon className="size-5" aria-hidden />
-                </span>
-                <span>
-                  <span className="block text-[16px] font-bold text-cocoa">{title}</span>
-                  <span className="mt-0.5 block text-[14px] leading-snug text-cocoa-2">{text}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
+          <ServiceGrid />
         </div>
 
-        <div className="relative overflow-hidden rounded-[32px] bg-cream p-6 ring-1 ring-seam md:p-8 lg:col-span-5">
-          <motion.div
+        <div className="relative isolate flex h-full min-w-0 flex-col overflow-hidden rounded-[32px] bg-cream p-4 ring-1 ring-seam sm:p-6 md:p-8 lg:col-span-7">
+          <ImageReel images={backdrop} />
+          <div
             aria-hidden
-            style={{ rotate }}
-            className="pointer-events-none absolute -top-16 -right-16 size-56 text-candy/70"
-          >
-            <Flower className="size-full" />
-          </motion.div>
-          <PopHeading className="relative text-[28px] text-rose-ink md:text-[36px]">
-            En números
-          </PopHeading>
-          <BentoGrid className="relative mt-6">
-            {stats.map((stat, i) => {
-              const featured = i === 0 || i === stats.length - 1;
-              return (
-                <BentoCard key={stat.label} featured={featured} className={cn("flex flex-col justify-end", STAT_TONES[i % 4])}>
-                  <dd className={cn("font-pop leading-none", featured ? "text-[52px] md:text-[64px]" : "text-[40px] md:text-[48px]")}>
-                    <NumberTicker value={stat.value} />
+            className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_oklab,var(--color-cream)_58%,transparent)_0%,color-mix(in_oklab,var(--color-cream)_58%,transparent)_16%,color-mix(in_oklab,var(--color-cream)_14%,transparent)_38%,color-mix(in_oklab,var(--color-cream)_30%,transparent)_100%)]"
+          />
+          <div className="relative z-10">
+            <PopHeading className="text-[28px] text-sun-deep md:text-[36px]">En números</PopHeading>
+            <dl className="m-0 mt-5 grid grid-cols-2 gap-2 sm:mt-6 sm:gap-3">
+              {stats.map((stat, index) => (
+                <div
+                  key={stat.label}
+                  className={cn(
+                    "@container flex min-w-0 flex-col justify-end rounded-[22px] p-3 sm:p-4 md:p-5",
+                    "shadow-[0_16px_32px_-20px_color-mix(in_oklab,var(--color-ultramarine)_42%,transparent)]",
+                    STAT_TONES[index % STAT_TONES.length],
+                  )}
+                >
+                  <dd
+                    className="m-0 font-pop leading-[0.8] whitespace-nowrap"
+                    style={{ fontSize: "clamp(4rem, 52cqi, 10rem)" }}
+                  >
+                    <RisingDigits value={stat.value} delay={index * 0.09} />
                   </dd>
-                  <dt className="pop-label mt-2">{stat.label}</dt>
-                </BentoCard>
-              );
-            })}
-          </BentoGrid>
+                  <dt className="pop-label m-0 mt-2 text-balance">{stat.label}</dt>
+                </div>
+              ))}
+            </dl>
+          </div>
         </div>
       </PopContainer>
     </section>
