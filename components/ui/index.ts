@@ -1,6 +1,5 @@
 export { BentoCard, BentoGrid } from "./bento-grid";
 export { Button, buttonVariants, type ButtonProps } from "./button";
-export { FloatingNav } from "./floating-nav";
 export { InteractiveButton } from "./interactive-button";
 export { MagneticButton } from "./magnetic-button";
 export { Marquee } from "./marquee";

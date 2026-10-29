@@ -46,4 +46,13 @@ test("capturas de la landing a 390 y 1280", async ({ page }, testInfo) => {
     path: `docs/screens/21st-trabajos-${width}.png`,
     fullPage: false,
   });
+
+  // Barra de navegación: arriba del todo y tras 600px de scroll (se componen en docs/screens/nav-*.png).
+  const navClip = { x: 0, y: 0, width: Number(width), height: 240 };
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(350);
+  await page.screenshot({ path: `test-results/nav-${width}-top.png`, clip: navClip });
+  await page.evaluate(() => window.scrollTo(0, 600));
+  await page.waitForTimeout(350);
+  await page.screenshot({ path: `test-results/nav-${width}-scrolled.png`, clip: navClip });
 });

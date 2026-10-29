@@ -15,7 +15,7 @@ export function Providers({ children }: { children: ReactNode }) {
       lerp: 0.12,
       smoothWheel: true,
       // scroll suave hacia las anclas de las secciones (offset = nav sticky)
-      anchors: { offset: -56 },
+      anchors: { offset: window.innerWidth >= 768 ? -64 : -56 },
     });
     let rafId = 0;
     const raf = (time: number) => {

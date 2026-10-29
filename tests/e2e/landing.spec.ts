@@ -122,6 +122,39 @@ test.describe("landing", () => {
     await expect(band.locator('a[href="#conduccion"]').first()).toBeAttached();
   });
 
+  test("la barra es sticky, no se oculta al bajar y muestra el seam al scrollear", async ({ page, viewport }) => {
+    await page.goto("/");
+    await page.waitForSelector("#intro-loader", { state: "detached", timeout: 12_000 });
+    const header = page.getByRole("banner");
+    const expectedHeight = (viewport?.width ?? 0) >= 768 ? 64 : 56;
+    const before = await header.boundingBox();
+    expect(before?.y).toBe(0);
+    expect(before?.width).toBe(viewport?.width);
+    expect(Math.round(before?.height ?? 0)).toBe(expectedHeight + 1);
+    const borderBefore = await header.evaluate((el) => getComputedStyle(el).borderBottomColor);
+    expect(borderBefore).toBe("rgba(0, 0, 0, 0)");
+
+    await page.evaluate(() => window.scrollTo(0, 600));
+    await page.waitForTimeout(400);
+    const after = await header.boundingBox();
+    expect(after?.y).toBe(0);
+    await expect(header.getByRole("button", { name: "Mostrar QR del portafolio" })).toBeVisible();
+    const borderAfter = await header.evaluate((el) => getComputedStyle(el).borderBottomColor);
+    expect(borderAfter).not.toBe("rgba(0, 0, 0, 0)");
+    // Sin «Hablemos» en la barra: Contacto ya está en los links / menú.
+    await expect(header.getByRole("link", { name: "Hablemos" })).toHaveCount(0);
+  });
+
+  test("el link activo del nav desktop se subraya al scrollear a Formación", async ({ page, viewport }) => {
+    test.skip((viewport?.width ?? 0) < 1024, "Links visibles sólo en desktop");
+    await page.goto("/");
+    await page.waitForSelector("#intro-loader", { state: "detached", timeout: 12_000 });
+    await page.locator("#formacion").scrollIntoViewIfNeeded();
+    const nav = page.getByRole("navigation", { name: "Principal" });
+    await expect(nav.getByRole("link", { name: "Formación" })).toHaveAttribute("aria-current", "page");
+    await expect(nav.locator("[aria-current='page']")).toHaveCount(1);
+  });
+
   test("el botón Menú tiene área táctil >= 44px", async ({ page, viewport }) => {
     test.skip((viewport?.width ?? 0) >= 1024, "En desktop se usa la navegación principal");
     await page.goto("/");

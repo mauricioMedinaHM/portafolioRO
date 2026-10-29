@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "motion/react";
-import { QrCode, Share2 } from "lucide-react";
-import { Sparkle } from "@/components/pop/decor";
-import { buttonVariants, FloatingNav, Sheet } from "@/components/ui";
+import { motion, useMotionValueEvent, useReducedMotion, useScroll } from "motion/react";
+import { Menu, QrCode, Share2 } from "lucide-react";
+import { PopContainer } from "@/components/pop/heading";
+import { buttonVariants, Sheet } from "@/components/ui";
 import { ShareModal } from "@/components/share";
 import { cn } from "@/lib/utils";
 
@@ -54,6 +54,14 @@ function useActiveSection(anchors: NavAnchor[]) {
   return active;
 }
 
+/** Línea inferior de 1px (seam) y blur leve sólo después de scrollear un poco. */
+function useScrolled(threshold = 8) {
+  const { scrollY } = useScroll();
+  const [scrolled, setScrolled] = useState(false);
+  useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > threshold));
+  return scrolled;
+}
+
 export function NavBar({
   name,
   anchors,
@@ -65,84 +73,83 @@ export function NavBar({
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const reduce = useReducedMotion();
+  const scrolled = useScrolled();
   const active = useActiveSection(anchors);
-  const desktopCurrent = SECTION_LINKS.has(active) ? active : active === "#inicio" || active === "#sobre-mi" ? active : "#trabajos";
-
-  const parts = name.trim().split(/\s+/);
-  const logoTop = parts[0] ?? name;
-  const logoBottom = parts.slice(1, 2).join(" ");
+  // Las secciones por categoría (#conduccion, #streaming…) cuelgan de «Trabajos».
+  const desktopCurrent = SECTION_LINKS.has(active) ? active : active === "#inicio" ? null : "#trabajos";
 
   return (
     <>
-      <FloatingNav forceVisible={menuOpen}>
-        {({ compact }) => (
-          <div className="flex items-center justify-between gap-3">
-            <a
-              href="#inicio"
-              aria-label={`${name}, inicio`}
-              aria-current={active === "#inicio" ? "page" : undefined}
-              className={cn(
-                "font-pop flex min-h-11 shrink-0 flex-col justify-center leading-[0.9] text-cocoa focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sun-deep",
-                compact ? "text-[15px]" : "text-[17px] md:text-[18px]",
-              )}
-            >
-              <span>{logoTop}</span>
-              {logoBottom ? <span>{logoBottom}</span> : null}
-            </a>
-
-            <nav aria-label="Principal" className="hidden min-w-0 lg:block">
-              <ul className="flex items-center gap-1">
-                {DESKTOP_LINKS.map((link) => {
-                  const current = desktopCurrent === link.href;
-                  return (
-                    <li key={link.href}>
-                      <a
-                        href={link.href}
-                        aria-current={current ? "page" : undefined}
-                        className={cn(
-                          "pop-label inline-flex min-h-11 items-center rounded-full px-3 text-cocoa transition-colors hover:text-sun-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sun-deep",
-                          current && "bg-candy text-cocoa",
-                        )}
-                      >
-                        {link.label}
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
-            </nav>
-
-            <div className="flex shrink-0 items-center gap-2">
-              <a
-                href="#contacto"
-                className={cn(buttonVariants({ variant: "pop", size: "md" }), "hidden sm:inline-flex")}
-              >
-                Hablemos
-                <Sparkle className="size-4" />
-              </a>
-              <button
-                type="button"
-                aria-label="Mostrar QR del portafolio"
-                aria-haspopup="dialog"
-                onClick={() => setShareOpen(true)}
-                className="inline-flex size-11 items-center justify-center rounded-full border-2 border-cocoa text-cocoa transition-colors hover:bg-cocoa hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cocoa"
-              >
-                <QrCode className="size-5" aria-hidden />
-              </button>
-              <button
-                type="button"
-                aria-expanded={menuOpen}
-                aria-controls="menu-secciones"
-                onClick={() => setMenuOpen(true)}
-                className="inline-flex min-h-11 items-center rounded-full border-2 border-cocoa px-4 text-[14px] font-bold text-cocoa transition-colors hover:bg-cocoa hover:text-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cocoa lg:hidden"
-              >
-                Menú
-              </button>
-            </div>
-          </div>
+      <header
+        className={cn(
+          "sticky top-0 z-40 w-full border-b transition-[background-color,border-color] duration-300",
+          scrolled ? "border-seam bg-cream/90 backdrop-blur-sm" : "border-transparent bg-cream",
         )}
-      </FloatingNav>
-      <div aria-hidden className="h-[5.25rem] md:h-24" />
+      >
+        <PopContainer className="flex h-14 items-center justify-between gap-4 md:h-16">
+          <a
+            href="#inicio"
+            aria-label={`${name}, inicio`}
+            aria-current={active === "#inicio" ? "page" : undefined}
+            className="font-pop flex min-h-11 min-w-0 items-center truncate text-[15px] leading-none whitespace-nowrap text-cocoa focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sun-deep md:text-[16px]"
+          >
+            {name}
+          </a>
+
+          <nav aria-label="Principal" className="hidden h-full min-w-0 lg:block">
+            <ul className="flex h-full items-stretch gap-1">
+              {DESKTOP_LINKS.map((link) => {
+                const current = desktopCurrent === link.href;
+                return (
+                  <li key={link.href} className="flex">
+                    <a
+                      href={link.href}
+                      aria-current={current ? "page" : undefined}
+                      className={cn(
+                        "relative inline-flex items-center px-2.5 text-[14px] font-medium transition-colors hover:text-cocoa focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sun-deep",
+                        current ? "text-cocoa" : "text-cocoa-2",
+                      )}
+                    >
+                      {link.label}
+                      {current ? (
+                        <motion.span
+                          aria-hidden
+                          layoutId="nav-underline"
+                          transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 38 }}
+                          className="absolute inset-x-2.5 bottom-0 h-0.5 bg-sun-deep"
+                        />
+                      ) : null}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+
+          <div className="flex shrink-0 items-center gap-1">
+            <button
+              type="button"
+              aria-label="Mostrar QR del portafolio"
+              aria-haspopup="dialog"
+              onClick={() => setShareOpen(true)}
+              className="inline-flex size-11 items-center justify-center text-cocoa transition-colors hover:text-sun focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sun-deep"
+            >
+              <QrCode className="size-5" aria-hidden />
+            </button>
+            <button
+              type="button"
+              aria-expanded={menuOpen}
+              aria-controls="menu-secciones"
+              onClick={() => setMenuOpen(true)}
+              className="inline-flex min-h-11 items-center gap-1.5 pr-1 pl-2 text-[14px] font-bold text-cocoa transition-colors hover:text-sun focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sun-deep lg:hidden"
+            >
+              <Menu className="size-5" aria-hidden />
+              Menú
+            </button>
+          </div>
+        </PopContainer>
+      </header>
 
       <Sheet open={menuOpen} onOpenChange={setMenuOpen} title="Índice" side="right" className="bg-cream">
         <nav id="menu-secciones" aria-label="Secciones" className="flex flex-col">
