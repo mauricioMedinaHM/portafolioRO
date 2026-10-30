@@ -12,6 +12,8 @@ export interface CenterLoopProps {
   poster?: string | null;
   /** Segundo desde el que arranca y reinicia el bucle. Con 0 se usa el `loop` nativo. */
   start?: number;
+  /** `object-position` del poster y del video (ej. "center 80%") para encuadrar el recorte. */
+  objectPosition?: string;
 }
 
 /**
@@ -19,7 +21,7 @@ export interface CenterLoopProps {
  * La miniatura queda visible debajo hasta que el video tiene cuadros para
  * mostrar (readyState >= 3); recién ahí el video aparece con un fundido corto.
  */
-export function CenterLoop({ src, poster, start = 0 }: CenterLoopProps) {
+export function CenterLoop({ src, poster, start = 0, objectPosition }: CenterLoopProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const active = useLoopSlot(rootRef);
@@ -97,12 +99,20 @@ export function CenterLoop({ src, poster, start = 0 }: CenterLoopProps) {
       {poster ? (
         // Miniatura local del fragmento: el video sólo se monta cerca del centro.
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={poster} alt="" loading="lazy" fetchPriority="low" decoding="async" className="absolute inset-0 size-full object-cover" />
+        <img
+          src={poster}
+          alt=""
+          loading="lazy"
+          fetchPriority="low"
+          decoding="async"
+          className="absolute inset-0 size-full object-cover"
+          style={{ objectPosition }}
+        />
       ) : null}
       <video
         ref={videoRef}
         className="absolute inset-0 size-full object-cover"
-        style={{ opacity: 0 }}
+        style={{ opacity: 0, objectPosition }}
         muted
         playsInline
         preload="none"

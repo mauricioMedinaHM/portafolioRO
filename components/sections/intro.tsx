@@ -5,6 +5,9 @@ import { PopContainer } from "@/components/pop/heading";
 import { categoryIcon } from "@/components/pop/icons";
 import type { Category, Profile, Project } from "@/lib/types";
 
+/** Encuadre del destacado: las caras están en el tercio inferior del clip. */
+const SPOTLIGHT_FOCUS = "center 80%";
+
 /** "Hola, soy Rosario": presentación + áreas de trabajo (anclas a cada sección). */
 export function Intro({
   profile,
@@ -24,28 +27,40 @@ export function Intro({
           {spotlight?.thumbnailUrl ? (
             <a
               href={`#${categories.find((c) => c.id === spotlight.categoryId)?.slug ?? "trabajos"}`}
-              className="group relative block overflow-hidden rounded-[24px] bg-candy md:col-span-4"
+              className="group block md:col-span-4"
             >
-              <div className="relative aspect-[4/3] w-full transition-transform duration-500 group-hover:scale-[1.03]">
-                {spotlight.clipUrl ? (
-                  // Clip del destacado en bucle mudo (poster = miniatura; pausa fuera del centro).
-                  <CenterLoop src={spotlight.clipUrl} poster={spotlight.thumbnailUrl} start={spotlight.clipStart} />
-                ) : (
-                  // Miniatura externa (YouTube): fuera de los remotePatterns de next/image.
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={spotlight.thumbnailUrl}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    width={480}
-                    height={360}
-                    className="absolute inset-0 size-full object-cover"
-                  />
-                )}
+              {/* El clip queda limpio: el título va debajo, como pie, para no tapar las caras. */}
+              <div className="relative overflow-hidden rounded-[24px] bg-candy">
+                <div className="relative aspect-[16/10] w-full transition-transform duration-500 group-hover:scale-[1.03]">
+                  {spotlight.clipUrl ? (
+                    // Clip del destacado en bucle mudo (poster = miniatura; pausa fuera del centro).
+                    <CenterLoop
+                      src={spotlight.clipUrl}
+                      poster={spotlight.thumbnailUrl}
+                      start={spotlight.clipStart}
+                      objectPosition={SPOTLIGHT_FOCUS}
+                    />
+                  ) : (
+                    // Miniatura externa (YouTube): fuera de los remotePatterns de next/image.
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={spotlight.thumbnailUrl}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      width={480}
+                      height={300}
+                      className="absolute inset-0 size-full object-cover"
+                      style={{ objectPosition: SPOTLIGHT_FOCUS }}
+                    />
+                  )}
+                </div>
               </div>
-              <span className="absolute inset-x-3 bottom-3 rounded-2xl bg-cream/95 px-4 py-3 text-[14px] leading-snug font-semibold text-cocoa">
+              <span className="mt-3 block px-1 text-[15px] leading-snug font-semibold text-cocoa md:text-[16px]">
                 {spotlight.title}
+              </span>
+              <span className="mt-1 block px-1 text-[14px] font-semibold text-sun-deep transition-colors group-hover:text-cocoa">
+                Ver entrevista →
               </span>
             </a>
           ) : null}
