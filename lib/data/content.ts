@@ -50,6 +50,17 @@ function cleanSocials(redes?: { instagram?: string; linkedin?: string }): Projec
   return out;
 }
 
+/** Segundo de arranque del bucle; valores ausentes, negativos o no numéricos → 0. */
+function clipStart(value?: number) {
+  return typeof value === "number" && Number.isFinite(value) && value > 0 ? value : 0;
+}
+
+/** Ruta local a un archivo de video (en /public). */
+function localVideoOrNull(value?: string) {
+  const v = value?.trim();
+  return v && /^\/.+\.(m4v|mov|mp4|webm)$/i.test(v) ? v : null;
+}
+
 function slug(value: string) {
   return value
     .normalize("NFD")
@@ -65,6 +76,7 @@ export function buildProfile(): Profile {
     tagline: perfil.rol,
     bio: perfil.bio,
     photoUrl: perfil.foto,
+    heroVideoUrl: localVideoOrNull(perfil.heroClip),
     email: perfil.email || null,
     whatsapp: perfil.whatsapp || null,
     // Redes del perfil: se omiten las vacías ("" o comentadas).
@@ -111,6 +123,8 @@ export function buildProjects(source: Seccion[] = secciones): Project[] {
         provider: parsed.provider,
         embedUrl: parsed.embedUrl,
         thumbnailUrl: trabajo.miniatura?.trim() || parsed.thumbnailUrl,
+        clipUrl: trabajo.clip?.trim() || null,
+        clipStart: clipStart(trabajo.clipInicio),
         date: trabajo.fecha && DATE.test(trabajo.fecha) ? trabajo.fecha : null,
         position,
         isFeatured: Boolean(trabajo.destacado),

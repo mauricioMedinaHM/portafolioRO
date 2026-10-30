@@ -1,4 +1,5 @@
 import { Heart } from "lucide-react";
+import { CenterLoop } from "@/components/media/CenterLoop";
 import { Burst } from "@/components/pop/decor";
 import { PopContainer } from "@/components/pop/heading";
 import { categoryIcon } from "@/components/pop/icons";
@@ -25,17 +26,24 @@ export function Intro({
               href={`#${categories.find((c) => c.id === spotlight.categoryId)?.slug ?? "trabajos"}`}
               className="group relative block overflow-hidden rounded-[24px] bg-candy md:col-span-4"
             >
-              {/* Miniatura externa (YouTube): fuera de los remotePatterns de next/image. */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={spotlight.thumbnailUrl}
-                alt=""
-                loading="lazy"
-                decoding="async"
-                width={480}
-                height={360}
-                className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-              />
+              <div className="relative aspect-[4/3] w-full transition-transform duration-500 group-hover:scale-[1.03]">
+                {spotlight.clipUrl ? (
+                  // Clip del destacado en bucle mudo (poster = miniatura; pausa fuera del centro).
+                  <CenterLoop src={spotlight.clipUrl} poster={spotlight.thumbnailUrl} start={spotlight.clipStart} />
+                ) : (
+                  // Miniatura externa (YouTube): fuera de los remotePatterns de next/image.
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={spotlight.thumbnailUrl}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    width={480}
+                    height={360}
+                    className="absolute inset-0 size-full object-cover"
+                  />
+                )}
+              </div>
               <span className="absolute inset-x-3 bottom-3 rounded-2xl bg-cream/95 px-4 py-3 text-[14px] leading-snug font-semibold text-cocoa">
                 {spotlight.title}
               </span>

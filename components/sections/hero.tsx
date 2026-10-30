@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { Mic } from "lucide-react";
+import { HeroClip } from "@/components/media/HeroClip";
 import { Burst, Flower, OnAirBadge, Rays, Sparkle, Squiggle } from "@/components/pop/decor";
 import { PopContainer } from "@/components/pop/heading";
 import { buttonVariants, InteractiveButton, TextReveal } from "@/components/ui";
@@ -34,7 +34,7 @@ export function Hero({ profile }: { profile: Profile; firstCategorySlug?: string
             style={{ animationDelay: "650ms" }}
           />
 
-          <h1 className="font-pop relative pt-8 text-[64px] leading-[0.86] text-cocoa sm:text-[84px] md:pt-6 lg:text-[112px]">
+          <h1 className="font-pop relative pt-8 text-[52px] leading-[0.86] text-cocoa sm:text-[72px] md:pt-6 lg:text-[112px]">
             <span className="sr-only">{profile.fullName}: </span>
             <TextReveal text="Contar" className="block" startIndex={0} />
             <TextReveal text="lo que" className="block" startIndex={1} />
@@ -92,13 +92,11 @@ export function Hero({ profile }: { profile: Profile; firstCategorySlug?: string
 
           <div className="pop-arch absolute right-[9%] bottom-0 h-[86%] w-[64%] overflow-hidden rounded-t-full rounded-b-[32px] border-[6px] border-cream bg-peach">
             <motion.div className="absolute inset-[-6%]" style={{ y: photoY }}>
-              <Image
-                src={photo}
+              <HeroClip
+                poster={photo}
+                src={profile.heroVideoUrl}
                 alt="Retrato de Rosario Tejerina Pittis"
-                fill
-                priority
                 sizes="(min-width: 768px) 360px, 64vw"
-                className="object-cover object-[center_20%]"
               />
             </motion.div>
           </div>

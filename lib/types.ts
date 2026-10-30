@@ -12,6 +12,7 @@ export interface Profile {
   tagline: string;
   bio: string;
   photoUrl: string;
+  heroVideoUrl: string | null; // clip mudo en bucle dentro del arco del hero (la foto queda de poster)
   email: string | null;
   whatsapp: string | null; // formato E.164
   socials: {
@@ -46,6 +47,8 @@ export interface Project {
   provider: MediaProvider; // detectado desde el link (parseMediaUrl)
   embedUrl: string | null;
   thumbnailUrl: string | null; // calculada desde el link
+  clipUrl: string | null; // fragmento local que se reproduce en bucle
+  clipStart: number; // segundo desde el que arranca (y reinicia) el bucle
   date: string | null; // YYYY-MM-DD
   position: number;
   isFeatured: boolean;

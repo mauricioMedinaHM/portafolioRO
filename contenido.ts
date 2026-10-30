@@ -28,6 +28,13 @@
  *                 como botones de color debajo de la tarjeta.
  *    enlaces      opcional, lista de { nombre, link } (otros perfiles o páginas).
  *    miniatura    opcional, imagen propia para la tarjeta ("/trabajos/foto.jpg").
+ *    clip         opcional, fragmento propio ("/trabajos/clips/pieza.mp4").
+ *                 Se reproduce unos segundos en bucle sólo cuando la tarjeta
+ *                 está cerca del centro de la pantalla. Si además hay link,
+ *                 el botón de play abre el video completo.
+ *    clipInicio   opcional, segundo del clip desde el que arranca el bucle
+ *                 (ej. 2.5) para que la primera imagen sea una donde se vea
+ *                 bien la cara. Sin este campo arranca desde el principio.
  *    descripcion  admite un segundo párrafo separado por una línea en blanco (\n\n).
  *
  *  Campos de cada sección (además de nombre, ancla, intro, habilidades):
@@ -49,6 +56,10 @@ export interface Trabajo {
   redes?: RedesProyecto;
   enlaces?: { nombre: string; link: string }[];
   miniatura?: string;
+  /** Fragmento corto en /public. Bucle suave cerca del centro de la pantalla. */
+  clip?: string;
+  /** Segundo del clip desde el que arranca (y reinicia) el bucle. */
+  clipInicio?: number;
 }
 
 export interface RedesProyecto {
@@ -73,8 +84,13 @@ export const perfil = {
   nombre: "Rosario Tejerina Pittis",
   rol: "Conductora · Locutora · Comunicadora audiovisual",
   bio: "Soy estudiante de Comunicación Social y Locución Nacional en UCaSal y me entusiasma contar historias frente a cámara y detrás del micrófono. En coberturas, streaming y Generación Tech para El10TV conduzco, entrevisto y acompaño la producción de contenidos en vivo. También llevo esa escucha a la radio, las redes y la capacitación.",
-  /** Foto del hero (en /public). */
-  foto: "/rosario.png",
+  /**
+   * Foto del hero (en /public). Si hay `heroClip`, es la imagen que se ve
+   * mientras carga el clip (y la única, si el visitante prefiere menos movimiento).
+   */
+  foto: "/trabajos/puna-tech.jpg",
+  /** Clip mudo en bucle dentro del arco del hero (en /public). Dejar "" para usar sólo la foto. */
+  heroClip: "/trabajos/clips/puna-tech.mp4",
   email: "tejerinarosario4@gmail.com",
   /** WhatsApp con código de país, sin espacios. */
   whatsapp: "+5493875174774",
@@ -143,6 +159,23 @@ export const secciones: Seccion[] = [
         descripcion: "Cierre de la cobertura electoral en vivo con resultados y entrevistas.",
         fecha: "2025-10-26",
       },
+      {
+        titulo: "Conducción — Mesa al aire",
+        miniatura: "/trabajos/conduccion-mesa.jpg",
+        descripcion: "Conducción con auriculares y micrófono en una salida al aire.",
+      },
+      {
+        titulo: "Conducción — En cámara",
+        miniatura: "/trabajos/conduccion-camara.jpg",
+        descripcion: "La misma salida al aire, de frente al micrófono.",
+      },
+      {
+        titulo: "Conducción — Joseii",
+        clip: "/trabajos/clips/joseii.mp4",
+        clipInicio: 2.5,
+        miniatura: "/trabajos/joseii.jpg",
+        descripcion: "Conducción de un encuentro sobre inteligencia artificial.",
+      },
     ],
   },
   {
@@ -155,9 +188,17 @@ export const secciones: Seccion[] = [
       {
         titulo: "Otra Vez Sopa — Entrevista al Chaqueño Palavecino",
         link: "https://www.youtube.com/live/UL5Ri0NgGRY",
+        clip: "/trabajos/clips/chaqueno.mp4",
+        miniatura: "/trabajos/chaqueno.jpg",
         descripcion:
           "Entrevista al Chaqueño Palavecino en el programa universitario de actualidad, cultura y entretenimiento.",
         destacado: true,
+      },
+      {
+        titulo: "Otra Vez Sopa — Entrevista a Valentina Raposo",
+        miniatura: "/trabajos/valentina-raposo.jpg",
+        descripcion:
+          "Entrevista a Valentina Raposo, campeona del mundo de hockey, en Otra Vez Sopa.",
       },
       {
         titulo: "Otra Vez Sopa — Tecnología",
@@ -172,6 +213,20 @@ export const secciones: Seccion[] = [
           "Edición dedicada a idiomas, con conducción de segmentos, entrevistas y producción de contenidos para el vivo.",
       },
       {
+        titulo: "Participación en streamings",
+        clip: "/trabajos/clips/streamings.mp4",
+        miniatura: "/trabajos/streamings.jpg",
+        descripcion: "Detrás de cámara en una jornada de streaming.",
+      },
+      {
+        titulo: "Streaming Day — Primera Cumbre de Streaming del Norte",
+        clip: "/trabajos/clips/cumbre-noa.mp4",
+        miniatura: "/trabajos/streaming-day.jpg",
+        descripcion:
+          "Staff del evento: soporte de producción y producción de contenidos, y organización y logística de la jornada.",
+        redes: { instagram: "", linkedin: "" },
+      },
+      {
         titulo: "Otra Vez Sopa — Mundial",
         link: "https://www.youtube.com/live/zGt-GaUi4fk",
         descripcion:
@@ -182,12 +237,6 @@ export const secciones: Seccion[] = [
         link: "https://www.youtube.com/live/VV_wBrrPa5U",
         descripcion:
           "Edición dedicada a la felicidad, con conducción de segmentos, entrevistas y producción de contenidos para el vivo.",
-      },
-      {
-        titulo: "Streaming Day — Primera Cumbre de Streaming del Norte",
-        descripcion:
-          "Staff del evento: soporte de producción y producción de contenidos, y organización y logística de la jornada.",
-        redes: { instagram: "", linkedin: "" },
       },
     ],
   },
@@ -204,11 +253,15 @@ export const secciones: Seccion[] = [
       {
         titulo: "Generación Tech — Programa 19 de octubre",
         link: "https://youtu.be/aoMs_YE_RtE",
+        clip: "/trabajos/clips/generacion-tech.mp4",
+        clipInicio: 0.5,
+        miniatura: "/trabajos/generacion-tech.jpg",
         destacado: true,
       },
       {
         titulo: "Generación Tech — Programa 28 de septiembre",
         link: "https://youtu.be/N4lWIgW44AE",
+        miniatura: "/trabajos/generacion-tech-perfil.jpg",
       },
       {
         titulo: "Generación Tech — Programa 24 de agosto",
@@ -217,6 +270,12 @@ export const secciones: Seccion[] = [
       {
         titulo: "Generación Tech — Programa 10 de agosto",
         link: "https://youtu.be/UDSYj-nO2e4",
+      },
+      {
+        titulo: "Inteligencia artificial y comunidades",
+        clip: "/trabajos/clips/comunidades.mp4",
+        miniatura: "/trabajos/comunidades.jpg",
+        descripcion: "Pieza sobre chatbots de inteligencia artificial, desinformación y comunidades.",
       },
     ],
   },
@@ -243,6 +302,8 @@ export const secciones: Seccion[] = [
       },
       {
         titulo: "Puna Tech — Cobertura de evento tecnológico",
+        clip: "/trabajos/clips/puna-tech.mp4",
+        miniatura: "/trabajos/puna-tech.jpg",
         descripcion:
           "Prensa y marketing para la cobertura periodística y audiovisual en tiempo real: entrevistas a participantes, expositores y autoridades, contenido para redes y material institucional.",
         redes: { instagram: "", linkedin: "" },
@@ -297,6 +358,9 @@ export const secciones: Seccion[] = [
       },
       {
         titulo: "Productora Plastilina — Community Manager",
+        clip: "/trabajos/clips/creacion.mp4",
+        clipInicio: 2,
+        miniatura: "/trabajos/creacion.jpg",
         descripcion:
           "Gestión y planificación de contenidos para redes, redacción de copys, cobertura de actividades y eventos, y coordinación con equipos de producción.",
         redes: { instagram: "", linkedin: "" },

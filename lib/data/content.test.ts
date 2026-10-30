@@ -10,6 +10,7 @@ describe("contenido.ts → datos de la landing", () => {
     expect(profile.tagline.length).toBeGreaterThan(0);
     expect(profile.whatsapp).toMatch(/^\+\d+$/);
     expect(profile.photoUrl).toMatch(/^\//);
+    expect(profile.heroVideoUrl).toMatch(/^\/.+\.mp4$/);
     expect((profile.education ?? []).length).toBeGreaterThan(0);
     expect((profile.skills ?? []).length).toBeGreaterThan(0);
   });
@@ -29,14 +30,44 @@ describe("contenido.ts → datos de la landing", () => {
   });
 
   it("un link de YouTube se convierte en embed + miniatura sin tocar nada más", () => {
-    const projects = buildProjects();
-    const withLink = projects.filter((p) => p.url && p.provider !== "instagram");
+    const customThumb = new Set(
+      secciones.flatMap((seccion) =>
+        seccion.trabajos.filter((trabajo) => trabajo.miniatura).map((trabajo) => trabajo.titulo),
+      ),
+    );
+    const withLink = buildProjects().filter((p) => p.url && p.provider !== "instagram");
     expect(withLink.length).toBeGreaterThan(0);
     for (const p of withLink) {
       expect(p.provider).toBe("youtube");
       expect(p.embedUrl).toMatch(/youtube-nocookie\.com\/embed\//);
-      expect(p.thumbnailUrl).toMatch(/^https:\/\/i\.ytimg\.com\//);
+      if (customThumb.has(p.title)) expect(p.thumbnailUrl).toMatch(/^\//);
+      else expect(p.thumbnailUrl).toMatch(/^https:\/\/i\.ytimg\.com\//);
     }
+  });
+
+  it("el fragmento local queda en la tarjeta y el link de YouTube sigue siendo el video completo", () => {
+    const chaqueno = buildProjects().find((p) => p.title.includes("Chaqueño"));
+    expect(chaqueno?.clipUrl).toBe("/trabajos/clips/chaqueno.mp4");
+    expect(chaqueno?.provider).toBe("youtube");
+    expect(chaqueno?.thumbnailUrl).toBe("/trabajos/chaqueno.jpg");
+    expect(chaqueno?.clipStart).toBe(0);
+  });
+
+  it("clipInicio marca desde qué segundo arranca el bucle; valores raros quedan en 0", () => {
+    const joseii = buildProjects().find((p) => p.title.includes("Joseii"));
+    expect(joseii?.clipStart).toBe(2.5);
+    const [sin, negativo, nan] = buildProjects([
+      {
+        nombre: "X",
+        ancla: "x",
+        trabajos: [
+          { titulo: "Sin inicio", clip: "/trabajos/clips/a.mp4" },
+          { titulo: "Negativo", clip: "/trabajos/clips/a.mp4", clipInicio: -1 },
+          { titulo: "NaN", clip: "/trabajos/clips/a.mp4", clipInicio: Number.NaN },
+        ],
+      },
+    ]);
+    expect([sin.clipStart, negativo.clipStart, nan.clipStart]).toEqual([0, 0, 0]);
   });
 
   it("detecta cada tipo de link pegado", () => {
