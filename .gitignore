@@ -49,3 +49,6 @@ playwright-report/
 
 # CV original de la clienta (datos personales: DNI/CUIL). No subir.
 /DatosROSARIO_CV/
+
+# Originales pesados. En el sitio entran los recortes de /public/trabajos.
+/fotosRoPortafolio/

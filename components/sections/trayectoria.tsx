@@ -1,19 +1,10 @@
 import { Award, BookOpen, GraduationCap, Languages, Mic, type LucideIcon } from "lucide-react";
 import { PopContainer, PopHeading } from "@/components/pop/heading";
 import { Timeline } from "@/components/ui";
+import { CinematicLogoCloud } from "@/components/ui/cinematic-logo-cloud";
 import type { Profile } from "@/lib/types";
-import { cn } from "@/lib/utils";
 
 const TONES = ["bg-blush", "bg-peach", "bg-white/70 ring-1 ring-seam"] as const;
-
-// Chips de habilidades: fondos variados con contraste verificado (lib/contrast.test.ts).
-const CHIP_TONES = [
-  "bg-blush text-rose-deep",
-  "bg-peach text-cocoa",
-  "bg-candy text-cocoa",
-  "bg-amber text-cocoa",
-  "bg-cocoa text-cream",
-] as const;
 
 /** Ícono según el tipo de formación (heurística sobre el texto de contenido.ts). */
 function iconFor(item: string): LucideIcon {
@@ -62,19 +53,11 @@ export function Trayectoria({ profile }: { profile: Profile }) {
         {skills.length > 0 ? (
           <div className="mt-10">
             <h3 className="font-pop text-[22px] text-sun-deep md:text-[26px]">Habilidades</h3>
-            <ul aria-label="Habilidades" className="mt-5 flex flex-wrap gap-2.5 md:gap-3">
-              {skills.map((skill, i) => (
-                <li
-                  key={skill}
-                  className={cn(
-                    "rounded-full px-4 py-2.5 text-[15px] font-bold md:text-[17px]",
-                    CHIP_TONES[i % CHIP_TONES.length],
-                  )}
-                >
-                  {skill}
-                </li>
-              ))}
-            </ul>
+            <CinematicLogoCloud
+              clients={skills.map((name) => ({ name, text: true }))}
+              variant="ribbon"
+              className="mt-5"
+            />
           </div>
         ) : null}
       </PopContainer>

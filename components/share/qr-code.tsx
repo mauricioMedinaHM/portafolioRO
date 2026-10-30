@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { buttonVariants } from "@/components/ui";
 import { cn } from "@/lib/utils";
 
-const DARK = "#290087";
+const DARK = "#5735a8";
 const LIGHT = "#F6FFE9";
 
 function isIos() {

@@ -5,6 +5,8 @@ import { MotionConfig } from "motion/react";
 import Lenis from "lenis";
 import { Toaster } from "sonner";
 
+import { LoopViewportProvider } from "@/components/media/loop-viewport";
+
 export function Providers({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -32,7 +34,7 @@ export function Providers({ children }: { children: ReactNode }) {
 
   return (
     <MotionConfig reducedMotion="user" transition={{ ease: [0.16, 1, 0.3, 1] }}>
-      {children}
+      <LoopViewportProvider>{children}</LoopViewportProvider>
       <Toaster
         position="bottom-center"
         gap={8}

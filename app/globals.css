@@ -25,7 +25,7 @@
 
   /*
    * Paleta de marca: Honeydew #F6FFE9 · Vanilla Custard #F2E0A4 ·
-   * Periwinkle #CAC5E5 · Amethyst #A230A4 · Dark Ultramarine #290087.
+   * Periwinkle #CAC5E5 · Amethyst #A230A4 · Ultramarine suave #5735a8.
    * Los nombres de rol (cream, sun, cocoa…) se mantienen en los componentes;
    * acá se mapean a la paleta. Tintes derivados sólo para paneles, bordes
    * y texto secundario. Contrastes verificados en lib/contrast.test.ts.
@@ -34,7 +34,7 @@
   --color-vanilla: #f2e0a4;
   --color-periwinkle: #cac5e5;
   --color-amethyst: #a230a4;
-  --color-ultramarine: #290087;
+  --color-ultramarine: #5735a8;
 
   --color-cream: #f6ffe9; /* Honeydew: fondo */
   --color-peach: #f2e0a4; /* Vanilla Custard: paneles */
@@ -42,13 +42,13 @@
   --color-candy: #cac5e5; /* Periwinkle */
   --color-amber: #a230a4; /* Amethyst (fondo de cifras, texto Honeydew encima) */
   --color-sun: #a230a4; /* Amethyst: rellenos, formas, íconos */
-  --color-sun-deep: #290087; /* Ultramarine: botones, labels, foco */
-  --color-sun-hover: #3d1aa3; /* Ultramarine aclarado: hover de botones */
+  --color-sun-deep: #5735a8; /* Ultramarine: botones, labels, foco */
+  --color-sun-hover: #6746b5; /* Ultramarine aclarado: hover de botones */
   --color-rose: #cac5e5; /* Periwinkle: formas */
   --color-rose-ink: #a230a4; /* Amethyst: palabra script (texto grande) */
-  --color-rose-deep: #290087; /* Ultramarine */
-  --color-cocoa: #290087; /* Ultramarine: texto principal y titulares */
-  --color-cocoa-2: #4b2fbe; /* Ultramarine aclarado: texto secundario (≥4.5 en los 3 fondos) */
+  --color-rose-deep: #5735a8; /* Ultramarine */
+  --color-cocoa: #5735a8; /* Ultramarine: texto principal y titulares */
+  --color-cocoa-2: #61409e; /* Ultramarine aclarado: texto secundario (≥4.5 en los 3 fondos) */
   --color-sand: #bfb8dd; /* borde derivado de Periwinkle */
   --color-seam: #e0cd8c; /* borde derivado de Vanilla */
 
@@ -141,10 +141,10 @@ html.lenis body {
 body:has([data-theme="pop"]) {
   --color-paper: #f6ffe9;
   --color-paper-2: #f2e0a4;
-  --color-ink: #290087;
-  --color-ink-hover: #3d1aa3;
-  --color-ink-2: #4b2fbe;
-  --color-ink-3: #4b2fbe;
+  --color-ink: #5735a8;
+  --color-ink-hover: #6746b5;
+  --color-ink-2: #61409e;
+  --color-ink-3: #61409e;
   --color-line: #e0cd8c;
   --color-mist: #bfb8dd;
   background: var(--color-cream);
@@ -292,12 +292,92 @@ body:has([data-theme="pop"]) ::selection {
 }
 
 .ui-marquee-track {
-  animation: ui-marquee 42s linear infinite;
+  animation: ui-marquee 120s linear infinite;
 }
 
 .group\/marquee:hover .ui-marquee-track,
 .group\/marquee:active .ui-marquee-track,
 .group\/marquee:focus-within .ui-marquee-track {
+  animation-play-state: paused;
+}
+
+/* Habilidades: deriva lenta. La del centro enciende una lámpara vainilla. */
+.skill-ribbon {
+  overflow: hidden;
+  padding-block: 0.7rem;
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+.skill-ribbon-track {
+  display: flex;
+  width: max-content;
+  animation: ui-marquee 58s linear infinite;
+  will-change: transform;
+}
+
+.skill-ribbon-word {
+  position: relative;
+  z-index: 0;
+  padding: 0.35rem 0.85rem;
+  font-size: 18px;
+  line-height: 1.3;
+  font-weight: 600;
+  color: var(--color-cocoa);
+  transform: scale(1);
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 768px) {
+  .skill-ribbon-word {
+    padding-inline: 1.15rem;
+    font-size: 22px;
+  }
+}
+
+.skill-lamp {
+  position: absolute;
+  inset: -0.12rem -0.15rem;
+  z-index: -1;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-vanilla) 88%, white);
+  box-shadow: 0 8px 16px -10px color-mix(in srgb, var(--color-ultramarine) 42%, transparent);
+  opacity: 0;
+  transform: scale(0.92);
+  pointer-events: none;
+  transition:
+    opacity 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.skill-ribbon-word[data-spot="true"],
+.skill-ribbon-word:hover {
+  z-index: 1;
+  transform: scale(1.06);
+}
+
+.skill-ribbon-word[data-spot="true"] .skill-lamp,
+.skill-ribbon-word:hover .skill-lamp {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.skill-ribbon:hover .skill-ribbon-word[data-spot="true"]:not(:hover),
+.skill-ribbon:hover .skill-ribbon-word[data-spot="true"]:not(:hover) .skill-lamp {
+  transform: scale(1);
+}
+
+.skill-ribbon:hover .skill-ribbon-word[data-spot="true"]:not(:hover) .skill-lamp {
+  opacity: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .skill-ribbon:hover .skill-ribbon-track {
+    animation-play-state: paused;
+  }
+}
+
+.skill-ribbon:focus-within .skill-ribbon-track,
+.skill-ribbon[data-off] .skill-ribbon-track {
   animation-play-state: paused;
 }
 
@@ -335,6 +415,28 @@ body:has([data-theme="pop"]) ::selection {
   }
 
   .ui-marquee-copy {
+    display: none;
+  }
+
+  .skill-ribbon {
+    overflow: visible;
+    mask-image: none;
+    padding-block: 0.2rem;
+  }
+
+  .skill-ribbon-track {
+    display: block;
+    width: auto;
+    animation: none;
+    will-change: auto;
+  }
+
+  .skill-ribbon-track > ul:not(.skill-ribbon-copy) {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .skill-ribbon-copy {
     display: none;
   }
 }

@@ -95,10 +95,12 @@ export function CategorySection({
 
   const initialProjects = projects.slice(0, INITIAL_COUNT);
   const additionalProjects = projects.slice(INITIAL_COUNT);
-  const initialClips = initialProjects.filter((project) => project.url);
-  const additionalClips = additionalProjects.filter((project) => project.url);
-  const initialNotes = initialProjects.filter((project) => !project.url);
-  const additionalNotes = additionalProjects.filter((project) => !project.url);
+  const hasPicture = (project: Project) =>
+    Boolean(project.url || project.clipUrl || project.thumbnailUrl);
+  const initialClips = initialProjects.filter(hasPicture);
+  const additionalClips = additionalProjects.filter(hasPicture);
+  const initialNotes = initialProjects.filter((project) => !hasPicture(project));
+  const additionalNotes = additionalProjects.filter((project) => !hasPicture(project));
   const hasMore = additionalProjects.length > 0;
   const clipsCarousel = initialClips.length + (expanded ? additionalClips.length : 0) > 2;
   const Icon = categoryIcon(category.slug);
@@ -112,7 +114,7 @@ export function CategorySection({
       <PopContainer>
         <div className="grid grid-cols-12 gap-y-5 md:gap-x-8">
           <div className="col-span-12 flex items-start gap-4 md:col-span-6">
-            <span className="mt-1 grid size-12 shrink-0 place-items-center rounded-full bg-sun text-cocoa md:size-14">
+            <span className="mt-1 grid size-12 shrink-0 place-items-center rounded-full bg-blush text-cocoa md:size-14">
               <Icon className="size-6" aria-hidden />
             </span>
             <div className="flex min-w-0 flex-col gap-3">

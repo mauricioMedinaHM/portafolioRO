@@ -25,7 +25,7 @@ export default function OpengraphImage() {
             fontSize: 22,
             letterSpacing: 6,
             textTransform: "uppercase",
-            color: "#290087",
+            color: "#5735a8",
             fontWeight: 700,
           }}
         >
@@ -38,7 +38,7 @@ export default function OpengraphImage() {
             lineHeight: 0.9,
             fontWeight: 900,
             textTransform: "uppercase",
-            color: "#290087",
+            color: "#5735a8",
             letterSpacing: -2,
             maxWidth: 900,
           }}
@@ -58,7 +58,7 @@ export default function OpengraphImage() {
           style={{
             marginTop: 22,
             fontSize: 28,
-            color: "#4B2FBE",
+            color: "#61409E",
           }}
         >
           {SITE_TAGLINE}

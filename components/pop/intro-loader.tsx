@@ -210,7 +210,7 @@ function Microphone({ className }: { className?: string }) {
         />
         <path d="M139 256 L142 326" stroke="var(--color-cocoa-2)" strokeWidth="5" strokeLinecap="round" />
         <path d="M167 256 L163 326" stroke="var(--color-sun)" strokeWidth="4" strokeLinecap="round" opacity="0.75" />
-        <rect x="130" y="330" width="40" height="14" rx="7" fill="#290087" />
+        <rect x="130" y="330" width="40" height="14" rx="7" fill="#5735a8" />
       </g>
     </svg>
   );

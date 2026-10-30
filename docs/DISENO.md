@@ -6,14 +6,14 @@ Los componentes base (Sheet, Modal, QR, toasts) usan los tokens `paper/ink`; la 
 
 ## Paleta (app/globals.css)
 
-Marca: **Ultramarine #290087 · Periwinkle #CAC5E5 · Amethyst #A230A4 · Honeydew #F6FFE9**.
+Marca: **Ultramarine suave #5735A8 · Periwinkle #CAC5E5 · Amethyst #A230A4 · Honeydew #F6FFE9**.
 
-- Honeydew: fondo de página (`cream`). Ultramarine: texto, titulares, botones, labels y foco (`cocoa`, `sun-deep`, `rose-deep`); `cocoa-2` #4B2FBE es el texto secundario (≥4.5 sobre Honeydew, Vanilla y Periwinkle).
+- Honeydew: fondo de página (`cream`). Ultramarine: texto, titulares, botones, labels y foco (`cocoa`, `sun-deep`, `rose-deep`); `cocoa-2` #61409E es el texto secundario (≥4.5 sobre Honeydew, Vanilla y Periwinkle).
 - Amethyst: rellenos, formas, íconos en círculo, botón de play, Instagram, barra de progreso (`sun`, `amber`). Periwinkle: arco del hero, formas, paneles y etiquetas (`candy`, `rose`).
 - Paneles y bordes: `peach` (Vanilla Custard #F2E0A4), `blush` #DCD8F1 (tinte Periwinkle), `candy`/`rose` (Periwinkle #CAC5E5), bordes `sand` #BFB8DD y `seam` #E0CD8C.
 - La banda "Trabajos destacados" va en Ultramarine con texto Honeydew.
 
-Contraste (`lib/contrast.test.ts`): Amethyst sobre Honeydew da 5.84, así que sólo va como **texto grande** (`rose-ink`, la palabra manuscrita) o como relleno con texto Honeydew encima — nunca texto Ultramarine sobre Amethyst (2.42). Los titulares son Ultramarine (`cocoa`, 14.13 sobre Honeydew).
+Contraste (`lib/contrast.test.ts`): Amethyst sobre Honeydew da 5.84, así que sólo va como **texto grande** (`rose-ink`, la palabra manuscrita) o como relleno con texto Honeydew encima — evitar texto Ultramarine sobre Amethyst. Los titulares son Ultramarine (`cocoa`, 8.23 sobre Honeydew).
 
 ## Tipografía (autohospedada con @fontsource)
 

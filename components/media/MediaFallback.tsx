@@ -7,6 +7,12 @@ import { cn } from "@/lib/utils";
 
 import type { EmbedAspect } from "./LazyEmbed";
 
+const FRAME: Record<EmbedAspect, string> = {
+  "16/9": "aspect-video",
+  "9/16": "aspect-[9/16] max-w-[300px]",
+  "4/3": "aspect-[4/3]",
+};
+
 export interface MediaFallbackProps {
   href: string;
   label?: string;
@@ -21,7 +27,7 @@ export function MediaFallback({
   aspect = "16/9",
 }: MediaFallbackProps) {
   const [thumbFailed, setThumbFailed] = useState(false);
-  const frame = aspect === "9/16" ? "aspect-[9/16] max-w-[300px]" : "aspect-video";
+  const frame = FRAME[aspect];
   const showThumb = Boolean(thumbnailUrl) && !thumbFailed;
 
   return (
@@ -32,6 +38,8 @@ export function MediaFallback({
           // eslint-disable-next-line @next/next/no-img-element
           <img
             decoding="async"
+            loading="lazy"
+            fetchPriority="low"
             src={thumbnailUrl ?? undefined}
             alt=""
             className="absolute inset-0 h-full w-full object-cover"

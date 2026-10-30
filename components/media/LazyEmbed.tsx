@@ -6,7 +6,13 @@ import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-export type EmbedAspect = "16/9" | "9/16";
+export type EmbedAspect = "16/9" | "9/16" | "4/3";
+
+const FRAME: Record<EmbedAspect, string> = {
+  "16/9": "aspect-video",
+  "9/16": "aspect-[9/16] max-w-[300px]",
+  "4/3": "aspect-[4/3]",
+};
 
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
 
@@ -31,7 +37,7 @@ export function LazyEmbed({
 }: LazyEmbedProps) {
   const [active, setActive] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const frame = aspect === "9/16" ? "aspect-[9/16] max-w-[300px]" : "aspect-video";
+  const frame = FRAME[aspect];
   const openUrl = originalUrl || embedUrl;
 
   useEffect(() => {
