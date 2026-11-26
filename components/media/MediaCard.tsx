@@ -79,7 +79,7 @@ function PlayButton({ title, onClick }: { title: string; onClick: () => void }) 
       aria-label={`Reproducir ${title}`}
     >
       <span className="absolute inset-0 flex items-center justify-center">
-        <span className="flex size-14 items-center justify-center rounded-full bg-sun text-cocoa shadow-[0_10px_30px_-10px_rgb(91_5_80/0.6)] ring-4 ring-white/70 transition-transform duration-150 group-hover:scale-105">
+        <span className="flex size-14 items-center justify-center rounded-full bg-sun text-cream shadow-[0_10px_30px_-10px_rgb(91_5_80/0.6)] ring-4 ring-white/70 transition-transform duration-150 group-hover:scale-105">
           <Play className="size-6 translate-x-px" fill="currentColor" aria-hidden="true" />
         </span>
       </span>
@@ -96,7 +96,6 @@ export function MediaCard({ project }: MediaCardProps) {
   const thumbnailUrl = project.thumbnailUrl ?? parsed.thumbnailUrl;
   const clipSrc = project.clipUrl || (isVideoFile(project.url) ? project.url : null);
   const canInlineEmbed =
-    !thumbFailed &&
     Boolean(embedUrl) &&
     (provider === "youtube" ||
       provider === "vimeo" ||
@@ -135,7 +134,7 @@ export function MediaCard({ project }: MediaCardProps) {
           embedUrl={embedUrl}
           aspect="4/3"
           title={project.title}
-          thumbnailUrl={thumbnailUrl}
+          thumbnailUrl={thumbFailed ? null : thumbnailUrl}
           originalUrl={project.url}
           providerLabel={PROVIDER_LABEL[provider]}
           onThumbnailError={() => setThumbFailed(true)}
@@ -148,14 +147,17 @@ export function MediaCard({ project }: MediaCardProps) {
           aspect="4/3"
         />
       )}
-      {open && project.url ? (
+      {project.isReferenceImage && frame ? (
+        <p className="mt-2 px-1 text-sm text-cocoa-2">Foto de referencia</p>
+      ) : null}
+      {(open || (clipSrc && provider === "instagram")) && project.url ? (
         <a
           href={project.url}
           target="_blank"
           rel="noopener noreferrer"
           className="mt-2 text-[13px] text-cocoa-2 underline-offset-4 hover:text-cocoa hover:underline"
         >
-          ¿No carga? Abrir en {PROVIDER_LABEL[provider]}
+          Abrir en {PROVIDER_LABEL[provider]}
         </a>
       ) : null}
       <div className="mt-4 flex flex-col gap-1.5 px-1">

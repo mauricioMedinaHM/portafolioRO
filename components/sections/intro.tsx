@@ -23,14 +23,14 @@ export function Intro({
   return (
     <section id="sobre-mi" className="scroll-mt-28 py-6 md:py-10">
       <PopContainer>
-        <div className="grid grid-cols-1 gap-8 rounded-[32px] bg-white/55 p-5 ring-1 ring-seam md:grid-cols-12 md:items-center md:gap-10 md:p-8">
+        <div className="grid grid-cols-1 gap-8 rounded-[14px] border border-seam bg-paper p-5 md:grid-cols-12 md:items-center md:gap-10 md:p-8">
           {spotlight?.thumbnailUrl ? (
             <a
               href={`#${categories.find((c) => c.id === spotlight.categoryId)?.slug ?? "trabajos"}`}
-              className="group block md:col-span-4"
+              className="group block md:order-3 md:col-span-5"
             >
               {/* El clip queda limpio: el título va debajo, como pie, para no tapar las caras. */}
-              <div className="relative overflow-hidden rounded-[24px] bg-candy">
+              <div className="relative overflow-hidden rounded-[5px] border-4 border-cream bg-candy shadow-sm">
                 <div className="relative aspect-[16/10] w-full transition-transform duration-500 group-hover:scale-[1.03]">
                   {spotlight.clipUrl ? (
                     // Clip del destacado en bucle mudo (poster = miniatura; pausa fuera del centro).
@@ -65,7 +65,7 @@ export function Intro({
             </a>
           ) : null}
 
-          <div className="md:col-span-5">
+          <div className="md:col-span-4">
             <h2 className="font-pop text-[34px] leading-[0.95] text-cocoa md:text-[44px]">
               Hola, soy {firstName}.
             </h2>

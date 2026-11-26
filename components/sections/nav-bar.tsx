@@ -11,13 +11,18 @@ import { cn } from "@/lib/utils";
 export interface NavAnchor {
   href: string;
   label: string;
+  parentHref?: string;
 }
 
 const DESKTOP_LINKS: NavAnchor[] = [
-  { href: "#trabajos", label: "Trabajos" },
-  { href: "#servicios", label: "Qué hago" },
   { href: "#sobre-mi", label: "Sobre mí" },
+  { href: "#servicios", label: "Cualidades" },
   { href: "#formacion", label: "Formación" },
+  { href: "#trabajos", label: "Muestra" },
+  { href: "#en-vivo", label: "En vivo" },
+  { href: "#mundo-scout", label: "Mundo Scout" },
+  { href: "#eventos", label: "Eventos" },
+  { href: "#experiencia", label: "Experiencia" },
   { href: "#contacto", label: "Contacto" },
 ];
 
@@ -76,29 +81,30 @@ export function NavBar({
   const reduce = useReducedMotion();
   const scrolled = useScrolled();
   const active = useActiveSection(anchors);
-  // Las secciones por categoría (#conduccion, #streaming…) cuelgan de «Trabajos».
-  const desktopCurrent = SECTION_LINKS.has(active) ? active : active === "#inicio" ? null : "#trabajos";
+  const desktopCurrent = SECTION_LINKS.has(active)
+    ? active
+    : anchors.find(({ href }) => href === active)?.parentHref;
 
   return (
     <>
       <header
         className={cn(
           "sticky top-0 z-40 w-full border-b transition-[background-color,border-color] duration-300",
-          scrolled ? "border-seam bg-cream/90 backdrop-blur-sm" : "border-transparent bg-cream",
+          scrolled ? "border-sand bg-candy/95 backdrop-blur-sm" : "border-transparent bg-candy",
         )}
       >
-        <PopContainer className="flex h-14 items-center justify-between gap-4 md:h-16">
+        <PopContainer className="flex h-14 items-center justify-between gap-2.5 md:h-16 xl:gap-4">
           <a
             href="#inicio"
             aria-label={`${name}, inicio`}
             aria-current={active === "#inicio" ? "page" : undefined}
-            className="font-pop flex min-h-11 min-w-0 items-center truncate text-[15px] leading-none whitespace-nowrap text-cocoa focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sun-deep md:text-[16px]"
+            className="font-pop flex min-h-11 min-w-0 items-center text-[17px] leading-tight text-cocoa focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sun-deep md:text-[19px]"
           >
-            {name}
+            <span className="truncate">{name}</span>
           </a>
 
-          <nav aria-label="Principal" className="hidden h-full min-w-0 lg:block">
-            <ul className="flex h-full items-stretch gap-1">
+          <nav aria-label="Principal" className="hidden shrink-0 lg:block">
+            <ul className="flex items-stretch rounded-full border border-cocoa/15 bg-cream/35 p-1">
               {DESKTOP_LINKS.map((link) => {
                 const current = desktopCurrent === link.href;
                 return (
@@ -107,8 +113,8 @@ export function NavBar({
                       href={link.href}
                       aria-current={current ? "page" : undefined}
                       className={cn(
-                        "relative inline-flex items-center px-2.5 text-[14px] font-medium transition-colors hover:text-cocoa focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sun-deep",
-                        current ? "text-cocoa" : "text-cocoa-2",
+                        "relative inline-flex min-h-10 items-center rounded-full px-1.5 text-[13px] font-semibold whitespace-nowrap transition-colors hover:bg-cream/70 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sun-deep xl:px-2.5",
+                        current ? "bg-cream text-cocoa" : "text-cocoa-2",
                       )}
                     >
                       {link.label}
@@ -117,7 +123,7 @@ export function NavBar({
                           aria-hidden
                           layoutId="nav-underline"
                           transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 38 }}
-                          className="absolute inset-x-2.5 bottom-0 h-0.5 bg-sun-deep"
+                          className="absolute inset-x-3 bottom-1 h-px bg-sun-deep"
                         />
                       ) : null}
                     </a>
@@ -152,7 +158,7 @@ export function NavBar({
       </header>
 
       <Sheet open={menuOpen} onOpenChange={setMenuOpen} title="Índice" side="right" className="bg-cream">
-        <nav id="menu-secciones" aria-label="Secciones" className="flex flex-col">
+        <nav id="menu-secciones" aria-label="Secciones" className="flex flex-col divide-y divide-seam">
           {anchors.map((anchor, i) => (
             <motion.a
               key={anchor.href}

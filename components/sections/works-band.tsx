@@ -1,148 +1,153 @@
 "use client";
 
-import { motion } from "motion/react";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, type LucideIcon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Burst } from "@/components/pop/decor";
 import { PopContainer, PopHeading } from "@/components/pop/heading";
 import { categoryIcon } from "@/components/pop/icons";
-import { Marquee } from "@/components/ui";
 import type { Category, Project } from "@/lib/types";
-import { cn } from "@/lib/utils";
 
 export interface WorkGroup {
   category: Category;
   projects: Project[];
 }
 
-const GRID_COLS: Record<number, string> = {
-  1: "lg:grid-cols-1",
-  2: "lg:grid-cols-2",
-  3: "lg:grid-cols-3",
-  4: "lg:grid-cols-4",
-  5: "lg:grid-cols-5",
-  6: "lg:grid-cols-3", // 2 filas de 3
-};
+const CONTROL_STYLE = "grid size-11 place-items-center rounded-full text-cocoa hover:bg-honeydew focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cocoa disabled:opacity-40";
 
-/** "Título — subtítulo" → partes; el título va grande, el resto como bajada. */
+function CardArtwork({ src, Icon }: { src: string | null; Icon: LucideIcon }) {
+  const [failed, setFailed] = useState(false);
+  if (src && !failed) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img src={src} alt="" loading="lazy" decoding="async" width={480} height={360}
+        onError={() => setFailed(true)} className="absolute inset-0 size-full object-cover" />
+    );
+  }
+  return (
+    <span className="absolute inset-0 grid place-items-center">
+      <Burst className="absolute size-[70%] text-blush" />
+      <Icon className="relative size-9 text-rose-deep" aria-hidden />
+    </span>
+  );
+}
+
 function splitTitle(title: string) {
   const [head, ...rest] = title.split(/\s+[—–-]\s+/);
   return { head: head ?? title, sub: rest.join(" — ") };
 }
 
-/** Banda naranja: una tarjeta por área, con la pieza más representativa. */
 export function WorksBand({ groups }: { groups: WorkGroup[] }) {
+  const rail = useRef<HTMLUListElement>(null);
+  const [edges, setEdges] = useState({ previous: false, next: false });
+
+  useEffect(() => {
+    const track = rail.current;
+    if (!track) return;
+
+    function update() {
+      if (!track) return;
+      setEdges({
+        previous: track.scrollLeft > 2,
+        next: track.scrollLeft < track.scrollWidth - track.clientWidth - 2,
+      });
+    }
+
+    update();
+    const resize = new ResizeObserver(update);
+    resize.observe(track);
+    track.addEventListener("scroll", update, { passive: true });
+    return () => {
+      resize.disconnect();
+      track.removeEventListener("scroll", update);
+    };
+  }, [groups.length]);
+
+  function move(direction: -1 | 1) {
+    const track = rail.current;
+    const first = track?.firstElementChild;
+    if (!track || !first) return;
+
+    const gap = Number.parseFloat(getComputedStyle(track).columnGap) || 0;
+    track.scrollBy({
+      left: direction * (first.getBoundingClientRect().width + gap),
+      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+    });
+  }
+
   if (groups.length === 0) return null;
-  const cols = GRID_COLS[Math.min(groups.length, 6)];
 
   return (
-    <section id="trabajos" aria-labelledby="trabajos-titulo" className="scroll-mt-28 py-6 md:py-10">
+    <section id="trabajos" aria-labelledby="trabajos-titulo" className="scroll-mt-28 py-7 md:py-9">
       <PopContainer>
-        <div className="relative overflow-hidden rounded-[36px] bg-cocoa px-5 py-8 md:px-8 md:py-10">
-          <Burst className="pointer-events-none absolute -top-8 -right-8 size-32 text-sun/40" />
-          <div className="relative flex flex-wrap items-end justify-between gap-4">
-            <PopHeading tone="cream" className="text-[30px] md:text-[40px]">
-              <span id="trabajos-titulo">Trabajos destacados</span>
+        <div className="mb-3 flex items-end justify-between gap-3 md:mb-4">
+          <div>
+            <PopHeading className="text-[32px] md:text-[44px]">
+              <span id="trabajos-titulo">Muestra de contenidos</span>
             </PopHeading>
-            <a
-              href={`#${groups[0].category.slug}`}
-              className="group inline-flex min-h-11 items-center gap-2 rounded-full bg-cream px-5 text-[14px] font-bold text-sun-deep transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream"
-            >
-              Ver todo
-              <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden />
-            </a>
+            <p className="mt-2 max-w-xl text-sm text-cocoa-2 md:text-base">
+              Una selección de trabajos frente a cámara, detrás del micrófono y para redes.
+            </p>
           </div>
-
-          <div className="mt-6 flex w-full min-w-0 flex-col gap-6">
-          <ul
-            className={cn(
-              "relative order-2 -mx-5 flex snap-x snap-mandatory scroll-px-5 gap-4 overflow-x-auto px-5 pb-2 [scrollbar-width:none] md:mx-0 md:px-0 lg:grid lg:overflow-visible",
-              cols,
-            )}
-          >
-            {groups.map(({ category, projects }) => {
-              const lead =
-                projects.find((p) => p.isFeatured && p.thumbnailUrl) ??
-                projects.find((p) => p.isFeatured) ??
-                projects.find((p) => p.thumbnailUrl) ??
-                projects[0];
-              const { head, sub } = splitTitle(lead.title);
-              const Icon = categoryIcon(category.slug);
-              return (
-                <li key={category.id} className="w-[78%] shrink-0 snap-start sm:w-[44%] lg:w-auto">
-                  <motion.a
-                    href={`#${category.slug}`}
-                    initial={false}
-                    whileHover="hover"
-                    whileTap={{ scale: 0.98 }}
-                    variants={{ hover: { y: -6 } }}
-                    transition={{ duration: 0.2 }}
-                    className="flex h-full flex-col rounded-[24px] bg-cream p-4 text-cocoa focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-cream"
-                  >
-                    <span className="pop-label line-clamp-2 text-sun-deep">{category.name}</span>
-                    <span className="font-pop mt-2 text-[22px] leading-[0.95] text-cocoa md:text-[24px]">
-                      {head}
-                    </span>
-                    {sub ? (
-                      <span className="mt-1 line-clamp-2 text-[14px] leading-snug font-medium text-cocoa-2">
-                        {sub}
-                      </span>
-                    ) : null}
-
-                    <span className="relative mt-4 block aspect-[4/3] overflow-hidden rounded-[18px] bg-candy">
-                      {lead.thumbnailUrl ? (
-                        // Miniatura externa (YouTube): fuera de los remotePatterns de next/image.
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={lead.thumbnailUrl}
-                          alt=""
-                          loading="lazy"
-                          decoding="async"
-                          width={480}
-                          height={360}
-                          className="absolute inset-0 size-full object-cover"
-                        />
-                      ) : (
-                        <span className="absolute inset-0 grid place-items-center">
-                          <Burst className="absolute size-[70%] text-blush" />
-                          <Icon className="relative size-12 text-rose-deep" aria-hidden />
-                        </span>
-                      )}
-                      <motion.span
-                        variants={{ hover: { rotate: 45, scale: 1.08 } }}
-                        transition={{ duration: 0.2 }}
-                        className="absolute right-3 bottom-3 grid size-10 place-items-center rounded-full bg-sun text-cream"
-                      >
-                        <ArrowUpRight className="size-5" aria-hidden />
-                      </motion.span>
-                    </span>
-                    <span className="sr-only">Ir a {category.name}</span>
-                  </motion.a>
-                </li>
-              );
-            })}
-          </ul>
-          <Marquee label="Categorías y proyectos" className="order-1 text-cream">
-            {groups.flatMap(({ category, projects }) => [
-              <span
-                key={`cat-${category.id}`}
-                className="pop-label mx-3 inline-flex items-center gap-3 whitespace-nowrap text-cream"
-              >
-                {category.name}
-                <span aria-hidden className="size-1.5 rounded-full bg-sun" />
-              </span>,
-              ...projects.map((project) => (
-                <span
-                  key={project.id}
-                  className="mx-3 inline-flex items-center gap-3 text-[15px] font-semibold whitespace-nowrap text-cream"
-                >
-                  {project.title}
-                  <span aria-hidden className="size-1.5 rounded-full bg-vanilla" />
-                </span>
-              )),
-            ])}
-          </Marquee>
+          <div className="flex shrink-0 rounded-full border border-cocoa/25 bg-cream p-0.5">
+            <button
+              type="button"
+              aria-label="Ver trabajos anteriores"
+              aria-controls="muestra-trabajos"
+              onClick={() => move(-1)}
+              disabled={!edges.previous}
+              className={CONTROL_STYLE}
+            >
+              <ArrowLeft className="size-5" aria-hidden />
+            </button>
+            <button
+              type="button"
+              aria-label="Ver más trabajos"
+              aria-controls="muestra-trabajos"
+              onClick={() => move(1)}
+              disabled={!edges.next}
+              className={CONTROL_STYLE}
+            >
+              <ArrowRight className="size-5" aria-hidden />
+            </button>
           </div>
         </div>
+
+        <ul
+          id="muestra-trabajos"
+          ref={rail}
+          className="flex snap-x snap-mandatory scroll-px-1 gap-2 overflow-x-auto overscroll-x-contain px-1 pt-1 pb-3 md:gap-3"
+          data-lenis-prevent-horizontal
+        >
+          {groups.map(({ category, projects }) => {
+            const lead =
+              projects.find((project) => project.isFeatured && project.thumbnailUrl) ??
+              projects.find((project) => project.isFeatured) ??
+              projects.find((project) => project.thumbnailUrl) ??
+              projects[0];
+            if (!lead) return null;
+            const { head, sub } = splitTitle(lead.title);
+            const Icon = categoryIcon(category.slug);
+
+            return (
+              <li key={category.id} className="editorial-work-card w-[clamp(12.5rem,69vw,16rem)] shrink-0 snap-start">
+                <a
+                  href={"#" + category.slug}
+                  className="group flex h-full flex-col rounded-[9px] text-cocoa focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cocoa"
+                >
+                  <span className="relative mx-3 block aspect-[2/1] overflow-hidden rounded-t-[5px] border border-seam bg-honeydew">
+                    <CardArtwork src={lead.thumbnailUrl} key={lead.thumbnailUrl} Icon={Icon} />
+                  </span>
+                  <span className="editorial-folder-body flex flex-1 flex-col items-start px-3 pt-3 pb-2.5">
+                    <span className="pop-label text-cocoa">{category.name}</span>
+                    <span className="font-editorial mt-1 text-xl leading-tight font-semibold tracking-tight">{head}</span>
+                    {sub && <span className="mt-1 line-clamp-2 text-sm leading-snug">{sub}</span>}
+                    <span className="mt-auto pt-2 text-sm font-semibold underline-offset-2 group-hover:underline">Ver proyectos</span>
+                  </span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
       </PopContainer>
     </section>
   );

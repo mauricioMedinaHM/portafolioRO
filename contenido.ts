@@ -56,6 +56,8 @@ export interface Trabajo {
   redes?: RedesProyecto;
   enlaces?: { nombre: string; link: string }[];
   miniatura?: string;
+  miniaturaDeReferencia?: boolean;
+  grupo?: string;
   /** Fragmento corto en /public. Bucle suave cerca del centro de la pantalla. */
   clip?: string;
   /** Segundo del clip desde el que arranca (y reinicia) el bucle. */
@@ -83,7 +85,7 @@ export interface Seccion {
 export const perfil = {
   nombre: "Rosario Tejerina Pittis",
   rol: "Conductora · Locutora · Comunicadora audiovisual",
-  bio: "Soy estudiante de Comunicación Social y Locución Nacional en UCaSal y me entusiasma contar historias frente a cámara y detrás del micrófono. En coberturas, streaming y Generación Tech para El10TV conduzco, entrevisto y acompaño la producción de contenidos en vivo. También llevo esa escucha a la radio, las redes y la capacitación.",
+  bio: "Soy Verónica Rosario Tejerina Pittis, estudiante de Comunicación Social y Locución Nacional en UCaSal. Me entusiasma contar historias frente a cámara y detrás del micrófono. En coberturas, streaming y Generación Tech para El10TV conduzco, entrevisto y acompaño la producción de contenidos en vivo. También llevo esa escucha a la radio, las redes y la capacitación.",
   /**
    * Foto del hero (en /public). Si hay `heroClip`, es la imagen que se ve
    * mientras carga el clip (y la única, si el visitante prefiere menos movimiento).
@@ -91,15 +93,16 @@ export const perfil = {
   foto: "/trabajos/puna-tech.jpg",
   /** Clip mudo en bucle dentro del arco del hero (en /public). Dejar "" para usar sólo la foto. */
   heroClip: "/trabajos/clips/puna-tech.mp4",
-  email: "tejerinarosario4@gmail.com",
+  email: "vrtejerinapittis@gmail.com",
+  transmisionesEnVivo: 50,
   /** WhatsApp con código de país, sin espacios. */
   whatsapp: "+5493875174774",
   redes: {
-    instagram: "https://instagram.com/rooo_tp",
-    // TODO: pegar la URL de LinkedIn de Rosario (ej. "https://www.linkedin.com/in/usuario").
-    linkedin: "",
-    // tiktok: "https://www.tiktok.com/@…",
-    // youtube: "https://www.youtube.com/@…",
+    linkedin: "https://www.linkedin.com/in/rosario-tejerina-pittis-3a7879374?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+    instagram: "https://www.instagram.com/rooo_tp?knvt=MW4ybW9pb3V5aXN6Yg==",
+    x: "https://x.com/Roosario_TP",
+    telegram: "https://t.me/RosarioTejerina",
+    github: "https://github.com/rosariotejerinap",
   },
   habilidades: [
     "Comunicación",
@@ -117,16 +120,20 @@ export const perfil = {
     "Planificación estratégica",
     "Edición audiovisual",
     "Gestión de redes sociales",
+    "Interacción con audiencias",
+    "Operación básica de cámara y consola de radio",
+    "Edición con Canva, Premiere, CapCut e InShot",
   ],
   /** "Título — detalle": el guion largo separa el título del detalle. */
   formacion: [
     "Lic. en Comunicaciones Sociales — UCaSal (2024–act.)",
     "Locutora Nacional — UCaSal (2024–act.)",
-    "Bachiller Humanista Moderno — Esc. Parroquial N.S. de la Merced N° 4400",
+    "Bachiller Humanista Moderno — Esc. Parroquial N.S. de la Merced N.º 4400 (2010–2023)",
     "FOPEA + Google News Initiative (2024): herramientas periodísticas y verificación de información",
     "Anglia Certificate of English ESOL International — B2 (CEFR), Grade Merit 78% (2024)",
     "Barista y Bartender Profesional — GingerAle Escuela de Coctelería (2023)",
-    "Idiomas: español nativo · inglés B2 (The Royal School of English, 2016–2022)",
+    "Idiomas — Español nativo · Inglés B2 (The Royal School of English, 2016–2022)",
+    "Pronunciación en otros idiomas — Alemán, francés, portugués e italiano",
   ],
 };
 
@@ -196,6 +203,7 @@ export const secciones: Seccion[] = [
       },
       {
         titulo: "Otra Vez Sopa — Entrevista a Valentina Raposo",
+        link: "https://www.youtube.com/live/ENox4obi6Jg?si=yPznhl2c8V93Loy4",
         miniatura: "/trabajos/valentina-raposo.jpg",
         descripcion:
           "Entrevista a Valentina Raposo, campeona del mundo de hockey, en Otra Vez Sopa.",
@@ -214,17 +222,8 @@ export const secciones: Seccion[] = [
       },
       {
         titulo: "Participación en streamings",
-        clip: "/trabajos/clips/streamings.mp4",
-        miniatura: "/trabajos/streamings.jpg",
-        descripcion: "Detrás de cámara en una jornada de streaming.",
-      },
-      {
-        titulo: "Streaming Day — Primera Cumbre de Streaming del Norte",
-        clip: "/trabajos/clips/cumbre-noa.mp4",
-        miniatura: "/trabajos/streaming-day.jpg",
-        descripcion:
-          "Staff del evento: soporte de producción y producción de contenidos, y organización y logística de la jornada.",
-        redes: { instagram: "", linkedin: "" },
+        link: "https://www.youtube.com/live/tLWftyZeszo?si=jF7Pl7k8nG7dQ7bD",
+        descripcion: "Participación en una jornada de streaming y en la producción detrás de cámara.",
       },
       {
         titulo: "Otra Vez Sopa — Mundial",
@@ -252,6 +251,7 @@ export const secciones: Seccion[] = [
     trabajos: [
       {
         titulo: "Generación Tech — Programa 19 de octubre",
+        descripcion: "Producción de contenidos audiovisuales y participación al aire en el programa de El10TV.",
         link: "https://youtu.be/aoMs_YE_RtE",
         clip: "/trabajos/clips/generacion-tech.mp4",
         clipInicio: 0.5,
@@ -260,31 +260,46 @@ export const secciones: Seccion[] = [
       },
       {
         titulo: "Generación Tech — Programa 28 de septiembre",
+        descripcion: "Producción para televisión y plataformas digitales en una edición dedicada a tecnología e innovación.",
         link: "https://youtu.be/N4lWIgW44AE",
         miniatura: "/trabajos/generacion-tech-perfil.jpg",
       },
       {
         titulo: "Generación Tech — Programa 24 de agosto",
+        descripcion: "Participación en la producción del programa, con contenidos sobre tecnología y emprendedurismo.",
         link: "https://youtu.be/lPLNkncoVp4",
       },
       {
         titulo: "Generación Tech — Programa 10 de agosto",
+        descripcion: "Asistencia de producción y coordinación de contenidos para la transmisión de El10TV.",
         link: "https://youtu.be/UDSYj-nO2e4",
-      },
-      {
-        titulo: "Inteligencia artificial y comunidades",
-        clip: "/trabajos/clips/comunidades.mp4",
-        miniatura: "/trabajos/comunidades.jpg",
-        descripcion: "Pieza sobre chatbots de inteligencia artificial, desinformación y comunidades.",
       },
     ],
   },
   {
-    nombre: "Móviles y coberturas en vivo",
-    ancla: "moviles",
+    nombre: "Mundo Scout",
+    ancla: "mundo-scout",
+    intro: "En mi trabajo de comunicación están muy presentes los valores scout: el compromiso con la comunidad, el servicio y el trabajo en equipo. En cada cobertura registro lo que pasa, coordino con los equipos, edito videos y creo contenido durante el evento.",
+    habilidades: ["Cobertura en campo", "Trabajo en equipo", "Edición de video", "Creación de contenido en tiempo real", "Adaptabilidad"],
+    trabajos: [
+      {
+        titulo: "Grupo Scout N.º 811 Santo Domingo Savio — Comunicación",
+        descripcion:
+          "Trabajo en comunicación scout desde Salta Capital. Manejo las cuentas del grupo, la zona y el distrito. Creo y difundo contenidos digitales, cubro eventos y coordino con los equipos la comunicación de las actividades.\n\nUn proyecto que nace para impulsar nuevas iniciativas y aprovechar las herramientas del escultismo para conectar con distintas áreas de la sociedad, con un compromiso de servicio permanente y un impacto positivo y transformador en la comunidad.",
+        enlaces: [
+          { nombre: "Aona Yamana 811", link: "https://www.instagram.com/aonayamana811" },
+          { nombre: "Zona 27 SAAC", link: "https://www.instagram.com/zona27.saac" },
+          { nombre: "Distrito 4 · Zona 27", link: "https://www.instagram.com/distrito4z27.saac" },
+        ],
+      },
+    ],
+  },
+  {
+    nombre: "Eventos",
+    ancla: "eventos",
     intro:
-      "Móviles, entrevistas en campo y asistencia de producción en eventos masivos y coberturas especiales.",
-    habilidades: ["Móviles en vivo", "Coberturas", "Trabajo en campo"],
+      "Coberturas especiales, móviles y entrevistas en campo, además de producción y logística de eventos.",
+    habilidades: ["Móviles en vivo", "Coberturas", "Producción de eventos"],
     trabajos: [
       {
         titulo: "Cobertura Fiesta del Milagro — UCaSal 2025",
@@ -301,45 +316,32 @@ export const secciones: Seccion[] = [
         fecha: "2026-09-15",
       },
       {
-        titulo: "Puna Tech — Cobertura de evento tecnológico",
+        titulo: "Puna Tech · Argentina Space — Cobertura de evento tecnológico",
+        destacado: true,
         clip: "/trabajos/clips/puna-tech.mp4",
         miniatura: "/trabajos/puna-tech.jpg",
         descripcion:
           "Prensa y marketing para la cobertura periodística y audiovisual en tiempo real: entrevistas a participantes, expositores y autoridades, contenido para redes y material institucional.",
         redes: { instagram: "", linkedin: "" },
       },
-    ],
-  },
-  {
-    nombre: "Capacitaciones y proyectos de extensión universitaria",
-    ancla: "extension",
-    intro:
-      "Proyectos de extensión de la Universidad Católica de Salta: capacitación en radio y locución, producción radial y comunicación de jornadas.",
-    habilidades: ["Radio", "Locución", "Capacitación"],
-    etiqueta: "UCaSal · Extensión universitaria",
-    trabajos: [
       {
-        titulo: "Mi Huella Verde",
+        titulo: "Streaming Day — Primera Cumbre de Streaming del Norte",
+        miniatura: "/trabajos/streaming-day.jpg",
         descripcion:
-          "Diseño y dictado de capacitaciones en radiofonía y locución para estudiantes del Colegio Secundario 5051 N.S. de la Merced; asesoramiento en estructura y contenidos, y acompañamiento en la salida al aire.",
+          "Staff del evento: soporte de producción y producción de contenidos, y organización y logística de la jornada.",
         redes: { instagram: "", linkedin: "" },
       },
       {
-        titulo: "Puentes Generacionales",
-        descripcion:
-          "Diseño de dinámicas y juegos, planificación de propuestas intergeneracionales, gestión de redes, y registro y comunicación de las jornadas.",
-        redes: { instagram: "", linkedin: "" },
+        titulo: "Inteligencia artificial y comunidades",
+        grupo: "Eventos Tech",
+        clip: "/trabajos/clips/comunidades.mp4",
+        miniatura: "/trabajos/comunidades.jpg",
+        descripcion: "Participación en hackatones y creación de una pieza audiovisual sobre chatbots de inteligencia artificial, desinformación y comunidades.",
+        enlaces: [{ nombre: "Ver video", link: "/trabajos/clips/comunidades.mp4" }],
       },
-    ],
-  },
-  {
-    nombre: "Experiencia profesional complementaria",
-    ancla: "experiencia",
-    intro: "Experiencia laboral en contenidos para redes, eventos y atención al público.",
-    habilidades: ["Community management", "Contenido digital", "Eventos"],
-    trabajos: [
       {
-        titulo: "Proyectos y eventos — Jota Joti 2026",
+        titulo: "Jota Joti 2026",
+        grupo: "Eventos scouts",
         link: "https://www.instagram.com/reel/DenJBl1CFQd/",
         miniatura: "/trabajos/jota-joti-2026.jpg",
         descripcion:
@@ -347,20 +349,35 @@ export const secciones: Seccion[] = [
         destacado: true,
       },
       {
-        titulo: "Grupo Scout N.º 811 Santo Domingo Savio — Comunicación",
-        descripcion:
-          "Salta Capital. Equipos de comunicación a nivel de grupo, distrito y zona: creación y difusión de contenidos digitales, cobertura y comunicación de actividades y eventos scouts, y trabajo colaborativo en la comunicación institucional y comunitaria.\n\nUn proyecto que nace para impulsar nuevas iniciativas y aprovechar las herramientas del escultismo para conectar con distintas áreas de la sociedad, con un compromiso de servicio permanente y un impacto positivo y transformador en la comunidad.",
-        enlaces: [
-          { nombre: "Aona Yamana 811", link: "https://www.instagram.com/aonayamana811" },
-          { nombre: "Zona 27 SAAC", link: "https://www.instagram.com/zona27.saac" },
-          { nombre: "Distrito 4 · Zona 27", link: "https://www.instagram.com/distrito4z27.saac" },
-        ],
+        titulo: "Aullidos 2026",
+        grupo: "Eventos scouts",
+        link: "https://www.instagram.com/reel/Dec8VxRCRwB/?utm_source=ig_web_copy_link&avpt=MzRlODBiNWFlZA==",
+        descripcion: "Registro en el lugar, creación de contenido durante la actividad y edición del reel para redes.",
       },
       {
+        titulo: "Rally Caminantes 2026",
+        grupo: "Eventos scouts",
+        link: "https://www.instagram.com/reel/DgGLcsRNOX9/?utm_source=ig_web_copy_link&evlk=MzRlODBiNWFlZA==&avpt=MzRlODBiNWFlZA==",
+        descripcion: "Cobertura de la jornada en equipo, selección de momentos y edición de contenido para difundir la experiencia scout.",
+      },
+      {
+        titulo: "VII Rover Moot Nacional 2026",
+        grupo: "Eventos scouts",
+        descripcion:
+          "Participé del encuentro de Scouts de Argentina del 17 al 24 de enero de 2026 en Necochea, Mar del Plata y Laguna de los Padres, provincia de Buenos Aires.\n\nEl encuentro reunió a más de 4.000 jóvenes Rovers de 18 a 22 años de todo el país, con delegaciones del norte argentino y el apoyo de personas voluntarias. Hubo actividades educativas, vida en la naturaleza, vivacs, proyectos comunitarios y mingas.\n\nLas cámaras de Diputados y de Senadores de la provincia de Buenos Aires lo declararon de interés legislativo.",
+        enlaces: [{ nombre: "Crónica de Scouts de Argentina", link: "https://scouts.org.ar/comunicaciones/finalizo-el-vii-rover-moot-nacional-2026-una-experiencia-que-deja-huellas-en-miles-de-jovenes-y-comunidades" }],
+      },
+    ],
+  },
+  {
+    nombre: "Experiencia profesional complementaria",
+    ancla: "experiencia",
+    intro: "Gestión de redes, coordinación de eventos, atención al público y proyectos de extensión de la Universidad Católica de Salta.",
+    habilidades: ["Gestión de redes", "Eventos", "Atención al público", "Capacitación en radio y locución"],
+    trabajos: [
+      {
         titulo: "Productora Plastilina — Community Manager",
-        clip: "/trabajos/clips/creacion.mp4",
-        clipInicio: 2,
-        miniatura: "/trabajos/creacion.jpg",
+        enlaces: [{ nombre: "Ver reel en Instagram", link: "https://www.instagram.com/reel/DHQ2CPGAZfh/?utm_source=ig_web_copy_link&hvrq=MzRlODBiNWFlZA==&avpt=MzRlODBiNWFlZA==" }],
         descripcion:
           "Gestión y planificación de contenidos para redes, redacción de copys, cobertura de actividades y eventos, y coordinación con equipos de producción.",
         redes: { instagram: "", linkedin: "" },
@@ -379,6 +396,20 @@ export const secciones: Seccion[] = [
         titulo: "Alemanía Resto-Bar — Atención al cliente",
         descripcion:
           "Atención directa al público, manejo de caja y pedidos, y trabajo en equipo en entornos de alta demanda.",
+      },
+      {
+        titulo: "Mi Huella Verde",
+        enlaces: [{ nombre: "Ver reel en Instagram", link: "https://www.instagram.com/reel/DfFpvDaCdHU/?lqvp=MXZka2xueTN3bnR6MQ==" }],
+        descripcion:
+          "Diseño y dictado de capacitaciones en radiofonía y locución para estudiantes del Colegio Secundario 5051 N.S. de la Merced; asesoramiento en contenidos y acompañamiento en la salida al aire de un programa sobre concientización ambiental.",
+        redes: { instagram: "", linkedin: "" },
+      },
+      {
+        titulo: "Puentes Generacionales",
+        enlaces: [{ nombre: "Ver publicación en LinkedIn", link: "https://lnkd.in/p/d7yfJRWF" }],
+        descripcion:
+          "Diseño de dinámicas y juegos, planificación de propuestas intergeneracionales, gestión de redes, y registro y comunicación de las jornadas.",
+        redes: { instagram: "", linkedin: "" },
       },
     ],
   },

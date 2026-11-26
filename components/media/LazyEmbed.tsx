@@ -97,7 +97,7 @@ export function LazyEmbed({
               <span className="absolute inset-0 bg-cocoa/10 transition-colors group-hover:bg-cocoa/25" />
               <span className="absolute inset-0 flex items-center justify-center">
                 <motion.span
-                  className="flex size-16 items-center justify-center rounded-full bg-sun text-cocoa shadow-[0_10px_30px_-10px_rgb(91_5_80/0.6)] ring-4 ring-white/70"
+                  className="flex size-16 items-center justify-center rounded-full bg-sun text-cream shadow-[0_10px_30px_-10px_rgb(91_5_80/0.6)] ring-4 ring-white/70"
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.96 }}
                   transition={{ duration: 0.12, ease: EASE_OUT }}
@@ -109,14 +109,14 @@ export function LazyEmbed({
           )}
         </AnimatePresence>
       </div>
-      {active ? (
+      {active || providerLabel === "Instagram" ? (
         <a
           href={openUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="text-[13px] text-ink-3 underline-offset-4 hover:text-ink hover:underline"
         >
-          ¿No carga? Abrir en {providerLabel}
+          Abrir en {providerLabel}
         </a>
       ) : null}
     </div>

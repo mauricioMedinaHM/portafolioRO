@@ -1,3 +1,5 @@
+import { PopContainer, PopHeading } from "@/components/pop/heading";
+import { perfil } from "@/contenido";
 import { IntroLoader } from "@/components/pop/intro-loader";
 import { ScrollProgress } from "@/components/ui";
 import { CategorySection } from "@/components/sections/category-section";
@@ -13,51 +15,52 @@ import { WorksBand } from "@/components/sections/works-band";
 import { getLandingData } from "@/lib/data/content";
 import { SITE_URL } from "@/lib/site";
 
-// Página estática: el contenido sale de `contenido.ts` en cada build/deploy.
+const LIVE_SLUGS = new Set(["conduccion", "streaming", "generacion-tech"]);
 
 export default async function Home() {
   const { profile, categories, projects } = await getLandingData();
 
-  const visibleCategories = categories;
-  const published = projects;
-  const featured = published.filter((p) => p.isFeatured);
+  const featured = projects.filter((project) => project.isFeatured);
 
-  const withProjects = visibleCategories
+  const withProjects = categories
     .map((category) => ({
       category,
-      projects: published.filter((p) => p.categoryId === category.id),
+      projects: projects.filter((p) => p.categoryId === category.id),
     }))
     .filter((group) => group.projects.length > 0);
+
+  const liveGroups = withProjects.filter(({ category }) => LIVE_SLUGS.has(category.slug));
+  const otherGroups = withProjects.filter(({ category }) => !LIVE_SLUGS.has(category.slug));
 
   const anchors: NavAnchor[] = [
     { href: "#inicio", label: "Inicio" },
     { href: "#sobre-mi", label: "Sobre mí" },
-    { href: "#trabajos", label: "Trabajos" },
-    { href: "#servicios", label: "Qué hago" },
-    ...withProjects.map(({ category }) => ({
-      href: `#${category.slug}`,
+    { href: "#servicios", label: "Cualidades" },
+    { href: "#formacion", label: "Formación" },
+    { href: "#trabajos", label: "Muestra de contenidos" },
+    { href: "#en-vivo", label: "Trabajos en vivo" },
+    ...liveGroups.map(({ category }) => ({
+      href: "#" + category.slug,
+      label: category.name,
+      parentHref: "#en-vivo",
+    })),
+    ...otherGroups.map(({ category }) => ({
+      href: "#" + category.slug,
       label: category.name,
     })),
-    { href: "#formacion", label: "Formación" },
     { href: "#contacto", label: "Contacto" },
   ];
 
-  // Cifras calculadas desde el contenido publicado (sin números inventados).
-  const videos = published.filter((p) => p.url);
-  const experiences = published.filter((p) => !p.url);
+  const coverageYears = new Set(withProjects.flatMap(({ category, projects: entries }) => {
+    if (!LIVE_SLUGS.has(category.slug) && category.slug !== "eventos") return [];
+    return entries.flatMap(({ date }) => date ? [date.slice(0, 4)] : []);
+  }));
   const stats: Stat[] = [
-    { value: String(videos.length), label: "Videos y vivos" },
+    { value: String(perfil.transmisionesEnVivo), prefix: "+", label: "Transmisiones en vivo" },
     { value: String(withProjects.length), label: "Áreas de trabajo" },
-    { value: String(experiences.length), label: "Proyectos y experiencias" },
-    { value: String(new Set(published.map((p) => p.date?.slice(0, 4)).filter(Boolean)).size || 1), label: "Años de coberturas" },
+    { value: String(projects.length), label: "Trabajos publicados" },
+    { value: String(coverageYears.size), label: "Años con coberturas publicadas" },
   ];
-  const spotlight = featured.find((p) => p.thumbnailUrl) ?? videos[0];
-  const backdrop = published
-    .flatMap((project) =>
-      project.thumbnailUrl ? [{ src: project.thumbnailUrl, alt: project.title }] : [],
-    )
-    .slice(0, 8);
-
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -81,21 +84,69 @@ export default async function Home() {
       <NavBar name={profile.fullName} anchors={anchors} siteUrl={SITE_URL} />
       <main id="contenido">
         <Hero profile={profile} />
+        <div className="editorial-strip">
+          <p>Conducción en vivo <span aria-hidden>·</span> Streaming <span aria-hidden>·</span> Entrevistas y coberturas</p>
+        </div>
         <Intro
           profile={profile}
           categories={withProjects.map(({ category }) => category)}
-          spotlight={featured[1] ?? spotlight}
+          spotlight={featured.find((project) => project.clipUrl) ?? featured[0]}
         />
-        <WorksBand groups={withProjects} />
-        <Services stats={stats} backdrop={backdrop} />
-        {withProjects.map(({ category, projects: list }) => (
-          <CategorySection
-            key={category.id}
-            category={category}
-            projects={list}
-          />
-        ))}
+        <Services stats={stats} skills={profile.skills ?? []} />
         <Trayectoria profile={profile} />
+        <WorksBand groups={withProjects} />
+        {liveGroups.length > 0 && (
+          <section id="en-vivo" aria-labelledby="en-vivo-titulo" className="scroll-mt-28 border-t border-seam bg-honeydew/50 pt-7 md:pt-10">
+            <PopContainer className="text-center">
+              <PopHeading><span id="en-vivo-titulo">Trabajos en vivo</span></PopHeading>
+              <p className="mx-auto mt-3 max-w-xl text-cocoa-2">Conducción en estudio, transmisiones, entrevistas en campo y coberturas especiales.</p>
+              <nav aria-label="Categorías de trabajos en vivo" className="mt-4 flex flex-wrap justify-center gap-1.5">
+                {liveGroups.map(({ category }) => (
+                  <a className="editorial-pill bg-cream text-cocoa" key={category.id} href={"#" + category.slug}>
+                    {category.name}
+                  </a>
+                ))}
+              </nav>
+            </PopContainer>
+            {liveGroups.map(({ category, projects: list }) => (
+              <CategorySection
+                key={category.id}
+                category={category}
+                projects={list}
+                relatedLink={category.slug === "generacion-tech" ? { href: "#eventos-tech", label: "Ver Eventos Tech" } : undefined}
+                asSubsection
+                showAll
+              />
+            ))}
+          </section>
+        )}
+        {otherGroups.map(({ category, projects: list }) => {
+          if (category.slug === "mundo-scout") {
+            const [overview] = list;
+            return (
+              <div key={category.id} className="border-t border-seam bg-honeydew/50">
+                <CategorySection
+                  category={category}
+                  overview={overview}
+                  projects={[]}
+                  relatedLink={{ href: "#eventos-scouts", label: "Ver Eventos scouts" }}
+                />
+              </div>
+            );
+          }
+          if (category.slug === "eventos") {
+            return (
+              <div key={category.id} id="moviles" className="scroll-mt-28 border-y border-seam bg-honeydew/50">
+                <CategorySection category={category} projects={list} showAll />
+              </div>
+            );
+          }
+          return (
+            <div key={category.id} id={category.slug === "experiencia" ? "extension" : undefined} className="scroll-mt-28">
+              <CategorySection category={category} projects={list} showAll />
+            </div>
+          );
+        })}
         <Contact profile={profile} />
       </main>
       <FloatingContact whatsapp={profile.whatsapp} />

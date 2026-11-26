@@ -51,24 +51,25 @@ const USED_PAIRS = [
   ["paper / ink", "paper", "ink"],
   ["mist / ink", "mist", "ink"],
   ["paper / ink-hover", "paper", "ink-hover"],
-  // Paleta Honeydew / Vanilla / Periwinkle / Amethyst / Ultramarine
-  ["cocoa(ultramarine) / cream(honeydew)", "cocoa", "cream"],
-  ["cocoa / peach(vanilla)", "cocoa", "peach"],
+  ["texto / franja de papel", "cocoa", "honeydew"],
+  // Paleta editorial
+  ["cocoa / cream", "cocoa", "cream"],
+  ["cocoa / peach", "cocoa", "peach"],
   ["cocoa / blush", "cocoa", "blush"],
-  ["cocoa / candy(periwinkle)", "cocoa", "candy"],
+  ["cocoa / candy", "cocoa", "candy"],
   ["cocoa-2 / cream", "cocoa-2", "cream"],
   ["cocoa-2 / peach", "cocoa-2", "peach"],
   ["cocoa-2 / blush", "cocoa-2", "blush"],
   ["cocoa-2 / candy", "cocoa-2", "candy"],
-  ["sun-deep(ultramarine) / cream", "sun-deep", "cream"],
+  ["sun-deep / cream", "sun-deep", "cream"],
   ["sun-deep / peach", "sun-deep", "peach"],
   ["sun-deep / candy", "sun-deep", "candy"],
   ["rose-deep / blush", "rose-deep", "blush"],
   ["cream / sun-deep (botones)", "cream", "sun-deep"],
   ["cream / sun-hover", "cream", "sun-hover"],
-  ["cream / cocoa (banda de trabajos)", "cream", "cocoa"],
+  ["cream / cocoa (llamada principal)", "cream", "cocoa"],
   ["white / sun-deep (FAB)", "white", "sun-deep"],
-  // Texto claro sobre rellenos Amethyst (sun/amber): siempre Honeydew/cream
+  // Texto claro sobre fondos oscuros.
   ["cream / sun (píldoras e íconos)", "cream", "sun"],
   ["cream / amber (cifras)", "cream", "amber"],
   ["cocoa / candy (píldoras de enlaces)", "cocoa", "candy"],
@@ -76,10 +77,9 @@ const USED_PAIRS = [
 
 /** Texto grande (≥24px o ≥18.66px bold): alcanza 3:1. Titulares pop y script. */
 const LARGE_PAIRS = [
-  ["rose-ink(amethyst) / cream (script)", "rose-ink", "cream"],
+  ["rose-ink / cream (script)", "rose-ink", "cream"],
   ["rose-ink / peach (script)", "rose-ink", "peach"],
   ["rose-ink / blush (script)", "rose-ink", "blush"],
-  // Nombres de marca grandes: ultramarine siempre pasa, amethyst solo sobre claro
   ["cocoa / peach (titulares)", "cocoa", "peach"],
   ["sun-deep / blush (titulares)", "sun-deep", "blush"],
 ] as const;

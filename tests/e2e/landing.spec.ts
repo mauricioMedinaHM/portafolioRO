@@ -31,7 +31,7 @@ test.describe("landing", () => {
 
   test("hero muestra nombre y CTAs", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Rosario");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("La voz frente al aire, la mirada detrás de escena");
     await expect(page.getByRole("link", { name: "Ver mi trabajo" })).toBeVisible();
     await expect(
       page.getByRole("link", { name: "WhatsApp" }).first(),
@@ -57,7 +57,7 @@ test.describe("landing", () => {
 
   test("las categorías con contenido tienen ancla", async ({ page }) => {
     await page.goto("/");
-    for (const id of ["conduccion", "streaming", "generacion-tech", "moviles", "extension", "experiencia", "trabajos", "servicios", "formacion", "contacto"]) {
+    for (const id of ["conduccion", "streaming", "generacion-tech", "eventos", "moviles", "en-vivo", "mundo-scout", "extension", "experiencia", "trabajos", "servicios", "formacion", "contacto"]) {
       await expect(page.locator(`#${id}`)).toBeAttached();
     }
   });
@@ -118,8 +118,11 @@ test.describe("landing", () => {
   test("la banda de trabajos enlaza a cada área", async ({ page }) => {
     await page.goto("/");
     const band = page.locator("#trabajos");
-    await expect(band.getByRole("heading", { name: /Trabajos destacados/i })).toBeVisible();
+    await expect(band.getByRole("heading", { name: /Muestra de contenidos/i })).toBeVisible();
     await expect(band.locator('a[href="#conduccion"]').first()).toBeAttached();
+    const rail = band.locator("#muestra-trabajos");
+    await band.getByRole("button", { name: "Ver más trabajos" }).click();
+    await expect.poll(() => rail.evaluate((node) => node.scrollLeft)).toBeGreaterThan(0);
   });
 
   test("la barra es sticky, no se oculta al bajar y muestra el seam al scrollear", async ({ page, viewport }) => {
@@ -177,21 +180,45 @@ test.describe("landing", () => {
     ).toHaveAttribute("href", "https://www.instagram.com/generacion.tech/");
   });
 
-  test("Extensión universitaria menciona a UCaSal", async ({ page }) => {
+  test("la presentación y la formación preceden a la muestra y a los vivos", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator("#extension")).toContainText(/UCaSal/);
+    const primarySections = page.locator("main > :is(#sobre-mi, #servicios, #formacion, #trabajos, #en-vivo)");
+    expect(await primarySections.evaluateAll((nodes) => nodes.map((node) => node.id))).toEqual(["sobre-mi", "servicios", "formacion", "trabajos", "en-vivo"]);
+    await expect(page.locator("#en-vivo").getByRole("heading", { name: /Fiesta del Milagro/ })).toHaveCount(2);
+    await expect(page.locator("#en-vivo").getByRole("heading", { name: /Política Joven/ })).toHaveCount(3);
+    await expect(page.locator("#servicios")).toContainText("Transmisiones en vivo");
+    await expect(page.locator("#servicios dd").first()).toContainText("+50");
   });
-  test("Grupo Scout muestra sus 3 Instagram y el reel destacado", async ({ page }) => {
+
+  test("la experiencia complementaria reúne extensión y trabajos", async ({ page }) => {
     await page.goto("/");
     const section = page.locator("#experiencia");
+    await expect(section).toContainText(/Universidad Católica de Salta/);
+    await expect(section.getByRole("heading", { name: "Puentes Generacionales" })).toBeVisible();
+    await expect(section.locator("article")).toHaveCount(6);
+    await expect(section.locator("article img")).toHaveCount(0);
+    await expect(section.locator("img")).toHaveCount(0);
+    await expect(section.locator("a[href*=DHQ2CPGAZfh]")).toBeVisible();
+    await expect(section.locator("a[href*=d7yfJRWF]")).toBeVisible();
+    await expect(section.locator("a[href*=DfFpvDaCdHU]")).toBeVisible();
+  });
+
+  test("Mundo Scout muestra el grupo, sus cuentas y los eventos scouts", async ({ page }) => {
+    await page.goto("/");
+    const section = page.locator("#mundo-scout");
     await expect(section.getByRole("heading", { name: /Grupo Scout N\.º 811/ })).toBeVisible();
+    await expect(section.getByRole("link", { name: "Ver Eventos scouts" })).toHaveAttribute("href", "#eventos-scouts");
     for (const handle of ["aonayamana811", "zona27.saac", "distrito4z27.saac"]) {
-      await expect(section.locator(`a[href="https://www.instagram.com/${handle}"]`)).toBeAttached();
+      await expect(section.locator("a[href*='instagram.com/" + handle + "']")).toBeAttached();
     }
-    await expect(
-      page.locator('#trabajos a[href="#experiencia"]').first(),
-    ).toContainText(/Proyectos y eventos/i);
-    await section.locator("button[aria-label^='Reproducir Proyectos y eventos']").click();
-    await expect(section.locator("iframe")).toHaveAttribute("src", /instagram\.com\/reel\/DenJBl1CFQd\/embed/);
+    const events = page.locator("#eventos");
+    const scoutEvents = events.locator("#eventos-scouts");
+    await expect(events.getByRole("heading", { name: "Eventos Tech" })).toBeVisible();
+    await expect(scoutEvents.getByRole("heading", { name: "VII Rover Moot Nacional 2026" })).toBeVisible();
+    for (const reel of ["DenJBl1CFQd", "Dec8VxRCRwB", "DgGLcsRNOX9"]) {
+      await expect(scoutEvents.locator("a[href*='instagram.com/reel/" + reel + "']")).toBeVisible();
+    }
+    await scoutEvents.getByRole("button", { name: "Reproducir Jota Joti 2026" }).click();
+    await expect(scoutEvents.locator("iframe")).toHaveAttribute("src", /instagram\.com\/reel\/DenJBl1CFQd\/embed/);
   });
 });

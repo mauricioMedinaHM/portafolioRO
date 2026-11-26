@@ -36,7 +36,7 @@ function stripTracking(value: string) {
 
 function cleanLinks(enlaces?: { nombre: string; link: string }[]): ProjectLink[] {
   return (enlaces ?? []).flatMap(({ nombre, link }) => {
-    const url = httpOrUndefined(link);
+    const url = httpOrUndefined(link) ?? localVideoOrNull(link);
     return url && nombre?.trim() ? [{ label: nombre.trim(), url: stripTracking(url) }] : [];
   });
 }
@@ -58,7 +58,7 @@ function clipStart(value?: number) {
 /** Ruta local a un archivo de video (en /public). */
 function localVideoOrNull(value?: string) {
   const v = value?.trim();
-  return v && /^\/.+\.(m4v|mov|mp4|webm)$/i.test(v) ? v : null;
+  return v && /^\/(?!\/).+\.(m4v|mov|mp4|webm)$/i.test(v) ? v : null;
 }
 
 function slug(value: string) {
@@ -123,6 +123,8 @@ export function buildProjects(source: Seccion[] = secciones): Project[] {
         provider: parsed.provider,
         embedUrl: parsed.embedUrl,
         thumbnailUrl: trabajo.miniatura?.trim() || parsed.thumbnailUrl,
+        group: trabajo.grupo?.trim() || undefined,
+        isReferenceImage: Boolean(trabajo.miniaturaDeReferencia),
         clipUrl: trabajo.clip?.trim() || null,
         clipStart: clipStart(trabajo.clipInicio),
         date: trabajo.fecha && DATE.test(trabajo.fecha) ? trabajo.fecha : null,

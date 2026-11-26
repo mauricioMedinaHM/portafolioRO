@@ -21,8 +21,10 @@ export interface Profile {
     tiktok?: string;
     youtube?: string;
     x?: string;
+    telegram?: string;
+    github?: string;
   };
-  skills?: string[]; // chips de habilidades (sección Sobre mí)
+  skills?: string[]; // cualidades y habilidades profesionales
   education?: string[]; // formación y certificados ("Trayectoria")
 }
 
@@ -46,7 +48,9 @@ export interface Project {
   url: string;
   provider: MediaProvider; // detectado desde el link (parseMediaUrl)
   embedUrl: string | null;
-  thumbnailUrl: string | null; // calculada desde el link
+  thumbnailUrl: string | null;
+  group?: string;
+  isReferenceImage?: boolean; // imagen contextual, no registro de ese trabajo
   clipUrl: string | null; // fragmento local que se reproduce en bucle
   clipStart: number; // segundo desde el que arranca (y reinicia) el bucle
   date: string | null; // YYYY-MM-DD

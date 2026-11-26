@@ -1,12 +1,13 @@
 import {
   BriefcaseBusiness,
+  CalendarDays,
   Clapperboard,
   GraduationCap,
-  Mic,
   MonitorPlay,
   Radio,
   Smartphone,
   Tv,
+  Tent,
   type LucideIcon,
 } from "lucide-react";
 
@@ -14,9 +15,10 @@ const BY_SLUG: Record<string, LucideIcon> = {
   conduccion: Tv,
   streaming: MonitorPlay,
   "generacion-tech": Clapperboard,
-  moviles: Mic,
+  eventos: CalendarDays,
   extension: GraduationCap,
   experiencia: BriefcaseBusiness,
+  "mundo-scout": Tent,
   // Compatibilidad con slugs anteriores.
   radio: Radio,
   redes: Smartphone,
