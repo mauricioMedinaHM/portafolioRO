@@ -16,9 +16,6 @@ export interface NavAnchor {
 
 const DESKTOP_LINKS: NavAnchor[] = [
   { href: "#sobre-mi", label: "Sobre mí" },
-  { href: "#servicios", label: "Cualidades" },
-  { href: "#formacion", label: "Formación" },
-  { href: "#trabajos", label: "Muestra" },
   { href: "#en-vivo", label: "En vivo" },
   { href: "#mundo-scout", label: "Mundo Scout" },
   { href: "#eventos", label: "Eventos" },
@@ -170,6 +167,7 @@ export function NavBar({
               transition={{ delay: i * 0.035, duration: 0.35 }}
               className={cn(
                 "font-pop flex min-h-14 items-center border-b-2 border-seam text-[28px] leading-none text-cocoa transition-colors hover:text-sun-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sun-deep",
+                anchor.parentHref === "#sobre-mi" && "min-h-11 pl-4 text-[19px]",
                 active === anchor.href && "text-sun-deep",
               )}
             >

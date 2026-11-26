@@ -1,85 +1,99 @@
-"use client";
-
-import { AnimatePresence, motion } from "motion/react";
+import Image from "next/image";
 import { GraduationCap, MonitorPlay, Tv } from "lucide-react";
-import { useState, type ReactNode } from "react";
 import { MediaCard } from "@/components/media";
 import { PopContainer, PopHeading } from "@/components/pop/heading";
 import { categoryIcon } from "@/components/pop/icons";
 import { ProjectSocialLinks } from "@/components/pop/social-links";
-import { Button, buttonVariants, SpotlightCard } from "@/components/ui";
+import { buttonVariants } from "@/components/ui";
+import { HorizontalRail } from "@/components/ui/horizontal-rail";
 import type { Category, Project } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
-const INITIAL_COUNT = 6;
-const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
+const SLIDING_MINIMUM = 4;
 
 function yearOf(date: string | null) {
   return date?.slice(0, 4) ?? "Experiencia";
 }
 
-function NoteCard({ project }: { project: Project }) {
+function NoteCard({ project, compact = false }: { project: Project; compact?: boolean }) {
+  const [first, ...rest] = project.description?.split("\n\n") ?? [];
+  const description = compact ? first : project.description;
   return (
-    <article className="flex h-full flex-col rounded-[24px] bg-peach p-5 md:p-6">
-      <p className="pop-label self-start rounded-full bg-cream px-3 py-1.5 text-sun-deep">
-        {yearOf(project.date)}
-      </p>
-      <h3 className="mt-4 text-[18px] leading-snug font-bold text-cocoa md:text-[19px]">
-        {project.title}
-      </h3>
-      {project.description ? (
-        <p className="mt-2 max-w-[62ch] text-[15px] leading-relaxed whitespace-pre-line text-cocoa-2">
-          {project.description}
+    <article className={cn("flex h-full flex-col bg-peach", compact ? "rounded-[12px] p-3.5" : "rounded-[18px] p-5 md:p-6")}>
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="pop-label inline-block rounded-full bg-cream px-3 py-1.5 text-sun-deep">
+            {yearOf(project.date)}
+          </p>
+          <h3 className={cn("leading-snug font-bold text-cocoa", compact ? "mt-2 text-base" : "mt-4 text-[18px] md:text-[19px]")}>
+            {project.title}
+          </h3>
+        </div>
+        {project.sticker && (
+          <Image
+            src={project.sticker.src}
+            alt={project.sticker.alt}
+            width={104}
+            height={104}
+            sizes="(min-width: 640px) 96px, 64px"
+            className="size-16 shrink-0 rotate-6 rounded-full border-[3px] border-white bg-white object-cover shadow-[2px_4px_10px_rgb(76_12_41/0.26)] sm:size-24"
+          />
+        )}
+      </div>
+      {description && (
+        <p className={cn("mt-2 max-w-[62ch] leading-relaxed whitespace-pre-line text-cocoa-2", compact ? "text-sm" : "text-[15px]")}>
+          {description}
         </p>
-      ) : null}
+      )}
+      {compact && rest.length > 0 && (
+        <details className="mt-2 text-sm text-cocoa-2">
+          <summary className="min-h-10 cursor-pointer py-2 font-semibold underline underline-offset-2">Leer más</summary>
+          <p className="mt-1 leading-relaxed whitespace-pre-line">{rest.join("\n\n")}</p>
+        </details>
+      )}
       <ProjectSocialLinks
         socials={project.socials}
         links={project.links}
         title={project.title}
-        className="mt-auto pt-4"
+        className={cn("mt-auto", compact ? "pt-2" : "pt-4")}
       />
     </article>
   );
 }
 
-function VideoRail({ carousel, children }: { carousel: boolean; children: ReactNode }) {
-  return (
-    <ul
-      className={cn(
-        "mt-6 md:mt-8",
-        carousel
-          ? "flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-2 [scrollbar-width:none] lg:grid lg:grid-cols-3 lg:gap-5 lg:overflow-visible lg:pb-0 [&::-webkit-scrollbar]:hidden"
-          : "grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4 md:gap-y-8 lg:grid-cols-3",
-      )}
-    >
-      {children}
-    </ul>
-  );
+function hasPicture(project: Project) {
+  return Boolean(project.url || project.clipUrl || project.thumbnailUrl);
 }
 
-function VideoItem({
-  carousel,
-  children,
-  animated = false,
-  index = 0,
-}: {
-  carousel: boolean;
-  children: ReactNode;
-  animated?: boolean;
-  index?: number;
-}) {
-  const className = cn(carousel ? "w-[85%] shrink-0 snap-start sm:w-[46%] lg:w-auto lg:shrink" : "min-w-0");
-  if (!animated) return <li className={className}>{children}</li>;
+function ProjectList({ projects, id, label }: { projects: Project[]; id: string; label: string }) {
+  if (projects.length === 0) return null;
+  const cards = projects.map((project) => (
+    <li key={project.id} className="min-w-0">
+      {hasPicture(project) ? (
+        <div className="rounded-[12px] border border-seam bg-paper p-2.5">
+          <MediaCard project={project} compact />
+        </div>
+      ) : <NoteCard project={project} compact />}
+    </li>
+  ));
+
   return (
-    <motion.li
-      className={className}
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 8, transition: { duration: 0.15 } }}
-      transition={{ duration: 0.3, delay: index * 0.04, ease: EASE_OUT_EXPO }}
-    >
-      {children}
-    </motion.li>
+    <div className="mt-4 md:mt-6">
+      {projects.length >= SLIDING_MINIMUM ? (
+        <HorizontalRail
+          id={id}
+          label={label}
+          itemCount={projects.length}
+          className="[&>li]:w-[clamp(12.5rem,70vw,16rem)]"
+        >
+          {cards}
+        </HorizontalRail>
+      ) : (
+        <ul aria-label={label} className="grid max-w-[54rem] grid-cols-1 items-start gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {cards}
+        </ul>
+      )}
+    </div>
   );
 }
 
@@ -89,16 +103,13 @@ export function CategorySection({
   overview,
   relatedLink,
   asSubsection = false,
-  showAll = false,
 }: {
   category: Category;
   projects: Project[];
   overview?: Project;
   relatedLink?: { href: string; label: string };
   asSubsection?: boolean;
-  showAll?: boolean;
 }) {
-  const [expanded, setExpanded] = useState(false);
   if (projects.length === 0 && !overview) return null;
 
   const grouped = new Map<string, Project[]>();
@@ -109,16 +120,6 @@ export function CategorySection({
     grouped.set(project.group, entries);
     return false;
   });
-  const initialProjects = showAll ? mainProjects : mainProjects.slice(0, INITIAL_COUNT);
-  const additionalProjects = showAll ? [] : mainProjects.slice(INITIAL_COUNT);
-  const hasPicture = (project: Project) =>
-    Boolean(project.url || project.clipUrl || project.thumbnailUrl);
-  const initialClips = initialProjects.filter(hasPicture);
-  const additionalClips = additionalProjects.filter(hasPicture);
-  const initialNotes = initialProjects.filter((project) => !hasPicture(project));
-  const additionalNotes = additionalProjects.filter((project) => !hasPicture(project));
-  const hasMore = additionalProjects.length > 0;
-  const clipsCarousel = !showAll && initialClips.length + (expanded ? additionalClips.length : 0) > 2;
   const Icon = categoryIcon(category.slug);
   const isUniversity = category.badge
     ? /ucasal|universi/i.test(category.badge)
@@ -127,7 +128,7 @@ export function CategorySection({
   const hasFeature = Boolean(overview);
 
   return (
-    <section id={category.slug} aria-labelledby={category.slug + "-titulo"} className="scroll-mt-28 py-7 md:py-10">
+    <section id={category.slug} aria-labelledby={category.slug + "-titulo"} className="scroll-mt-28 py-5 md:py-8">
       <PopContainer>
         <div className={cn("grid grid-cols-12 content-start items-start gap-y-4 md:gap-x-7", hasFeature && "md:grid-rows-[auto_1fr]")}>
           <div className="col-span-12 flex items-start gap-4 md:col-span-6">
@@ -194,84 +195,18 @@ export function CategorySection({
         </div>
 
 
-        {initialClips.length > 0 || additionalClips.length > 0 ? (
-          <VideoRail carousel={clipsCarousel}>
-            {initialClips.map((project) => (
-              <VideoItem key={project.id} carousel={clipsCarousel}>
-                <SpotlightCard>
-                  <MediaCard project={project} />
-                </SpotlightCard>
-              </VideoItem>
-            ))}
-            <AnimatePresence initial={false}>
-              {expanded
-                ? additionalClips.map((project, index) => (
-                    <VideoItem
-                      key={project.id}
-                      carousel={clipsCarousel}
-                      animated
-                      index={index}
-                    >
-                      <SpotlightCard>
-                        <MediaCard project={project} />
-                      </SpotlightCard>
-                    </VideoItem>
-                  ))
-                : null}
-            </AnimatePresence>
-          </VideoRail>
-        ) : null}
-
-        {initialNotes.length > 0 || additionalNotes.length > 0 ? (
-          <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 md:mt-8 lg:grid-cols-3">
-            {initialNotes.map((project) => (
-              <li key={project.id}>
-                <NoteCard project={project} />
-              </li>
-            ))}
-            <AnimatePresence initial={false}>
-              {expanded
-                ? additionalNotes.map((project, index) => (
-                    <motion.li
-                      key={project.id}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 8, transition: { duration: 0.15 } }}
-                      transition={{ duration: 0.3, delay: index * 0.04, ease: EASE_OUT_EXPO }}
-                    >
-                      <NoteCard project={project} />
-                    </motion.li>
-                  ))
-                : null}
-            </AnimatePresence>
-          </ul>
-        ) : null}
+        <ProjectList projects={mainProjects} id={category.slug + "-proyectos"} label={"Trabajos de " + category.name} />
 
         {Array.from(grouped, ([name, entries]) => {
           const id = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-");
           return (
-            <section key={name} id={id} aria-labelledby={id + "-titulo"} className="mt-7 scroll-mt-28 border-t border-seam pt-6 md:mt-9">
+            <section key={name} id={id} aria-labelledby={id + "-titulo"} className="mt-5 scroll-mt-28 border-t border-seam pt-4 md:mt-7 md:pt-5">
               <h4 id={id + "-titulo"} className="font-pop text-3xl text-cocoa md:text-4xl">{name}</h4>
-              <VideoRail carousel={false}>
-                {entries.map((project) => (
-                  <VideoItem key={project.id} carousel={false}>
-                    {hasPicture(project) ? (
-                      <SpotlightCard><MediaCard project={project} /></SpotlightCard>
-                    ) : <NoteCard project={project} />}
-                  </VideoItem>
-                ))}
-              </VideoRail>
+              <ProjectList projects={entries} id={id + "-proyectos"} label={name} />
             </section>
           );
         })}
 
-        {hasMore ? (
-          <div className="mt-10">
-            <Button variant="pop-outline" onClick={() => setExpanded(!expanded)} aria-expanded={expanded}>
-              {expanded ? "Ver menos" : `Ver más (${additionalProjects.length})`}
-            </Button>
-          </div>
-        ) : null}
       </PopContainer>
     </section>
   );

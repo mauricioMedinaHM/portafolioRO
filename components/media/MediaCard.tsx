@@ -6,12 +6,13 @@ import { useState, type ReactNode } from "react";
 import { ProjectSocialLinks } from "@/components/pop/social-links";
 import { parseMediaUrl } from "@/lib/embed/parseMediaUrl";
 import type { MediaProvider, Project } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 import { CenterLoop } from "./CenterLoop";
 import { LazyEmbed } from "./LazyEmbed";
 import { MediaFallback } from "./MediaFallback";
 
-const FRAME = "relative aspect-[4/3] w-full overflow-hidden rounded-[22px] bg-cocoa";
+const FRAME = "relative w-full overflow-hidden rounded-[14px] bg-cocoa";
 
 const PROVIDER_LABEL: Record<MediaProvider, string> = {
   drive: "Drive",
@@ -52,6 +53,7 @@ function fallbackLabel(provider: MediaProvider): string {
 
 export interface MediaCardProps {
   project: Project;
+  compact?: boolean;
 }
 
 function Still({ src, onError }: { src: string; onError?: () => void }) {
@@ -79,7 +81,7 @@ function PlayButton({ title, onClick }: { title: string; onClick: () => void }) 
       aria-label={`Reproducir ${title}`}
     >
       <span className="absolute inset-0 flex items-center justify-center">
-        <span className="flex size-14 items-center justify-center rounded-full bg-sun text-cream shadow-[0_10px_30px_-10px_rgb(91_5_80/0.6)] ring-4 ring-white/70 transition-transform duration-150 group-hover:scale-105">
+        <span className="flex size-12 items-center justify-center rounded-full bg-sun text-cream shadow-[0_10px_30px_-10px_rgb(91_5_80/0.6)] ring-4 ring-white/70 transition-transform duration-150 group-hover:scale-105">
           <Play className="size-6 translate-x-px" fill="currentColor" aria-hidden="true" />
         </span>
       </span>
@@ -87,9 +89,10 @@ function PlayButton({ title, onClick }: { title: string; onClick: () => void }) 
   );
 }
 
-export function MediaCard({ project }: MediaCardProps) {
+export function MediaCard({ project, compact = false }: MediaCardProps) {
   const [thumbFailed, setThumbFailed] = useState(false);
   const [open, setOpen] = useState(false);
+  const aspect = compact ? "16/9" : "4/3";
   const parsed = parseMediaUrl(project.url);
   const provider = project.provider;
   const embedUrl = project.embedUrl ?? parsed.embedUrl;
@@ -128,11 +131,11 @@ export function MediaCard({ project }: MediaCardProps) {
   return (
     <article className="flex w-full flex-col">
       {frame ? (
-        <div className={FRAME}>{frame}</div>
+        <div className={cn(FRAME, compact ? "aspect-video" : "aspect-[4/3]")}>{frame}</div>
       ) : canInlineEmbed && embedUrl ? (
         <LazyEmbed
           embedUrl={embedUrl}
-          aspect="4/3"
+          aspect={aspect}
           title={project.title}
           thumbnailUrl={thumbFailed ? null : thumbnailUrl}
           originalUrl={project.url}
@@ -144,7 +147,7 @@ export function MediaCard({ project }: MediaCardProps) {
           href={project.url}
           label={fallbackLabel(provider)}
           thumbnailUrl={thumbFailed ? null : thumbnailUrl}
-          aspect="4/3"
+          aspect={aspect}
         />
       )}
       {project.isReferenceImage && frame ? (
@@ -160,23 +163,23 @@ export function MediaCard({ project }: MediaCardProps) {
           Abrir en {PROVIDER_LABEL[provider]}
         </a>
       ) : null}
-      <div className="mt-4 flex flex-col gap-1.5 px-1">
+      <div className={cn("flex flex-col gap-1.5 px-1", compact ? "mt-2.5" : "mt-4")}>
         {project.date ? (
           <time dateTime={project.date} className="pop-label text-sun-deep">
             {formatDate(project.date)}
           </time>
         ) : null}
-        <h3 className="text-[18px] leading-snug font-bold text-balance text-cocoa md:text-[19px]">
+        <h3 className={cn("leading-snug font-bold text-balance text-cocoa", compact ? "text-base" : "text-[18px] md:text-[19px]")}>
           {project.title}
         </h3>
         {project.description ? (
-          <p className="max-w-[62ch] text-[15px] leading-relaxed whitespace-pre-line text-cocoa-2">{project.description}</p>
+          <p className={cn("max-w-[62ch] leading-relaxed whitespace-pre-line text-cocoa-2", compact ? "text-sm" : "text-[15px]")}>{project.description}</p>
         ) : null}
         <ProjectSocialLinks
           socials={project.socials}
           links={project.links}
           title={project.title}
-          className="mt-3"
+          className={compact ? "mt-1.5" : "mt-3"}
         />
       </div>
     </article>

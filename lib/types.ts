@@ -50,6 +50,7 @@ export interface Project {
   embedUrl: string | null;
   thumbnailUrl: string | null;
   group?: string;
+  sticker?: { src: string; alt: string };
   isReferenceImage?: boolean; // imagen contextual, no registro de ese trabajo
   clipUrl: string | null; // fragmento local que se reproduce en bucle
   clipStart: number; // segundo desde el que arranca (y reinicia) el bucle

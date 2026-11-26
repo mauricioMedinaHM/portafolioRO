@@ -1,14 +1,16 @@
-import { Heart } from "lucide-react";
+import { Award, Clapperboard, GraduationCap, Heart } from "lucide-react";
 import { CenterLoop } from "@/components/media/CenterLoop";
-import { Burst } from "@/components/pop/decor";
 import { PopContainer } from "@/components/pop/heading";
-import { categoryIcon } from "@/components/pop/icons";
 import type { Category, Profile, Project } from "@/lib/types";
 
-/** Encuadre del destacado: las caras están en el tercio inferior del clip. */
 const SPOTLIGHT_FOCUS = "center 80%";
 
-/** "Hola, soy Rosario": presentación + áreas de trabajo (anclas a cada sección). */
+export const ABOUT_LINKS = [
+  { href: "#servicios", label: "Cualidades", icon: Award },
+  { href: "#formacion", label: "Formación", icon: GraduationCap },
+  { href: "#trabajos", label: "Muestra de contenidos", icon: Clapperboard },
+] as const;
+
 export function Intro({
   profile,
   categories,
@@ -19,92 +21,78 @@ export function Intro({
   spotlight?: Project;
 }) {
   const firstName = profile.fullName.trim().split(/\s+/)[0] ?? profile.fullName;
+  const [opening, ...paragraphs] = profile.bio.split(/\n\n+/).filter(Boolean);
+  const namedOpening = opening?.match(/^Soy ([^,]+)(,.*)$/);
 
   return (
-    <section id="sobre-mi" className="scroll-mt-28 py-6 md:py-10">
-      <PopContainer>
-        <div className="grid grid-cols-1 gap-8 rounded-[14px] border border-seam bg-paper p-5 md:grid-cols-12 md:items-center md:gap-10 md:p-8">
-          {spotlight?.thumbnailUrl ? (
-            <a
-              href={`#${categories.find((c) => c.id === spotlight.categoryId)?.slug ?? "trabajos"}`}
-              className="group block md:order-3 md:col-span-5"
-            >
-              {/* El clip queda limpio: el título va debajo, como pie, para no tapar las caras. */}
-              <div className="relative overflow-hidden rounded-[5px] border-4 border-cream bg-candy shadow-sm">
-                <div className="relative aspect-[16/10] w-full transition-transform duration-500 group-hover:scale-[1.03]">
-                  {spotlight.clipUrl ? (
-                    // Clip del destacado en bucle mudo (poster = miniatura; pausa fuera del centro).
-                    <CenterLoop
-                      src={spotlight.clipUrl}
-                      poster={spotlight.thumbnailUrl}
-                      start={spotlight.clipStart}
-                      objectPosition={SPOTLIGHT_FOCUS}
-                    />
-                  ) : (
-                    // Miniatura externa (YouTube): fuera de los remotePatterns de next/image.
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={spotlight.thumbnailUrl}
-                      alt=""
-                      loading="lazy"
-                      decoding="async"
-                      width={480}
-                      height={300}
-                      className="absolute inset-0 size-full object-cover"
-                      style={{ objectPosition: SPOTLIGHT_FOCUS }}
-                    />
-                  )}
-                </div>
-              </div>
-              <span className="mt-3 block px-1 text-[15px] leading-snug font-semibold text-cocoa md:text-[16px]">
-                {spotlight.title}
-              </span>
-              <span className="mt-1 block px-1 text-[14px] font-semibold text-sun-deep transition-colors group-hover:text-cocoa">
-                Ver entrevista →
-              </span>
-            </a>
-          ) : null}
+    <PopContainer className="pt-6 pb-2 md:pt-9 md:pb-3">
+      <div className="grid items-start gap-5 rounded-[14px] border border-seam bg-paper p-4 sm:p-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:gap-x-9 lg:p-8">
+        <div className="min-w-0">
+          <h2 id="sobre-mi-titulo" className="font-pop text-[34px] leading-[0.95] text-cocoa md:text-[48px]">
+            Sobre mí
+          </h2>
+          {opening && (
+            <div className="mt-4 max-w-[64ch] space-y-3 text-base leading-relaxed text-cocoa-2">
+              <p>
+                {namedOpening ? <>Soy <strong className="text-cocoa">{namedOpening[1]}</strong>{namedOpening[2]}</> : opening}
+              </p>
+              {paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            </div>
+          )}
+          <p className="mt-3 flex items-center gap-2 text-rose-ink" aria-hidden>
+            <span className="font-script text-[36px] leading-none">{firstName}</span>
+            <Heart className="size-4" />
+          </p>
 
-          <div className="md:col-span-4">
-            <h2 className="font-pop text-[34px] leading-[0.95] text-cocoa md:text-[44px]">
-              Hola, soy {firstName}.
-            </h2>
-            <p className="font-pop mt-2 text-[19px] leading-tight text-sun-deep md:text-[22px]">
-              Conductora, locutora &amp; comunicadora audiovisual
-            </p>
-            {profile.bio ? (
-              <p className="mt-5 max-w-[60ch] text-[16px] leading-relaxed text-cocoa-2">{profile.bio}</p>
-            ) : null}
-            <p className="mt-4 flex items-center gap-2 text-rose-ink" aria-hidden>
-              <span className="font-script text-[40px] leading-none">{firstName}</span>
-              <Heart className="size-5" />
-            </p>
-          </div>
-
-          <div className="relative md:col-span-3 md:border-l-2 md:border-seam md:pl-8">
-            <h3 className="sr-only">Áreas de trabajo</h3>
-            <ul className="flex flex-col gap-1">
-              {categories.map((category) => {
-                const Icon = categoryIcon(category.slug);
-                return (
-                  <li key={category.id}>
-                    <a
-                      href={`#${category.slug}`}
-                      className="group flex min-h-11 items-start gap-3 rounded-full text-[15px] leading-snug font-semibold text-cocoa transition-colors hover:text-sun-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sun-deep"
-                    >
-                      <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-sun text-cream transition-transform duration-150 group-hover:scale-110">
-                        <Icon className="size-4" aria-hidden />
-                      </span>
-                      <span className="self-center">{category.name}</span>
-                    </a>
-                  </li>
-                );
-              })}
+          <nav aria-label="Apartados de Sobre mí" className="mt-5">
+            <ul className="flex flex-wrap gap-1.5 rounded-[10px] border border-seam bg-honeydew/60 p-1.5">
+              {ABOUT_LINKS.map(({ href, label, icon: Icon }) => (
+                <li className="min-w-0" key={href}>
+                  <a
+                    href={href}
+                    className="group inline-flex min-h-11 items-center gap-2 rounded-[7px] border border-seam bg-cream px-2.5 text-sm font-semibold text-cocoa transition-colors hover:bg-candy focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cocoa"
+                  >
+                    <Icon className="size-4 shrink-0" aria-hidden />
+                    {label}
+                  </a>
+                </li>
+              ))}
             </ul>
-            <Burst className="absolute -right-3 -bottom-10 hidden size-16 text-rose md:block" />
-          </div>
+          </nav>
         </div>
-      </PopContainer>
-    </section>
+
+        {spotlight?.thumbnailUrl && (
+          <a
+            href={"#" + (categories.find((category) => category.id === spotlight.categoryId)?.slug ?? "trabajos")}
+            className="group block min-w-0 self-center rounded-[9px] border border-seam bg-cream p-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cocoa"
+          >
+            <div className="relative aspect-[16/9] overflow-hidden rounded-[4px] bg-candy">
+              {spotlight.clipUrl ? (
+                <CenterLoop
+                  src={spotlight.clipUrl}
+                  poster={spotlight.thumbnailUrl}
+                  start={spotlight.clipStart}
+                  objectPosition={SPOTLIGHT_FOCUS}
+                />
+              ) : (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={spotlight.thumbnailUrl}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  width={480}
+                  height={270}
+                  className="absolute inset-0 size-full object-cover"
+                  style={{ objectPosition: SPOTLIGHT_FOCUS }}
+                />
+              )}
+            </div>
+            <span className="mt-2 block px-1 text-sm leading-snug font-semibold text-cocoa md:text-base">{spotlight.title}</span>
+            <span className="block px-1 pt-1 text-sm text-sun-deep group-hover:underline">Ver entrevista</span>
+          </a>
+        )}
+      </div>
+    </PopContainer>
   );
 }

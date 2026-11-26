@@ -57,6 +57,7 @@ export interface Trabajo {
   enlaces?: { nombre: string; link: string }[];
   miniatura?: string;
   miniaturaDeReferencia?: boolean;
+  sticker?: { src: string; alt: string };
   grupo?: string;
   /** Fragmento corto en /public. Bucle suave cerca del centro de la pantalla. */
   clip?: string;
@@ -85,7 +86,12 @@ export interface Seccion {
 export const perfil = {
   nombre: "Rosario Tejerina Pittis",
   rol: "Conductora · Locutora · Comunicadora audiovisual",
-  bio: "Soy Verónica Rosario Tejerina Pittis, estudiante de Comunicación Social y Locución Nacional en UCaSal. Me entusiasma contar historias frente a cámara y detrás del micrófono. En coberturas, streaming y Generación Tech para El10TV conduzco, entrevisto y acompaño la producción de contenidos en vivo. También llevo esa escucha a la radio, las redes y la capacitación.",
+  bio: [
+    "Soy Verónica Rosario Tejerina Pittis, estudiante de Comunicación Social y Locución Nacional en UCASAL. Me apasiona contar historias, conectar con las personas y descubrir lo que hay detrás de cada proyecto, idea y experiencia.",
+    "En los últimos años, fui construyendo un recorrido que abarca la producción de contenidos en sus distintas etapas: preproducción, producción y postproducción, tanto en redes sociales como en radio, televisión y streaming.",
+    "A través de coberturas, entrevistas, conducción y programas en vivo, fui adquiriendo herramientas que me permiten desenvolverme frente y detrás de cámara, explorar distintos formatos y conocer el mundo de la comunicación desde diferentes áreas.",
+    "Creo en el aprendizaje constante, en la curiosidad y en la posibilidad de seguir creciendo, perfeccionándome y encontrando nuevas formas de comunicar. En este espacio, los invito a conocer un poco más de mí, de mis experiencias, mis habilidades y todo lo que me apasiona hacer.",
+  ].join("\n\n"),
   /**
    * Foto del hero (en /public). Si hay `heroClip`, es la imagen que se ve
    * mientras carga el clip (y la única, si el visitante prefiere menos movimiento).
@@ -95,6 +101,11 @@ export const perfil = {
   heroClip: "/trabajos/clips/puna-tech.mp4",
   email: "vrtejerinapittis@gmail.com",
   transmisionesEnVivo: 50,
+  visualizaciones: {
+    panelesDe30Dias: [8729, 30351, 60355],
+    periodo: "27 de octubre al 25 de noviembre de 2026",
+    reelDeReferencia: 6919,
+  },
   /** WhatsApp con código de país, sin espacios. */
   whatsapp: "+5493875174774",
   redes: {
@@ -105,24 +116,13 @@ export const perfil = {
     github: "https://github.com/rosariotejerinap",
   },
   habilidades: [
-    "Comunicación",
-    "Conducción",
-    "Producción audiovisual",
-    "Creatividad",
-    "Trabajo en equipo",
-    "Improvisación",
-    "Adaptabilidad",
-    "Gestión de contenidos",
-    "Organización",
-    "Resolución de problemas",
-    "Entrevistas y móviles",
-    "Comunicación digital",
-    "Planificación estratégica",
+    "Conducción y entrevistas",
+    "Comunicación audiovisual",
+    "Creación de contenido",
     "Edición audiovisual",
+    "Trabajo en equipo",
+    "Adaptabilidad e improvisación",
     "Gestión de redes sociales",
-    "Interacción con audiencias",
-    "Operación básica de cámara y consola de radio",
-    "Edición con Canva, Premiere, CapCut e InShot",
   ],
   /** "Título — detalle": el guion largo separa el título del detalle. */
   formacion: [
@@ -284,6 +284,10 @@ export const secciones: Seccion[] = [
     trabajos: [
       {
         titulo: "Grupo Scout N.º 811 Santo Domingo Savio — Comunicación",
+        sticker: {
+          src: "/trabajos/grupo-scout-811.jpg",
+          alt: "Escudo del Grupo Scout N.º 811 Santo Domingo Savio",
+        },
         descripcion:
           "Trabajo en comunicación scout desde Salta Capital. Manejo las cuentas del grupo, la zona y el distrito. Creo y difundo contenidos digitales, cubro eventos y coordino con los equipos la comunicación de las actividades.\n\nUn proyecto que nace para impulsar nuevas iniciativas y aprovechar las herramientas del escultismo para conectar con distintas áreas de la sociedad, con un compromiso de servicio permanente y un impacto positivo y transformador en la comunidad.",
         enlaces: [

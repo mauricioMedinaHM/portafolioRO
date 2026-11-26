@@ -11,7 +11,6 @@ const STAT_TONES = [
   "bg-peach text-sun-deep",
   "bg-candy text-cocoa",
   "bg-blush text-cocoa",
-  "bg-amber text-cream",
 ] as const;
 
 export interface Stat {
@@ -66,38 +65,48 @@ function SkillsList({ skills }: { skills: string[] }) {
   );
 }
 
-export function Services({ stats, skills }: { stats: Stat[]; skills: string[] }) {
-  return (
-    <section id="servicios" className="scroll-mt-28 bg-cocoa py-9 text-cream md:py-14">
-      <PopContainer className="grid grid-cols-1 items-center gap-7 lg:grid-cols-12 lg:gap-12">
-        <div className="min-w-0 lg:col-span-5">
-          <PopHeading tone="cream" className="text-[33px] md:text-[44px]">Cualidades</PopHeading>
-          <SkillsList skills={skills} />
-        </div>
+interface Reach {
+  average: string;
+  sampleSize: number;
+  period: string;
+  reel: string;
+}
 
-        <div className="min-w-0 rounded-[12px] bg-cream p-4 text-cocoa sm:p-6 md:p-8 lg:col-span-7">
-          <div className="relative z-10">
+export function Services({ stats, skills, reach }: { stats: Stat[]; skills: string[]; reach: Reach }) {
+  return (
+    <section id="servicios" aria-labelledby="cualidades-titulo" className="scroll-mt-28 py-3 md:py-4">
+      <PopContainer>
+        <div className="grid items-center gap-5 rounded-[14px] bg-cocoa p-4 text-cream sm:p-6 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-9 lg:p-8">
+          <div className="min-w-0">
+            <PopHeading tone="cream" className="text-[33px] md:text-[44px]">
+              <span id="cualidades-titulo">Cualidades</span>
+            </PopHeading>
+            <SkillsList skills={skills} />
+          </div>
+
+          <div className="min-w-0 rounded-[12px] bg-cream p-4 text-cocoa sm:p-6">
             <PopHeading className="text-[28px] text-sun-deep md:text-[36px]">En números</PopHeading>
-            <dl className="m-0 mt-5 grid grid-cols-2 gap-2 sm:mt-6 sm:gap-3">
+            <dl className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
               {stats.map((stat, index) => (
                 <div
                   key={stat.label}
-                  className={cn(
-                    "@container flex min-w-0 flex-col justify-end rounded-[6px] p-3 sm:p-4 md:p-5",
-                    "shadow-[0_16px_32px_-20px_color-mix(in_oklab,var(--color-ultramarine)_42%,transparent)]",
-                    STAT_TONES[index % STAT_TONES.length],
-                  )}
+                  className={cn("flex min-w-0 flex-col justify-end rounded-[8px] p-3", index === stats.length - 1 && "col-span-2 sm:col-span-1", STAT_TONES[index % STAT_TONES.length])}
                 >
-                  <dd
-                    className="m-0 font-pop leading-[0.8] whitespace-nowrap"
-                    style={{ fontSize: stat.prefix ? "clamp(2.5rem, 33cqi, 7rem)" : "clamp(3.5rem, 48cqi, 9rem)" }}
-                  >
+                  <dt className="order-2 mt-1 text-sm leading-snug font-semibold">{stat.label}</dt>
+                  <dd className="font-pop order-1 text-[2.5rem] leading-none sm:text-[2.85rem]">
                     {stat.prefix && <span className="align-top text-[0.65em]">{stat.prefix}</span>}
                     <RisingDigits value={stat.value} delay={index * 0.09} />
                   </dd>
-                  <dt className="pop-label m-0 mt-2 text-balance">{stat.label}</dt>
                 </div>
               ))}
+              <div className="col-span-full grid items-center gap-2 rounded-[10px] border border-sand bg-honeydew p-3 min-[430px]:grid-cols-[auto_minmax(0,1fr)] sm:gap-4 sm:p-4">
+                <dt className="text-base leading-tight font-bold min-[430px]:col-start-2 min-[430px]:row-start-1">Promedio de vistas en 30 días</dt>
+                <dd className="font-pop text-[clamp(2.65rem,8vw,4.5rem)] leading-none tabular-nums min-[430px]:col-start-1 min-[430px]:row-span-2 min-[430px]:row-start-1">{reach.average}</dd>
+                <dd className="min-w-0 min-[430px]:col-start-2 min-[430px]:row-start-2">
+                  <span className="mt-1 block text-sm leading-snug text-cocoa-2">{reach.sampleSize} paneles · {reach.period}</span>
+                  <span className="mt-1 block text-sm font-semibold">{reach.reel} vistas en un reel de referencia</span>
+                </dd>
+              </div>
             </dl>
           </div>
         </div>

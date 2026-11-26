@@ -48,7 +48,7 @@ export function LazyEmbed({
 
   return (
     <div className={cn("flex w-full flex-col gap-2", aspect === "9/16" && "items-center")}>
-      <div className={cn("relative w-full overflow-hidden rounded-[22px] bg-cocoa", frame)}>
+      <div className={cn("relative w-full overflow-hidden rounded-[14px] bg-cocoa", frame)}>
         <AnimatePresence initial={false} mode="sync">
           {active ? (
             <motion.iframe
@@ -97,7 +97,7 @@ export function LazyEmbed({
               <span className="absolute inset-0 bg-cocoa/10 transition-colors group-hover:bg-cocoa/25" />
               <span className="absolute inset-0 flex items-center justify-center">
                 <motion.span
-                  className="flex size-16 items-center justify-center rounded-full bg-sun text-cream shadow-[0_10px_30px_-10px_rgb(91_5_80/0.6)] ring-4 ring-white/70"
+                  className={cn("flex items-center justify-center rounded-full bg-sun text-cream shadow-[0_10px_30px_-10px_rgb(91_5_80/0.6)] ring-4 ring-white/70", aspect === "16/9" ? "size-12" : "size-16")}
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.96 }}
                   transition={{ duration: 0.12, ease: EASE_OUT }}

@@ -25,14 +25,15 @@ export function Trayectoria({ profile }: { profile: Profile }) {
   if (education.length === 0) return null;
 
   return (
-    <section id="formacion" className="relative scroll-mt-28 border-b border-seam bg-honeydew/50 py-10 md:py-14">
+    <section id="formacion" aria-labelledby="formacion-titulo" className="scroll-mt-28 py-3 md:py-4">
       <PopContainer>
-        <PopHeading script="y certificados">Formación</PopHeading>
+        <div className="rounded-[14px] border border-seam bg-paper p-4 sm:p-6 lg:p-8">
+          <PopHeading script="y certificados" className="text-[32px] md:text-[42px]"><span id="formacion-titulo">Formación</span></PopHeading>
 
-        {education.length > 0 ? (
-          <div className="mt-8">
+          <div className="mt-5">
             <Timeline
               label="Formación"
+              columns
               items={education.map((item, i) => {
                 const Icon = iconFor(item);
                 const { head, detail } = splitItem(item);
@@ -46,8 +47,7 @@ export function Trayectoria({ profile }: { profile: Profile }) {
               })}
             />
           </div>
-        ) : null}
-
+        </div>
       </PopContainer>
     </section>
   );

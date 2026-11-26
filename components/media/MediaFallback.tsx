@@ -32,7 +32,7 @@ export function MediaFallback({
 
   return (
     <div className={cn("flex w-full", aspect === "9/16" && "justify-center")}>
-      <div className={cn("relative flex w-full items-center justify-center overflow-hidden rounded-[22px] bg-cocoa", frame)}>
+      <div className={cn("relative flex w-full items-center justify-center overflow-hidden rounded-[14px] bg-cocoa", frame)}>
         {showThumb ? (
           // La miniatura puede venir de un og:image externo que no está en next/image.
           // eslint-disable-next-line @next/next/no-img-element

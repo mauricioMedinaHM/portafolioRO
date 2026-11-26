@@ -124,6 +124,7 @@ export function buildProjects(source: Seccion[] = secciones): Project[] {
         embedUrl: parsed.embedUrl,
         thumbnailUrl: trabajo.miniatura?.trim() || parsed.thumbnailUrl,
         group: trabajo.grupo?.trim() || undefined,
+        sticker: trabajo.sticker,
         isReferenceImage: Boolean(trabajo.miniaturaDeReferencia),
         clipUrl: trabajo.clip?.trim() || null,
         clipStart: clipStart(trabajo.clipInicio),

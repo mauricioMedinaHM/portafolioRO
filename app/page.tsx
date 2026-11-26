@@ -7,7 +7,7 @@ import { Contact } from "@/components/sections/contact";
 import { FloatingContact } from "@/components/sections/floating-contact";
 import { Footer } from "@/components/sections/footer";
 import { Hero } from "@/components/sections/hero";
-import { Intro } from "@/components/sections/intro";
+import { ABOUT_LINKS, Intro } from "@/components/sections/intro";
 import { NavBar, type NavAnchor } from "@/components/sections/nav-bar";
 import { Services, type Stat } from "@/components/sections/services";
 import { Trayectoria } from "@/components/sections/trayectoria";
@@ -35,9 +35,7 @@ export default async function Home() {
   const anchors: NavAnchor[] = [
     { href: "#inicio", label: "Inicio" },
     { href: "#sobre-mi", label: "Sobre mí" },
-    { href: "#servicios", label: "Cualidades" },
-    { href: "#formacion", label: "Formación" },
-    { href: "#trabajos", label: "Muestra de contenidos" },
+    ...ABOUT_LINKS.map(({ href, label }) => ({ href, label, parentHref: "#sobre-mi" })),
     { href: "#en-vivo", label: "Trabajos en vivo" },
     ...liveGroups.map(({ category }) => ({
       href: "#" + category.slug,
@@ -57,10 +55,18 @@ export default async function Home() {
   }));
   const stats: Stat[] = [
     { value: String(perfil.transmisionesEnVivo), prefix: "+", label: "Transmisiones en vivo" },
-    { value: String(withProjects.length), label: "Áreas de trabajo" },
     { value: String(projects.length), label: "Trabajos publicados" },
     { value: String(coverageYears.size), label: "Años con coberturas publicadas" },
   ];
+  const { panelesDe30Dias, periodo, reelDeReferencia } = perfil.visualizaciones;
+  const formatNumber = new Intl.NumberFormat("es-AR");
+  const averageViews = Math.round(panelesDe30Dias.reduce((total, views) => total + views, 0) / panelesDe30Dias.length);
+  const reach = {
+    average: formatNumber.format(averageViews),
+    sampleSize: panelesDe30Dias.length,
+    period: periodo,
+    reel: formatNumber.format(reelDeReferencia),
+  };
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -87,14 +93,16 @@ export default async function Home() {
         <div className="editorial-strip">
           <p>Conducción en vivo <span aria-hidden>·</span> Streaming <span aria-hidden>·</span> Entrevistas y coberturas</p>
         </div>
-        <Intro
-          profile={profile}
-          categories={withProjects.map(({ category }) => category)}
-          spotlight={featured.find((project) => project.clipUrl) ?? featured[0]}
-        />
-        <Services stats={stats} skills={profile.skills ?? []} />
-        <Trayectoria profile={profile} />
-        <WorksBand groups={withProjects} />
+        <section id="sobre-mi" aria-labelledby="sobre-mi-titulo" className="scroll-mt-28 bg-honeydew/25 pb-3 md:pb-5">
+          <Intro
+            profile={profile}
+            categories={withProjects.map(({ category }) => category)}
+            spotlight={featured.find((project) => project.clipUrl) ?? featured[0]}
+          />
+          <Services stats={stats} skills={profile.skills ?? []} reach={reach} />
+          <Trayectoria profile={profile} />
+          <WorksBand groups={withProjects} />
+        </section>
         {liveGroups.length > 0 && (
           <section id="en-vivo" aria-labelledby="en-vivo-titulo" className="scroll-mt-28 border-t border-seam bg-honeydew/50 pt-7 md:pt-10">
             <PopContainer className="text-center">
@@ -115,7 +123,6 @@ export default async function Home() {
                 projects={list}
                 relatedLink={category.slug === "generacion-tech" ? { href: "#eventos-tech", label: "Ver Eventos Tech" } : undefined}
                 asSubsection
-                showAll
               />
             ))}
           </section>
@@ -137,13 +144,13 @@ export default async function Home() {
           if (category.slug === "eventos") {
             return (
               <div key={category.id} id="moviles" className="scroll-mt-28 border-y border-seam bg-honeydew/50">
-                <CategorySection category={category} projects={list} showAll />
+                <CategorySection category={category} projects={list} />
               </div>
             );
           }
           return (
             <div key={category.id} id={category.slug === "experiencia" ? "extension" : undefined} className="scroll-mt-28">
-              <CategorySection category={category} projects={list} showAll />
+              <CategorySection category={category} projects={list} />
             </div>
           );
         })}

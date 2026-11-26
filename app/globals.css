@@ -738,7 +738,7 @@ body:has(#intro-loader[data-state="loading"]) :is(.pop-rise, .pop-write, .pop-bu
 
 .editorial-folder-body {
   position: relative;
-  margin-top: -0.7rem;
+  margin-top: -0.65rem;
   border-radius: 0.55rem;
   background: var(--folder-paper);
 }
@@ -746,10 +746,10 @@ body:has(#intro-loader[data-state="loading"]) :is(.pop-rise, .pop-write, .pop-bu
 .editorial-folder-body::before {
   content: "";
   position: absolute;
-  top: -0.6rem;
+  top: -0.55rem;
   left: 0;
   width: 38%;
-  height: 0.85rem;
+  height: 0.8rem;
   border-radius: 0.45rem 0.65rem 0 0;
   background: var(--folder-paper);
 }

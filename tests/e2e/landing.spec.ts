@@ -43,7 +43,8 @@ test.describe("landing", () => {
     if ((viewport?.width ?? 0) >= 1024) {
       // Desktop: navegación principal visible en el header (sin botón Menú).
       const nav = page.getByRole("navigation", { name: "Principal" });
-      await nav.getByRole("link", { name: "Formación" }).click();
+      await nav.getByRole("link", { name: "Sobre mí" }).click();
+      await page.getByRole("navigation", { name: "Apartados de Sobre mí" }).getByRole("link", { name: "Formación" }).click();
       await expect(page).toHaveURL(/#formacion$/);
       return;
     }
@@ -148,13 +149,13 @@ test.describe("landing", () => {
     await expect(header.getByRole("link", { name: "Hablemos" })).toHaveCount(0);
   });
 
-  test("el link activo del nav desktop se subraya al scrollear a Formación", async ({ page, viewport }) => {
+  test("Sobre mí se activa al scrollear a Formación", async ({ page, viewport }) => {
     test.skip((viewport?.width ?? 0) < 1024, "Links visibles sólo en desktop");
     await page.goto("/");
     await page.waitForSelector("#intro-loader", { state: "detached", timeout: 12_000 });
     await page.locator("#formacion").scrollIntoViewIfNeeded();
     const nav = page.getByRole("navigation", { name: "Principal" });
-    await expect(nav.getByRole("link", { name: "Formación" })).toHaveAttribute("aria-current", "page");
+    await expect(nav.getByRole("link", { name: "Sobre mí" })).toHaveAttribute("aria-current", "page");
     await expect(nav.locator("[aria-current='page']")).toHaveCount(1);
   });
 
@@ -182,9 +183,9 @@ test.describe("landing", () => {
 
   test("la presentación y la formación preceden a la muestra y a los vivos", async ({ page }) => {
     await page.goto("/");
-    const primarySections = page.locator("main > :is(#sobre-mi, #servicios, #formacion, #trabajos, #en-vivo)");
-    expect(await primarySections.evaluateAll((nodes) => nodes.map((node) => node.id))).toEqual(["sobre-mi", "servicios", "formacion", "trabajos", "en-vivo"]);
-    await expect(page.locator("#en-vivo").getByRole("heading", { name: /Fiesta del Milagro/ })).toHaveCount(2);
+    const aboutTabs = page.locator("#sobre-mi > :is(#servicios, #formacion, #trabajos)");
+    expect(await aboutTabs.evaluateAll((nodes) => nodes.map((node) => node.id))).toEqual(["servicios", "formacion", "trabajos"]);
+    await expect(page.locator("#eventos").getByRole("heading", { name: /Fiesta del Milagro/ })).toHaveCount(2);
     await expect(page.locator("#en-vivo").getByRole("heading", { name: /Política Joven/ })).toHaveCount(3);
     await expect(page.locator("#servicios")).toContainText("Transmisiones en vivo");
     await expect(page.locator("#servicios dd").first()).toContainText("+50");
